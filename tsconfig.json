@@ -11,11 +11,11 @@
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
+    "noEmit": true, //是否打包的时候生成JS文件
     "jsx": "react-jsx",
 
     /* Linting */
-    "strict": true,
+    "strict": true, //指定参数类型
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
