@@ -1,7 +1,6 @@
 import ReactDOM from 'react-dom/client'
 import './index.css'
-import { RouterProvider } from 'react-router-dom'
-import router3 from './Router3.tsx'
+import App from './App.tsx'
 
 /**ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <BrowserRouter>
@@ -9,7 +8,7 @@ import router3 from './Router3.tsx'
   </BrowserRouter>**/
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <RouterProvider router={router3} />
+  <App />
 
   //通过/#/eva/...来访问
   /**  <HashRouter>
