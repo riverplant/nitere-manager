@@ -50,6 +50,7 @@ export default function UserList() {
       pageSize: params.pageSize || pagination.pageSize,
     })
 
+    console.log('userList:',data.list)
     setData(data.list)
     setTotal(data.page.total)
 
@@ -129,13 +130,13 @@ export default function UserList() {
     },
     {
       title: '提货点',
-      dataIndex: 'deptId',
-      key: 'deptId',
+      dataIndex: 'deptName',
+      key: 'deptName',
     },
     {
       title: '送货地址',
-      dataIndex: 'deptName',
-      key: 'deptName',
+      dataIndex: 'address',
+      key: 'address',
     },
     {
       title: '账户权限',

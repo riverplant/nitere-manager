@@ -13,7 +13,7 @@ function Forbidden() {
         <Button
           type='primary'
           onClick={() => {
-            navigate('/')
+            navigate('/welcome')
           }}
         >
           返回首页

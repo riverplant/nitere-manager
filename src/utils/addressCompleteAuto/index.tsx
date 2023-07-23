@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import { StandaloneSearchBox, LoadScript } from '@react-google-maps/api'
 import storage from '../storage'
@@ -13,9 +13,10 @@ export default function PlaceComponent() {
       console.log(searchBox.getPlaces()[0].formatted_address)
     }
   }
-  const onSBLoad = ref => {
+  const onSBLoad = (ref : any)  => {
     setSearchBox(ref)
   }
+  
 
   return (
     <LoadScript googleMapsApiKey='AIzaSyC153GoK1FRCh1x-lVZ3-ruujEY25-Qq9A' libraries={lib}>

@@ -9,11 +9,18 @@ import { useRef } from 'react'
 import { IAction } from '@/types/modal'
 import { ColumnsType } from 'antd/es/table'
 import { message } from '@/utils/AntdGlobal'
+import TreePermission from './TreePermission'
 export default function RoleList() {
   const [form] = useForm()
   const roleRef = useRef<{
     open: (type: IAction, data?: Role.RoleItem) => void
   }>()
+
+  const permissionRef = useRef<{
+    open: ( type: IAction, data?: Role.RoleItem) => void
+  }>()
+
+
   const getTableData = ({ current, pageSize }: { current: number; pageSize: number }, formData: Role.Params) => {
     return api
       .getRoleList({
@@ -43,7 +50,9 @@ export default function RoleList() {
   const handleEdite = (data: Role.RoleItem) => {
     roleRef.current?.open('update', data)
   }
-  const handleAutorisation = (id: string) => {}
+  const handleAutorisation = (record: Role.RoleItem) => {
+    permissionRef.current?.open('update', record)
+  }
   //删除确认
   const handleDel = (_id: string) => {
     Modal.confirm({
@@ -94,7 +103,7 @@ export default function RoleList() {
             <Button type='text' onClick={() => handleEdite(record)}>
               编辑
             </Button>
-            <Button type='text' onClick={() => handleAutorisation(record._id)}>
+            <Button type='text' onClick={() => handleAutorisation(record)}>
               设置权限
             </Button>
             <Button type='text' danger onClick={() => handleDel(record._id)}>
@@ -136,6 +145,8 @@ export default function RoleList() {
       </div>
       {/**创建角色组件 */}
       <CreateRole mRef={roleRef} update={search.submit} />
+       {/**设置权限组件 */}
+       <TreePermission mRef={permissionRef} update={search.submit} />
     </div>
   )
 }

@@ -10,8 +10,9 @@ import Layout from '@/layout'
 import Menu from '@/views/system/menu'
 import AuthLoader from './AuthLoader'
 import Role from '@/views/system/role'
+import OrderList from '@/views/order/OrderList'
 
-const router = [
+export const router = [
   {
     path: '/',
     element: <Navigate to='/welcome' />,
@@ -32,6 +33,9 @@ const router = [
       {
         path: '/welcome',
         element: <Welcome />,
+        meta:{
+          auth: false // 访问首页不需要验证用户权限
+        }
       },
       {
         path: '/dashboard',
@@ -52,6 +56,10 @@ const router = [
       {
         path: '/roleList',
         element: <Role />,
+      },
+      {
+        path: '/packageList',
+        element: <OrderList />,
       },
     ],
   },

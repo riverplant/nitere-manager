@@ -1,6 +1,8 @@
 import api from '@/api'
-import { PickPoint, User } from '@/types/api'
+import { PickPoint, Role, User } from '@/types/api'
 import { IAction, IModalProp } from '@/types/modal'
+import PlaceComponent from '@/utils/addressCompleteAuto'
+import storage from '@/utils/storage'
 import { Form, Input, Modal, Select, TreeSelect, message } from 'antd'
 import FormItem from 'antd/es/form/FormItem'
 import { useEffect, useImperativeHandle, useState } from 'react'
@@ -10,6 +12,7 @@ const CreateUser = (props: IModalProp) => {
   const [visible, setVisible] = useState(false)
   const [action, setAction] = useState<IAction>('create')
   const [pickPoints, setPickPoints] = useState<PickPoint.PickPointItem[]>([])
+  const [roleList, setRoleList] = useState<Role.RoleItem[]>([])
   //暴露子组件的open
   useImperativeHandle(props.mRef, () => {
     return {
@@ -18,11 +21,19 @@ const CreateUser = (props: IModalProp) => {
   })
   useEffect(() => {
     getPickPointList()
+    getAllRoleList()
   }, [])
   const getPickPointList = async () => {
     const data = await api.getPickPointsList()
     setPickPoints(data)
   }
+
+  const getAllRoleList = async () => {
+    const data = await api.getRoleList()
+    console.log('roleList:', data)
+    setRoleList(data.list)
+  }
+
   //调用弹窗显示方法
   const open = (type: IAction, data?: User.UserInfo) => {
     setAction(type)
@@ -33,9 +44,11 @@ const CreateUser = (props: IModalProp) => {
   }
 
   const handleSubmit = async () => {
+    const address = storage.get('pickPointAddress')
     const valid = await form.validateFields()
     if (valid) {
-      const params = { ...form.getFieldsValue() }
+      const params = { ...form.getFieldsValue(), 'address': address }
+      console.log('create param:', params)
       if (action === 'create') {
         await api.createUser(params)
         message.success('创建成功')
@@ -66,6 +79,7 @@ const CreateUser = (props: IModalProp) => {
         <FormItem name='userId' hidden>
           <Input />
         </FormItem>
+
         <FormItem
           label='用户手机号'
           name='mobile'
@@ -73,14 +87,16 @@ const CreateUser = (props: IModalProp) => {
         >
           <Input type='number' placeholder='请输入手机号' />
         </FormItem>
+
         <FormItem label='用户名' name='userName' rules={[{ required: true, message: '请输入用户名' }]}>
           <Input placeholder='请输入用户名' />
+
         </FormItem>
         <FormItem label='用户邮箱' name='userEmail' rules={[{ required: true, message: '请输入用户邮箱' }]}>
           <Input placeholder='请输入用户邮箱' />
         </FormItem>
 
-        <FormItem label='用户提货码' name='code' rules={[{ required: true, message: '请输入提货码' }]}>
+        <FormItem label='用户提货码' name='job' rules={[{ required: true, message: '请输入提货码' }]}>
           <Input placeholder='请输入提货码' />
         </FormItem>
         <FormItem label='提货点' name='deptId' rules={[{ required: true, message: '请选择提货点' }]}>
@@ -88,18 +104,25 @@ const CreateUser = (props: IModalProp) => {
             placeholder='请选择提货点'
             allowClear
             treeDefaultExpandAll
+            showCheckedStrategy={TreeSelect.SHOW_ALL}
             fieldNames={{ label: 'deptName', value: '_id' }}
             treeData={pickPoints}
           />
         </FormItem>
-        <FormItem label='送货地址' name='deptName' rules={[{ required: true, message: '请输入送货地址' }]}>
-          <Input placeholder='请输入送货地址' />
+        <FormItem label='送货地址' name='address'>
+        <PlaceComponent />
         </FormItem>
-        <FormItem label='用户权限' name='role' rules={[{ required: true, message: '请选择用户权限' }]}>
-          <Select>
-            <Select.Option value={0}>超级管理员</Select.Option>
-            <Select.Option value={1}>管理员</Select.Option>
-            <Select.Option value={2}>用户</Select.Option>
+        
+        <FormItem label='用户权限' name='roleList' rules={[{ required: true, message: '请选择用户权限' }]}>
+          <Select placeholder='请选择角色'>
+            {roleList.map(item=> {
+                return (
+                <Select.Option value={item._id} key={item._id}>
+                  {item.roleName}
+                  </Select.Option>
+                )
+              })}
+
           </Select>
         </FormItem>
         <FormItem label='用户状态' name='state' rules={[{ required: true, message: '请选择用户状态' }]}>

@@ -21,13 +21,13 @@ export namespace User {
     _id: string
     userId: number
     userName: string
-    profiledID: string
     userEmail: string
     code: string
     mobile: string
     deptId: string
     deptName: string
     role: number
+    roleList:string
     state: number
     createTime: string
     userImg: string
@@ -196,7 +196,8 @@ export namespace Role {
   export interface RoleItem extends CreateParams {
     _id: string
     permissionList: {
-      checkedKeys: string[]
+      checkedKeys: string[],
+      halfCheckedKeys:string[]
     }
     updateTime: string
     createTime: string
@@ -205,7 +206,75 @@ export namespace Role {
   export interface CreatePermission {
     _id: string
     permissionList: {
-      checkedKeys: string[]
+      checkedKeys: string[],
+      halfCheckedKeys:string[]
     }
   }
+}
+
+
+export namespace Order {
+  export interface Params extends PageParams {
+    orderId?: string
+    userName?:string
+    state?:number
+  }
+
+  export enum PayStatus {
+    //nopay = 10,
+    doing = 1,
+    //payed = 20,
+    done = 2,
+    //payfaild = 30,
+    timeout = 3,
+    //refunded = 40
+    cance = 4
+  }
+
+  export interface CreateParams {
+    cityName:string,
+    userName:string,
+    mobile:number,
+    startAddress:string,
+    endAddress:string,
+    orderAmount:number, // 订单金额
+    userPayAmount:number, // 支付金额
+    driverAmount:number, // 支付金额
+    payType: number, // 1. 微信 2. 支付宝
+    driverName:string,
+    vehicleName:string,
+    state: PayStatus,
+    useTime:string,
+    endTime:string,
+    //realWeight:string,
+    //volum:string,
+    //volumWeight:string
+
+  }
+
+  export interface OrderItem extends CreateParams {
+    _id:string,
+    orderId:string,
+    route:Array<{lng:string; lat:string}>,
+    createTime:string,
+    remark:string
+  }
+
+  export interface SearchParams {
+    orderId?:string,
+    userName?:string,
+    state?:number
+  }
+
+  export interface Params extends PageParams{
+    orderId?:string,
+    userName?:string,
+    state?:number
+  }
+
+  export interface DictItem {
+    id:number,
+    name:string
+  }
+
 }

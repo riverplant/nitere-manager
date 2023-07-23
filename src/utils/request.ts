@@ -14,7 +14,7 @@ const instance = axios.create({
   timeoutErrorMessage: '请求超时，请稍后再试',
   withCredentials: true,
   headers: {
-    icode: '565AC03DAE9FEB57',
+    icode: '235F6F12641DDA02',
   },
 })
 
@@ -43,19 +43,21 @@ instance.interceptors.response.use(
   response => {
     const data: Result = response.data
     hideLoading()
-    if (data.code === 500001) {
-      //没有登陆
-      //1. 提示错误信息
-      message.error(data.msg)
-      //2. 删除已有的token
-      storage.remove('token')
-      //3. 从定向到登录
-      location.href = '/login?callback=' + encodeURIComponent(location.href)
-    } else if (data.code != 0) {
-      //报错
-      message.error(data.msg)
-      return Promise.reject(data)
-    }
+    if (response.config.responseType === 'blob') return response
+      if (data.code === 500001) {
+        //没有登陆
+        //1. 提示错误信息
+        message.error(data.msg)
+        //2. 删除已有的token
+        storage.remove('token')
+        //3. 从定向到登录
+        location.href = '/login?callback=' + encodeURIComponent(location.href)
+      } else if (data.code != 0) {
+        //报错
+        message.error(data.msg)
+        return Promise.reject(data)
+      } 
+
     return data.data
   },
   error => {
@@ -73,4 +75,25 @@ export default {
   post<T>(url: string, params: object): Promise<T> {
     return instance.post(url, params)
   },
+
+  downloadFile(url: string, data: any, fileName = 'fileName.xlsx') {
+    instance({
+      url,
+      data,
+      method: 'post',
+      responseType: 'blob',
+    }).then(response => {
+      const blob = new Blob([response.data], {
+        type: response.data.type
+      })
+      const name = (response.headers['file-name'] as string) || fileName
+      const link = document.createElement('a')
+      link.download = decodeURIComponent(name)
+      link.href = URL.createObjectURL(blob)
+      document.body.append(link)
+      link.click()
+      document.body.removeChild(link)
+      window.URL.revokeObjectURL(link.href)
+    })
+  }
 }

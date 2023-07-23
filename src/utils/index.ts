@@ -4,7 +4,8 @@
 
 import { Menu } from '@/types/api'
 
-export const formatMoney = (num: number | string) => {
+export const formatMoney = (num?: number | string ) => {
+  if (!num) return '0.00'
   const money = parseFloat(num.toString())
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -52,4 +53,23 @@ export const getMenuPath = (list: Menu.MenuItem[]): string[] => {
   return list.reduce((result: string[], item: Menu.MenuItem) => {
     return result.concat(Array.isArray(item.children) && !item.buttons ? getMenuPath(item.children) : item.path + '')
   }, [])
+}
+
+// 递归获取路由对象
+export const searchRoute:any = (path:string, routes:any[])=>{
+  console.log('routes:', routes)
+  for(const item of routes) {
+    if(item === path) return item
+    if(item.children) {
+      return searchRoute(path, item.children)
+    }
+  }
+  return ''
+}
+
+// 手机号加密
+export const formateMobile = (mobile?: number)=>{
+  if (!mobile) return '-'
+  const phone = mobile.toString()
+   return phone.replace(/(\d{3})\d*(\d{4})/,`$1****$2`)
 }

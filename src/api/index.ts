@@ -1,4 +1,4 @@
-import { Dashboard, Login, Menu, PickPoint, Role, User } from '@/types/api'
+import { Dashboard, Login, Menu, Order, PickPoint, Role, User } from '@/types/api'
 import request from '@/utils/request'
 
 export default {
@@ -102,9 +102,13 @@ export default {
     return request.post('/menu/delete', params)
   },
 
-  //获取角色管理
+  //获取所有角色管理
   getRoleList(params?: Role.Params) {
     return request.get<Dashboard.ResultData<Role.RoleItem>>('/roles/list', params)
+  },
+
+  getAllRoleList() {
+    return request.get<Role.RoleItem[]>('/roles/list')
   },
 
   //创建角色
@@ -121,4 +125,47 @@ export default {
   delRole(params: { _id: string }) {
     return request.post('/roles/delete', params)
   },
+
+  //更新权限列表
+  updatePermission(params: Role.CreatePermission) {
+    return request.post('/roles/update/permission', params)
+  },
+
+ //获取订单列表
+  getOrderList(params:Order.Params){
+    return request.get<Dashboard.ResultData<Order.OrderItem>>('/order/list', params)
+  },
+
+  //获取城市列表
+  getBoxList() {
+    return request.get<Order.DictItem[]>('/order/cityList')
+  },
+
+
+    //获取商品类型列表
+    getProductTypeList() {
+      return request.get<Order.DictItem[]>('/order/vehicList')
+    },
+
+    //创建订单
+    createOrder(params:Order.CreateParams) {
+      return request.post('/order/create', params)
+    },
+
+    //更新订单
+    updateOrder(params:Order.CreateParams) {
+      return request.post('/order/create', params)
+    },
+
+    //获取订单详情
+    getOrderDetail(orderId:string) {
+       return request.get<Order.OrderItem>(`/order/detail/${orderId}`)
+    },
+
+    //导出数据
+    exportData(params:Order.SearchParams) {
+        return request.downloadFile('/order/orderExport', params, '订单列表.xlsx')
+    }
+    
+
 }
