@@ -33,7 +33,7 @@ export default function MenuList() {
   }
 
   const handleSubCreate = (recode: Menu.MenuItem) => {
-    menuListRef.current?.open('create', { parentId: recode._id, orderBy: recode.children?.length })
+    menuListRef.current?.open('create', { parentId: recode.id, orderBy: recode.children?.length })
   }
 
   const handleEdit = (record: Menu.MenuItem) => {
@@ -49,14 +49,14 @@ export default function MenuList() {
       title: '确认',
       content: `确认删除该${text}吗?`,
       onOk() {
-        handleDelSubmit(record._id)
+        handleDelSubmit(record.id)
       },
     })
   }
 
   //删除提货点提交
   const handleDelSubmit = async (id: string) => {
-    await api.deleteMenu({ _id: id })
+    await api.deleteMenu({ id: id })
     message.success('删除成功')
     getMenuList()
   }
@@ -135,7 +135,7 @@ export default function MenuList() {
         <FormItem label='菜单名称' name='menuName'>
           <Input placeholder='菜单名称' />
         </FormItem>
-        <FormItem label='菜单状态' name='menuState'>
+        <FormItem label='菜单状态' name='menuStatus'>
           <Select style={{ width: 100 }}>
             <Select.Option value={1}>正常</Select.Option>
             <Select.Option value={2}>停用</Select.Option>
@@ -159,7 +159,7 @@ export default function MenuList() {
             </Button>
           </div>
         </div>
-        <Table bordered rowKey='_id' columns={columns} dataSource={data} pagination={false} />
+        <Table bordered rowKey='id' columns={columns} dataSource={data} pagination={false} />
       </div>
       <CreateMenu mRef={menuListRef} update={getMenuList} />
     </div>

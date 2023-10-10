@@ -72,7 +72,7 @@ export default function CreateMenu(props: IModalProp<Menu.MenuItem>) {
       onCancel={handleCancel}
     >
       <Form form={form} labelAlign='right' labelCol={{ span: 4 }} initialValues={{ menuType: 1, menuState: 1 }}>
-        <FormItem name='_id' hidden>
+        <FormItem name='id' hidden>
           <Input />
         </FormItem>
         <FormItem label='上级菜单' name='parentId'>
@@ -80,7 +80,7 @@ export default function CreateMenu(props: IModalProp<Menu.MenuItem>) {
             placeholder='请选择上级菜单'
             allowClear
             treeDefaultExpandAll
-            fieldNames={{ label: 'menuName', value: '_id' }}
+            fieldNames={{ label: 'menuName', value: 'id' }}
             treeData={menuList}
           />
         </FormItem>
@@ -112,7 +112,7 @@ export default function CreateMenu(props: IModalProp<Menu.MenuItem>) {
             )
           }}
         </FormItem>
-        <FormItem label='组件名称' name='component'>
+        <FormItem label='组件名称' name='component' >
           <Input placeholder='请输入组件名称' />
         </FormItem>
         <FormItem label='排序' name='orderBy' tooltip={{ title: '排序值越大越靠后', icon: <InfoCircleOutlined /> }}>

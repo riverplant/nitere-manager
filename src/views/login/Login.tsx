@@ -8,13 +8,18 @@ import { useStore } from '@/store'
 export default function LoginFC() {
   const [loading, setLoading] = useState(false)
   const updateToken = useStore(state => state.updateToken)
+  
   const onFinish = async (values: Login.params) => {
+    console.log('onFinish----------------------------------')
     try {
       setLoading(true)
+      console.log('login----------------------------------')
       const data = await api.login(values)
+     
+      console.log('data:',data.data)
       setLoading(false)
-      storage.set('token', data)
-      updateToken(data)
+      storage.set('token', data.data)
+      updateToken(data.data)
       message.success('登录成功')
       const params = new URLSearchParams(location.search)
       setTimeout(() => {
@@ -29,11 +34,11 @@ export default function LoginFC() {
       <div className={styles.loginWrapper}>
         <div className={styles.title}>系统登录</div>
         <Form name='basic' initialValues={{ remember: true }} onFinish={onFinish} autoComplete='off'>
-          <Form.Item name='userName' rules={[{ required: true, message: 'Please input your username!' }]}>
+          <Form.Item name='email' rules={[{ required: true, message: '請輸入您的用戶名!' }]}>
             <Input />
           </Form.Item>
 
-          <Form.Item name='userPwd' rules={[{ required: true, message: 'Please input your password!' }]}>
+          <Form.Item name='userPwd' rules={[{ required: true, message: '請輸入您的密碼!' }]}>
             <Input.Password />
           </Form.Item>
 

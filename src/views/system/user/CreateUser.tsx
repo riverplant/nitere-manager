@@ -76,7 +76,7 @@ const CreateUser = (props: IModalProp) => {
       onCancel={handleCancel}
     >
       <Form form={form} className='login-form' labelCol={{ span: 4 }} labelAlign='right'>
-        <FormItem name='userId' hidden>
+        <FormItem name='id' hidden>
           <Input />
         </FormItem>
 
@@ -92,11 +92,11 @@ const CreateUser = (props: IModalProp) => {
           <Input placeholder='请输入用户名' />
 
         </FormItem>
-        <FormItem label='用户邮箱' name='userEmail' rules={[{ required: true, message: '请输入用户邮箱' }]}>
+        <FormItem label='用户邮箱' name='email' rules={[{ required: true, message: '请输入用户邮箱' }]}>
           <Input placeholder='请输入用户邮箱' />
         </FormItem>
 
-        <FormItem label='用户提货码' name='job' rules={[{ required: true, message: '请输入提货码' }]}>
+        <FormItem label='用户提货码' name='code' rules={[{ required: true, message: '请输入提货码' }]}>
           <Input placeholder='请输入提货码' />
         </FormItem>
         <FormItem label='提货点' name='deptId' rules={[{ required: true, message: '请选择提货点' }]}>
@@ -105,7 +105,7 @@ const CreateUser = (props: IModalProp) => {
             allowClear
             treeDefaultExpandAll
             showCheckedStrategy={TreeSelect.SHOW_ALL}
-            fieldNames={{ label: 'deptName', value: '_id' }}
+            fieldNames={{ label: 'deptName', value: 'id' }}
             treeData={pickPoints}
           />
         </FormItem>
@@ -113,11 +113,11 @@ const CreateUser = (props: IModalProp) => {
         <PlaceComponent />
         </FormItem>
         
-        <FormItem label='用户权限' name='roleList' rules={[{ required: true, message: '请选择用户权限' }]}>
+        <FormItem label='用户权限' name='userRoles' rules={[{ required: true, message: '请选择用户权限' }]}>
           <Select placeholder='请选择角色'>
             {roleList.map(item=> {
                 return (
-                <Select.Option value={item._id} key={item._id}>
+                <Select.Option value={item.id} key={item.id}>
                   {item.roleName}
                   </Select.Option>
                 )
@@ -125,10 +125,10 @@ const CreateUser = (props: IModalProp) => {
 
           </Select>
         </FormItem>
-        <FormItem label='用户状态' name='state' rules={[{ required: true, message: '请选择用户状态' }]}>
+        <FormItem label='用户状态' name='userStatus' rules={[{ required: true, message: '请选择用户状态' }]}>
           <Select>
-            <Select.Option value={0}>正常状态</Select.Option>
-            <Select.Option value={1}>停用状态</Select.Option>
+            <Select.Option value={1}>正常状态</Select.Option>
+            <Select.Option value={2}>停用状态</Select.Option>
           </Select>
         </FormItem>
       </Form>

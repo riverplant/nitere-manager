@@ -13,9 +13,9 @@ const instance = axios.create({
   timeout: 8000,
   timeoutErrorMessage: '请求超时，请稍后再试',
   withCredentials: true,
-  headers: {
+  /**headers: {
     icode: '235F6F12641DDA02',
-  },
+  },**/
 })
 
 //请求拦截器
@@ -27,7 +27,7 @@ instance.interceptors.request.use(
       config.headers.Authorization = 'Bearer ' + token
     }
     //是否使用mock地址进行测试
-    config.baseURL = env.mock ? env.mockApi : env.baseApi
+    //config.baseURL = env.mock ? env.mockApi : env.baseApi
 
     return {
       ...config,
@@ -37,14 +37,19 @@ instance.interceptors.request.use(
     //错误处理
     return Promise.reject(error)
   }
-)
+)*
 //相应拦截
 instance.interceptors.response.use(
   response => {
     const data: Result = response.data
     hideLoading()
-    if (response.config.responseType === 'blob') return response
-      if (data.code === 500001) {
+    console.log('data:',data)
+    if(data.status != 200) {
+      message.error(data.msg)
+      return Promise.reject(data)
+    }
+   /** if (response.config.responseType === 'blob') return response
+      if (data.status === 500001) {
         //没有登陆
         //1. 提示错误信息
         message.error(data.msg)
@@ -52,11 +57,10 @@ instance.interceptors.response.use(
         storage.remove('token')
         //3. 从定向到登录
         location.href = '/login?callback=' + encodeURIComponent(location.href)
-      } else if (data.code != 0) {
+      } else if (data.status != 200) {
         //报错
-        message.error(data.msg)
-        return Promise.reject(data)
-      } 
+       
+      } **/
 
     return data.data
   },
@@ -74,6 +78,9 @@ export default {
   },
   post<T>(url: string, params: object): Promise<T> {
     return instance.post(url, params)
+  },
+  put<T>(url: string, params: object): Promise<T> {
+    return instance.put(url, params)
   },
 
   downloadFile(url: string, data: any, fileName = 'fileName.xlsx') {

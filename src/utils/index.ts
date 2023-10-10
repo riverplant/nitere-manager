@@ -35,15 +35,13 @@ export const formatDate = (date?: Date | string, rule?: string) => {
 
 //用户角色转换
 export const formatRole = (role: number) => {
-  if (role === 0) return '超级管理员'
-  if (role === 1) return '国内仓库管理员'
-  if (role === 2) return 'VIP用户'
+  if (role === 1) return '超级管理员'
+  if (role === 2) return '国内仓库管理员'
   if (role === 3) return '普通用户'
 }
 
 //用户状态转换
 export const formatState = (role: number) => {
-  if (role === 0) return '所有状态'
   if (role === 1) return '正常状态'
   if (role === 2) return '停用状态'
 }

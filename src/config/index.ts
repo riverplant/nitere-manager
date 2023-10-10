@@ -17,8 +17,8 @@ const env = (document.documentElement.dataset.env as ENV) || 'dev' //在index.ht
 
 const config = {
   dev: {
-    baseApi: '/api',
-    uploadApi: 'http://api-driver-dev.marsview.cc',
+    //baseApi: '/api',
+    //uploadApi: 'http://127.0.0.1:8080',
     mock: false,
     mockApi: '',
   },

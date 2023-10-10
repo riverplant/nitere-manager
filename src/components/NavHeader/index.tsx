@@ -17,7 +17,7 @@ const NavHeader = () => {
   const items: MenuProps['items'] = [
     {
       key: 'email',
-      label: '邮箱：' + userInfo.userEmail,
+      label: '邮箱：' + userInfo.email,
     },
     {
       key: 'logout',
@@ -46,7 +46,7 @@ const NavHeader = () => {
       <div className='right'>
         <Switch checkedChildren='暗黑' unCheckedChildren='默认' style={{ marginRight: 10 }} />
         <Dropdown menu={{ items, onClick }} trigger={['click']}>
-          <span className={styles.nickName}>{userInfo.userEmail}</span>
+          <span className={styles.nickName}>{userInfo.email}</span>
         </Dropdown>
       </div>
     </div>

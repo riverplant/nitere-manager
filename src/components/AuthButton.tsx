@@ -6,7 +6,7 @@ import { useRouteLoaderData } from "react-router"
 
 export default function AuthButton(props:any) {
     const data = useRouteLoaderData('layout') as IAuthLoader
-    const role = useStore(state=>state.userInfo.role)
+    const role = useStore(state=>state.userInfo.userRoles)
     if(!props.auth)return <Button {...props}>{props.children}</Button>
 
     if(data.buttonList.includes(props.auth) || role ===0) {

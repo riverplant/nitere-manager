@@ -15,7 +15,7 @@ const SideMenu = () => {
   const collapsed = useStore(state => state.collapsed)
   const data: any = useRouteLoaderData('layout')
   const [selectedKeys, setSelectedKeys] = useState<string[]>([])
-  const { pathName } = useLocation()
+  const { key } = useLocation()
   type MenuItem = Required<MenuProps>['items'][number]
 
   //生成每一个菜单项
@@ -47,7 +47,7 @@ const SideMenu = () => {
   // 递归生成菜单
   const getTreeMenu = (menuList: IMenu.MenuItem[], treeList: MenuItem[] = []) => {
     menuList.forEach((item, index) => {
-      if (item.menuType === 1 && item.menuState === 1) {
+      if (item.menuType === 1 && item.menuStatus === 1) {
         if (item.buttons) return treeList.push(getItem(item.menuName, item.path || index, createIcon(item.icon)))
         treeList.push(
           getItem(item.menuName, item.path || index, createIcon(item.icon), getTreeMenu(item.children || []))
@@ -62,7 +62,7 @@ const SideMenu = () => {
     const treeMenuList = getTreeMenu(data.menuList)
     console.log('treeMenuList', treeMenuList)
     setMenuList(treeMenuList)
-    setSelectedKeys([pathName])
+    setSelectedKeys([key])
   }, [])
 
   // 菜单点击

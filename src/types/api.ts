@@ -1,7 +1,7 @@
 //接口类型定义
 
 export interface Result<T = any> {
-  code: number
+  status: number
   data: T
   msg: string
 }
@@ -16,45 +16,86 @@ export interface PageParams {
   pageSize?: number | undefined
 }
 
+export namespace Role {
+  export interface Params extends PageParams {
+    roleName?: string
+  }
+
+  export interface CreateParams {
+    roleName: string
+    remark?: string
+  }
+
+  export interface EditParams extends CreateParams {
+    id: string
+  }
+
+  export interface DelParams {
+    id: string
+  }
+
+  export interface RoleItem extends CreateParams {
+    id: string
+    permissionList: {
+      checkedKeys: string[],
+      halfCheckedKeys:string[]
+    }
+    updateTime: string
+    createTime: string
+  }
+
+  export interface CreatePermission {
+    id: string
+    permissionList: {
+      checkedKeys: string[],
+      halfCheckedKeys:string[]
+    }
+  }
+}
+
 export namespace User {
   export interface UserInfo {
-    _id: string
-    userId: number
+    id: string
     userName: string
-    userEmail: string
+    wxnumber: string
+    email: string
     code: string
     mobile: string
     deptId: string
-    deptName: string
-    role: number
+    ppName: string
+    userRoles: number
     roleList:string
-    state: number
+    userStatus: number
     createTime: string
     userImg: string
+    formatted_address: string
+    openId: string
+    isDeleted: boolean
+    updateTime: string
+
   }
 
   export interface Params extends PageParams {
-    userId?: number
     code?: string
-    state?: number
+    userStatus?: number
   }
 
   export interface CreateParams {
     userName: string
     code: string
-    phone?: string
-    pickupPoint: string
-    delivreAddress: string
-    role: number
-    state: number
+    mobile?: string
+    wxnumber: string
+    ppName: string
+    deptId: string
+    formatted_address: string
+    userRoles: number
+    userStatus: number
     createTime: string
     userImg: string
   }
 
   export interface EditParams extends CreateParams {
-    userId: number
-    _id: string
-    profiledID: string
+    id: string
   }
 }
 
@@ -151,7 +192,7 @@ export namespace Menu {
     menuName: string // 菜单名称
     icon?: string //菜单图标
     menuType: number // 1:菜单 2:按钮 3:页面
-    menuState: number // 1. 正常 2: 停用
+    menuStatus: number // 1. 正常 2: 停用
     menuCode?: string // 按钮权限标识
     parentId?: string // 父级菜单ID
     path?: string //菜单路径
@@ -160,57 +201,22 @@ export namespace Menu {
   }
 
   export interface EditParams extends CreateParams {
-    _id?: string
+    id?: string
   }
 
   export interface DelParams {
-    _id?: string
+    id?: string
   }
 
   export interface MenuItem extends CreateParams {
-    _id: string
+    id: string
     createTime: string
     buttons?: MenuItem[]
     children?: MenuItem[]
   }
 }
 
-export namespace Role {
-  export interface Params extends PageParams {
-    roleName?: string
-  }
 
-  export interface CreateParams {
-    roleName: string
-    remark?: string
-  }
-
-  export interface EditParams extends CreateParams {
-    _id: string
-  }
-
-  export interface DelParams {
-    _id: string
-  }
-
-  export interface RoleItem extends CreateParams {
-    _id: string
-    permissionList: {
-      checkedKeys: string[],
-      halfCheckedKeys:string[]
-    }
-    updateTime: string
-    createTime: string
-  }
-
-  export interface CreatePermission {
-    _id: string
-    permissionList: {
-      checkedKeys: string[],
-      halfCheckedKeys:string[]
-    }
-  }
-}
 
 
 export namespace Order {

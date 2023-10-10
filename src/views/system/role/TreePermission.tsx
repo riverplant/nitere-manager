@@ -62,7 +62,7 @@ export default function TreePermission(propos: IModalProp<Role.RoleItem>) {
       }
     })
     setPermission({
-      _id: roleInfo?._id || '',
+      id: roleInfo?.id || '',
       permissionList: {
         checkedKeys: checkedKeysValues,
         halfCheckedKeys: parentCheckdKeys.concat(item.halfCheckedKeys)
