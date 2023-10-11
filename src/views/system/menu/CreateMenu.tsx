@@ -41,16 +41,10 @@ export default function CreateMenu(props: IModalProp<Menu.MenuItem>) {
     if (valid) {
       if (action === 'create') {
         const params: Menu.CreateParams = { ...form.getFieldsValue() }
-        console.log('params', params)
         await api.createMenu(params)
-        message.success('创建成功')
       } else {
         const params: Menu.EditParams = { ...form.getFieldsValue() }
-        console.log('edit', params)
-        //if (startTime) params.createTime = startTime
-        //if (endTime) params.updateTime = endTime
         await api.editMenu(params)
-        message.success('更新成功')
       }
       handleCancel()
       props.update()
@@ -119,7 +113,7 @@ export default function CreateMenu(props: IModalProp<Menu.MenuItem>) {
           <InputNumber placeholder='请输入排序' />
         </FormItem>
 
-        <FormItem label='菜单状态' name='menuState'>
+        <FormItem label='菜单状态' name='menuStatus'>
           <Radio.Group>
             <Radio value={1}>启用</Radio>
             <Radio value={2}>停用</Radio>

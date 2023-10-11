@@ -52,7 +52,7 @@ export default function PickPointList() {
 
   //删除提货点提交
   const handleDelSubmit = async (id: string) => {
-    await api.deletePickPoint({ _id: id })
+    await api.deletePickPoint({ id: id })
     message.success('删除成功')
     getPickPointList()
   }
@@ -100,13 +100,13 @@ export default function PickPointList() {
       render(_, record) {
         return (
           <Space>
-            <Button type='text' onClick={() => handleSubCreate(record._id)}>
+            <Button type='text' onClick={() => handleSubCreate(record.id)}>
               新增
             </Button>
             <Button type='text' onClick={() => handleEdit(record)}>
               编辑
             </Button>
-            <Button type='text' onClick={() => handleDelet(record._id)} danger>
+            <Button type='text' onClick={() => handleDelet(record.id)} danger>
               删除
             </Button>
           </Space>

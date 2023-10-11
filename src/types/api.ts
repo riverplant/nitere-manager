@@ -151,34 +151,42 @@ export namespace Dashboard {
 
 export namespace PickPoint {
   export interface Params {
-    deptName?: string
+    ppName?: string
   }
   export interface PickPointItem {
-    _id: string
+    id: string
     createTime: string
     updateTime: string
-    deptName: string
-    address: string
+    startTime:string
+    endTime:string
+    ppName: string
+    formatted_address: string
+    place_id:string
     parentId: string
-    userName: string
+    userId: string
+    ppCode:string
     children: PickPointItem[]
   }
 
   export interface CreateParams {
     parentId?: string
-    deptName: number
-    address: string
-    userName: string
+    ppName: number
+    place_id: string
+    formatted_address:string
     createTime: string
     updateTime: string
+    startTime:string
+    endTime:string
+    ppCode:string
+    userId:string
   }
 
   export interface EditParams extends CreateParams {
-    _id: string
+    id: string
   }
 
   export interface DeleteParams {
-    _id: string
+    id: string
   }
 }
 

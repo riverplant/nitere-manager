@@ -1,6 +1,6 @@
 import { IAction, IModalProp } from '@/types/modal'
 import { useEffect, useImperativeHandle, useState } from 'react'
-import { Form, Input, Modal, Select, TreeSelect, DatePicker, message, TimePicker } from 'antd'
+import { Form, Input, Modal, Select, TreeSelect, TimePicker } from 'antd'
 import { PickPoint, User } from '@/types/api'
 import { useForm } from 'antd/es/form/Form'
 import moment from 'moment'
@@ -17,7 +17,6 @@ export default function CreatePickPoint(props: IModalProp<PickPoint.PickPointIte
   const [admins, setAdmins] = useState<User.UserInfo[]>([])
   const [startTime, setStartTime] = useState('')
   const [endTime, setEndTime] = useState('')
-  const [pickPointAddress, setPickPointAddress] = useState('')
 
   useEffect(() => {
     getPickPointList()
@@ -46,28 +45,32 @@ export default function CreatePickPoint(props: IModalProp<PickPoint.PickPointIte
     open,
   }))
   const handleSubmit = async () => {
-    const address = storage.get('pickPointAddress')
-    if (address) setPickPointAddress(address)
+    const address = JSON.parse(storage.get('pickPointAddress')) 
     const valid = await form.validateFields()
     if (valid) {
       if (action === 'create') {
         const params: PickPoint.CreateParams = { ...form.getFieldsValue() }
         console.log('create', params)
-        if (pickPointAddress) params.address = pickPointAddress
-        //if (startTime) params.createTime = startTime
-        //if (endTime) params.updateTime = endTime
+        if (address){
+          params.place_id = address.place_id
+          params.formatted_address = address.formatted_address
+        } 
+        params.startTime = startTime
+        params.endTime = endTime
         console.log('params', params)
-        await api.createPickPoints(params)
-        message.success('创建成功')
+       // await api.createPickPoints(params)
       } else {
         const params: PickPoint.EditParams = { ...form.getFieldsValue() }
         console.log('edit', params)
-        //if (startTime) params.createTime = startTime
-        //if (endTime) params.updateTime = endTime
-        if (pickPointAddress) params.address = pickPointAddress
+       
+        if (address){
+          params.place_id = address.place_id
+          params.formatted_address = address.formatted_address
+        } 
+        params.startTime = startTime
+        params.endTime = endTime
         console.log('params', params)
         await api.editPickPoints(params)
-        message.success('更新成功')
       }
       handleCancel()
       props.update()
@@ -95,7 +98,7 @@ export default function CreatePickPoint(props: IModalProp<PickPoint.PickPointIte
       onCancel={handleCancel}
     >
       <Form form={form} labelAlign='right' labelCol={{ span: 4 }}>
-        <FormItem name='_id' hidden>
+        <FormItem name='id' hidden>
           <Input />
         </FormItem>
         <FormItem label='所属提货点' name='parentId'>
@@ -103,25 +106,28 @@ export default function CreatePickPoint(props: IModalProp<PickPoint.PickPointIte
             placeholder='请选择所属提货点'
             allowClear
             treeDefaultExpandAll
-            fieldNames={{ label: 'deptName', value: '_id' }}
+            fieldNames={{ label: 'ppName', value: 'id' }}
             treeData={pickPoints}
           />
         </FormItem>
-        <FormItem label='提货点名称' name='deptName' rules={[{ required: true, message: '请输入提货点名称' }]}>
+        <FormItem label='提货点名称' name='ppName' rules={[{ required: true, message: '请输入提货点名称' }]}>
           <Input placeholder='请输入提货点名称' />
         </FormItem>
-        <FormItem label='负责人' name='userName' rules={[{ required: true, message: '请选择该提货点的负责人' }]}>
+        <FormItem label='提货点代碼' name='ppCode' rules={[{ required: true, message: '请输入提货点代碼' }]}>
+          <Input placeholder='请输入提货点代碼' />
+        </FormItem>
+        <FormItem label='负责人' name='userName' >
           <Select>
             {admins.map(item => {
               return (
-                <Select.Option value={item.userName} key={item._id}>
+                <Select.Option value={item.userName} key={item.id}>
                   {item.userName}
                 </Select.Option>
               )
             })}
           </Select>
         </FormItem>
-        <FormItem label='提货点地址' name='address'>
+        <FormItem label='提货点地址' >
           <PlaceComponent />
         </FormItem>
         <FormItem label='提货点开始时间' name='startTime'>

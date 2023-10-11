@@ -18,13 +18,36 @@ export default {
   
     //编辑菜单
     editMenu(params: Menu.EditParams) {
-      return request.put('http://127.0.0.1:8080/menu/', params)
+      return request.put('http://127.0.0.1:8080/menu', params)
     },
   
     deleteMenu(params: Menu.DelParams) {
       return request.post('http://127.0.0.1:8080/menu/delete', params)
     },
-    
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+     //提货点管理
+  //查询提货点列表
+  getPickPointsList(params?: PickPoint.Params) {
+    return request.get<PickPoint.PickPointItem[]>('http://127.0.0.1:8080/pickPoint/list', params)
+  },
+
+  createPickPoints(params: PickPoint.CreateParams) {
+    return request.post('http://127.0.0.1:8080/pickPoint', params)
+  },
+
+  editPickPoints(params: PickPoint.EditParams) {
+    return request.post('http://127.0.0.1:8080/pickPoint/edit', params)
+  },
+
+  //删除指定提货点
+  deletePickPoint(params: PickPoint.DeleteParams) {
+    return request.post('http://127.0.0.1:8080/pickPoint/delete', params)
+  },
+
+
+
+
   //获取用户信息
   getUserInfo() {
     return request.get<User.UserInfo>('http://127.0.0.1:8080/users/admin')
@@ -80,30 +103,14 @@ export default {
 
 
 
-  //提货点管理
-  //查询提货点列表
-  getPickPointsList(params?: PickPoint.Params) {
-    return request.get<PickPoint.PickPointItem[]>('http://127.0.0.1:8080/dept/list', params)
-  },
-
-  createPickPoints(params: PickPoint.CreateParams) {
-    return request.post('http://127.0.0.1:8080/dept/create', params)
-  },
-
-  editPickPoints(params: PickPoint.EditParams) {
-    return request.post('http://127.0.0.1:8080/dept/edit', params)
-  },
+ 
 
   //获取所有管理员
   getAllAdminList() {
-    return request.get<User.UserInfo[]>('http://127.0.0.1:8080/users/all/list')
+    return request.get<User.UserInfo[]>('http://127.0.0.1:8080/users/admin/list')
   },
 
-  //删除指定提货点
-  deletePickPoint(params: PickPoint.DeleteParams) {
-    return request.post('http://127.0.0.1:8080/dept/delete', params)
-  },
-
+  
  
 
   //获取所有角色管理

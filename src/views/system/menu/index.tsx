@@ -27,7 +27,7 @@ export default function MenuList() {
   const handleReset = () => {
     form.resetFields()
   }
-  //创建提货点
+  //创建菜单
   const handleCreate = () => {
     menuListRef.current?.open('create', { orderBy: data.length })
   }
@@ -57,7 +57,6 @@ export default function MenuList() {
   //删除提货点提交
   const handleDelSubmit = async (id: string) => {
     await api.deleteMenu({ id: id })
-    message.success('删除成功')
     getMenuList()
   }
 

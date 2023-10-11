@@ -82,6 +82,9 @@ export default {
   put<T>(url: string, params: object): Promise<T> {
     return instance.put(url, params)
   },
+  delete<T>(url: string): Promise<T> {
+    return instance.delete(url)
+  },
 
   downloadFile(url: string, data: any, fileName = 'fileName.xlsx') {
     instance({
