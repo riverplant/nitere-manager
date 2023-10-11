@@ -60,15 +60,15 @@ export default function PickPointList() {
   const columns: ColumnsType<PickPoint.PickPointItem> = [
     {
       title: '提货点',
-      dataIndex: 'deptName',
-      key: 'deptName',
+      dataIndex: 'ppName',
+      key: 'ppName',
       width: 200,
     },
     {
       title: '地址',
-      dataIndex: 'address',
-      key: 'address',
-      width: 150,
+      dataIndex: 'formatted_address',
+      key: 'formatted_address',
+      width: 350,
     },
     {
       title: '负责人',
@@ -79,18 +79,18 @@ export default function PickPointList() {
 
     {
       title: '开放时间',
-      dataIndex: 'createTime',
-      key: 'createTime',
-      render(createTime) {
-        return formatDate(createTime)
+      dataIndex: 'startTime',
+      key: 'startTime',
+      render(startTime) {
+        return formatDate(startTime)
       },
     },
     {
       title: '关闭时间',
-      dataIndex: 'updateTime',
-      key: 'updateTime',
-      render(updateTime) {
-        return formatDate(updateTime)
+      dataIndex: 'endTime',
+      key: 'endTime',
+      render(endTime) {
+        return formatDate(endTime)
       },
     },
     {

@@ -58,7 +58,7 @@ export default function CreatePickPoint(props: IModalProp<PickPoint.PickPointIte
         params.startTime = startTime
         params.endTime = endTime
         console.log('params', params)
-       // await api.createPickPoints(params)
+        await api.createPickPoints(params)
       } else {
         const params: PickPoint.EditParams = { ...form.getFieldsValue() }
         console.log('edit', params)
