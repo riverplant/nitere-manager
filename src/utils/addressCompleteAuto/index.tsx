@@ -14,6 +14,7 @@ export default function PlaceComponent() {
         'place_id':searchBox.getPlaces()[0].place_id
       }
       storage.set('pickPointAddress', JSON.stringify(address))
+
     }
   }
   const onSBLoad = (ref : any)  => {

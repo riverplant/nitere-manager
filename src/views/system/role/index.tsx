@@ -16,10 +16,10 @@ export default function RoleList() {
     open: (type: IAction, data?: Role.RoleItem) => void
   }>()
 
-  const permissionRef = useRef<{
+  /**const permissionRef = useRef<{
     open: ( type: IAction, data?: Role.RoleItem) => void
   }>()
-
+**/
 
   const getTableData = ({ current, pageSize }: { current: number; pageSize: number }, formData: Role.Params) => {
     return api
@@ -50,9 +50,11 @@ export default function RoleList() {
   const handleEdite = (data: Role.RoleItem) => {
     roleRef.current?.open('update', data)
   }
+  /** 
   const handleAutorisation = (record: Role.RoleItem) => {
     permissionRef.current?.open('update', record)
   }
+  */
   //删除确认
   const handleDel = (_id: string) => {
     Modal.confirm({
@@ -103,10 +105,14 @@ export default function RoleList() {
             <Button type='text' onClick={() => handleEdite(record)}>
               编辑
             </Button>
-            <Button type='text' onClick={() => handleAutorisation(record)}>
+            {/** 
+             *  <Button type='text' onClick={() => handleAutorisation(record)}>
               设置权限
             </Button>
-            <Button type='text' danger onClick={() => handleDel(record._id)}>
+             * 
+            */}
+           
+            <Button type='text' danger onClick={() => handleDel(record.id)}>
               删除
             </Button>
           </Space>
@@ -141,12 +147,12 @@ export default function RoleList() {
             </Button>
           </div>
         </div>
-        <Table bordered rowKey='_id' columns={columns} {...tableProps} />
+        <Table bordered rowKey='id' columns={columns} {...tableProps} />
       </div>
       {/**创建角色组件 */}
       <CreateRole mRef={roleRef} update={search.submit} />
        {/**设置权限组件 */}
-       <TreePermission mRef={permissionRef} update={search.submit} />
+       {/** <TreePermission mRef={permissionRef} update={search.submit} /> */} 
     </div>
   )
 }

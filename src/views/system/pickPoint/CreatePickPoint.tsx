@@ -1,13 +1,14 @@
 import { IAction, IModalProp } from '@/types/modal'
 import { useEffect, useImperativeHandle, useState } from 'react'
-import { Form, Input, Modal, Select, TreeSelect, TimePicker } from 'antd'
+import { Form, Input, Modal, Select, TreeSelect, TimePicker, Radio } from 'antd'
 import { PickPoint, User } from '@/types/api'
 import { useForm } from 'antd/es/form/Form'
-import moment from 'moment'
+import dayjs from "dayjs";
 import api from '@/api'
 import FormItem from 'antd/es/form/FormItem'
 import PlaceComponent from '@/utils/addressCompleteAuto'
 import storage from '@/utils/storage'
+import { formatDate } from '@/utils'
 
 export default function CreatePickPoint(props: IModalProp<PickPoint.PickPointItem>) {
   const [form] = useForm()
@@ -37,9 +38,10 @@ export default function CreatePickPoint(props: IModalProp<PickPoint.PickPointIte
     setAction(type)
     setVisible(true)
     getPickPointList()
-    if (data) {
-      form.setFieldsValue(data)
+    if ( data  ) {   
+        form.setFieldsValue(data)
     }
+
   }
   useImperativeHandle(props.mRef, () => ({
     open,
@@ -50,18 +52,15 @@ export default function CreatePickPoint(props: IModalProp<PickPoint.PickPointIte
     if (valid) {
       if (action === 'create') {
         const params: PickPoint.CreateParams = { ...form.getFieldsValue() }
-        console.log('create', params)
         if (address){
           params.place_id = address.place_id
           params.formatted_address = address.formatted_address
         } 
         params.startTime = startTime
         params.endTime = endTime
-        console.log('params', params)
         await api.createPickPoints(params)
       } else {
         const params: PickPoint.EditParams = { ...form.getFieldsValue() }
-        console.log('edit', params)
        
         if (address){
           params.place_id = address.place_id
@@ -69,7 +68,6 @@ export default function CreatePickPoint(props: IModalProp<PickPoint.PickPointIte
         } 
         params.startTime = startTime
         params.endTime = endTime
-        console.log('params', params)
         await api.editPickPoints(params)
       }
       handleCancel()
@@ -87,6 +85,8 @@ export default function CreatePickPoint(props: IModalProp<PickPoint.PickPointIte
   const changEndTime = (value: any, dateString: string) => {
     setEndTime(dateString)
   }
+
+ 
   return (
     <Modal
       title={action === 'create' ? '创建提货点' : '编辑提货点'}
@@ -130,13 +130,21 @@ export default function CreatePickPoint(props: IModalProp<PickPoint.PickPointIte
         <FormItem label='提货点地址' >
           <PlaceComponent />
         </FormItem>
-        <FormItem label='提货点开始时间' name='startTime'>
-          <TimePicker onChange={changStartTime} defaultOpenValue={moment('00:00:00', 'HH:mm:ss')} />,
+        <FormItem label='提货点开始时间' name='startTime' >
+          <TimePicker onChange={changStartTime}   />,
         </FormItem>
         <FormItem label='提货点结束时间' name='endTime'>
-          <TimePicker onChange={changEndTime} defaultOpenValue={moment('00:00:00', 'HH:mm:ss')} />,
+          <TimePicker onChange={changEndTime}  />,
+        </FormItem>
+        <FormItem label='状态' name='pickPointStatus'>
+          <Radio.Group>
+            <Radio value={1}>启用</Radio>
+            <Radio value={2}>停用</Radio>
+          </Radio.Group>
         </FormItem>
       </Form>
     </Modal>
   )
 }
+
+

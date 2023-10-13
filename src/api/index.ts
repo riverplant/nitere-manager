@@ -37,7 +37,7 @@ export default {
   },
 
   editPickPoints(params: PickPoint.EditParams) {
-    return request.post('http://127.0.0.1:8080/pickPoint/edit', params)
+    return request.put('http://127.0.0.1:8080/pickPoint/edit', params)
   },
 
   //删除指定提货点
@@ -97,7 +97,7 @@ export default {
   },
 
   //删除用户
-  delUser(params: { userIds: number[] }) {
+  delUser(params: { userIds: string[] }) {
     return request.post('http://127.0.0.1:8080/users/delete', params)
   },
 

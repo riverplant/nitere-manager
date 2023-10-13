@@ -61,7 +61,6 @@ export namespace User {
     email: string
     code: string
     mobile: string
-    deptId: string
     ppName: string
     userRoles: number
     roleList:string
@@ -86,7 +85,7 @@ export namespace User {
     mobile?: string
     wxnumber: string
     ppName: string
-    deptId: string
+    pid: string
     formatted_address: string
     userRoles: number
     userStatus: number
@@ -152,6 +151,7 @@ export namespace Dashboard {
 export namespace PickPoint {
   export interface Params {
     ppName?: string
+    pickPointStatus?: number
   }
   export interface PickPointItem {
     id: string

@@ -1,6 +1,6 @@
 import api from '@/api'
 import { PickPoint } from '@/types/api'
-import { Button, Form, Input, Modal, Space, Table, message } from 'antd'
+import { Button, Form, Input, Modal, Select, Space, Table, message } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import { useEffect, useRef, useState } from 'react'
 import CreatePickPoint from './CreatePickPoint'
@@ -52,8 +52,14 @@ export default function PickPointList() {
 
   //删除提货点提交
   const handleDelSubmit = async (id: string) => {
-    await api.deletePickPoint({ id: id })
-    message.success('删除成功')
+    await api.deletePickPoint({ id: id }).then((result) => {
+      console.log(result);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  
+    console.log('刪除完成......')
     getPickPointList()
   }
 
@@ -82,7 +88,7 @@ export default function PickPointList() {
       dataIndex: 'startTime',
       key: 'startTime',
       render(startTime) {
-        return formatDate(startTime)
+        return formatDate(startTime, 'HH:mm:ss')
       },
     },
     {
@@ -90,7 +96,7 @@ export default function PickPointList() {
       dataIndex: 'endTime',
       key: 'endTime',
       render(endTime) {
-        return formatDate(endTime)
+        return formatDate(endTime, 'HH:mm:ss')
       },
     },
     {
@@ -117,8 +123,14 @@ export default function PickPointList() {
   return (
     <div>
       <Form className='search-form' layout='inline' form={form}>
-        <FormItem label='提货点' name={'deptName'}>
+        <FormItem label='提货点' name={'ppName'}>
           <Input placeholder='提货点' />
+        </FormItem>
+        <FormItem label='状态' name='pickPointStatus'>
+          <Select style={{ width: 100 }}>
+            <Select.Option value={1}>正常</Select.Option>
+            <Select.Option value={2}>停用</Select.Option>
+          </Select>
         </FormItem>
         <FormItem>
           <Button type='primary' className='mr10' onClick={getPickPointList}>
@@ -138,7 +150,7 @@ export default function PickPointList() {
             </Button>
           </div>
         </div>
-        <Table bordered rowKey='_id' columns={columns} dataSource={data} pagination={false} />
+        <Table bordered rowKey='id' columns={columns} dataSource={data} pagination={false} />
       </div>
       <CreatePickPoint mRef={pickPointRef} update={getPickPointList} />
     </div>

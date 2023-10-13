@@ -12,7 +12,7 @@ export default function UserList() {
   const [form] = Form.useForm()
   const [data, setData] = useState<User.UserInfo[]>([])
   const [total, setTotal] = useState(0)
-  const [userIds, setUserIds] = useState<number[]>([])
+  const [userIds, setUserIds] = useState<string[]>([])
   const userRef = useRef<{
     open: (type: IAction, data?: User.UserInfo) => void
   }>()
@@ -70,7 +70,7 @@ export default function UserList() {
   }
 
   //删除用户
-  const handleDel = (userId: number) => {
+  const handleDel = (userId: string) => {
     Modal.confirm({
       title: '删除确认',
       content: <span>确认删除该用户吗？</span>,
@@ -80,7 +80,7 @@ export default function UserList() {
     })
   }
   //公共删除用户接口
-  const handleUserDelSubmit = async (ids: number[]) => {
+  const handleUserDelSubmit = async (ids: string[]) => {
     try {
       await api.delUser({ userIds: ids })
       message.success('删除成功')
@@ -110,17 +110,17 @@ export default function UserList() {
   const columns: ColumnsType<User.UserInfo> = [
     {
       title: '用户ID',
-      dataIndex: 'userId',
-      key: 'userId',
+      dataIndex: 'id',
+      key: 'id',
     },
     {
-      title: 'profiledID',
-      dataIndex: 'userId',
-      key: 'profiledID',
+      title: 'openId',
+      dataIndex: 'openId',
+      key: 'openId',
     },
     {
       title: '提取码',
-      dataIndex: 'userName',
+      dataIndex: 'code',
       key: 'code',
     },
     {
@@ -130,35 +130,35 @@ export default function UserList() {
     },
     {
       title: '提货点',
-      dataIndex: 'deptName',
-      key: 'deptName',
+      dataIndex: 'ppName',
+      key: 'ppName',
     },
     {
       title: '送货地址',
-      dataIndex: 'address',
-      key: 'address',
+      dataIndex: 'formatted_address',
+      key: 'formatted_address',
     },
     {
       title: '账户权限',
-      dataIndex: 'role',
-      key: 'role',
-      render(role: number) {
+      dataIndex: 'userRoles',
+      key: 'userRoles',
+      render(userRoles: number) {
         return {
-          0: '超级管理员',
-          1: '管理员',
+          1: '超级管理员',
+          2: '管理员',
           3: '用户',
-        }[role]
+        }[userRoles]
       },
     },
     {
       title: '用户状态',
-      dataIndex: 'state',
-      key: 'state',
-      render(state: number) {
+      dataIndex: 'userStatus',
+      key: 'userStatus',
+      render(userStatus: number) {
         return {
-          0: '正常',
-          1: '停用',
-        }[state]
+          1: '正常',
+          2: '停用',
+        }[userStatus]
       },
     },
     {
@@ -178,7 +178,7 @@ export default function UserList() {
             <Button type='text' onClick={() => handleUpdate(record)}>
               编辑
             </Button>
-            <Button type='text' danger onClick={() => handleDel(record.userId)}>
+            <Button type='text' danger onClick={() => handleDel(record.id)}>
               删除
             </Button>
           </Space>
@@ -190,16 +190,16 @@ export default function UserList() {
   return (
     <div className='user-list'>
       <Form className='search-form' form={form} layout='inline' initialValues={{ state: 0 }}>
-        <Form.Item name='userId' label='用户ID'>
+        <Form.Item name='id' label='用户ID'>
           <Input placeholder='请输入用户ID' />
         </Form.Item>
         <Form.Item name='code' label='提取码'>
           <Input placeholder='请输入提取码'></Input>
         </Form.Item>
-        <Form.Item name='state' label='状态'>
+        <Form.Item name='userStatus' label='状态'>
           <Select style={{ width: 120 }}>
-            <Select.Option value={0}>正常</Select.Option>
-            <Select.Option value={1}>停用</Select.Option>
+            <Select.Option value={1}>正常</Select.Option>
+            <Select.Option value={2}>停用</Select.Option>
           </Select>
         </Form.Item>
         <Form.Item>
@@ -234,7 +234,7 @@ export default function UserList() {
             type: 'checkbox',
             selectedRowKeys: userIds,
             onChange: (selectedRowKeys: React.Key[]) => {
-              setUserIds(selectedRowKeys as number[])
+              setUserIds(selectedRowKeys as string[])
             },
           }}
           dataSource={data}

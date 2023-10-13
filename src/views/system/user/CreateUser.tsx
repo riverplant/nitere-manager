@@ -12,7 +12,7 @@ const CreateUser = (props: IModalProp) => {
   const [visible, setVisible] = useState(false)
   const [action, setAction] = useState<IAction>('create')
   const [pickPoints, setPickPoints] = useState<PickPoint.PickPointItem[]>([])
-  const [roleList, setRoleList] = useState<Role.RoleItem[]>([])
+ // const [roleList, setRoleList] = useState<Role.RoleItem[]>([])
   //暴露子组件的open
   useImperativeHandle(props.mRef, () => {
     return {
@@ -21,18 +21,19 @@ const CreateUser = (props: IModalProp) => {
   })
   useEffect(() => {
     getPickPointList()
-    getAllRoleList()
+   // getAllRoleList()
   }, [])
   const getPickPointList = async () => {
     const data = await api.getPickPointsList()
     setPickPoints(data)
   }
-
-  const getAllRoleList = async () => {
+/** 
+ * const getAllRoleList = async () => {
     const data = await api.getRoleList()
-    console.log('roleList:', data)
     setRoleList(data.list)
   }
+*/
+  
 
   //调用弹窗显示方法
   const open = (type: IAction, data?: User.UserInfo) => {
@@ -99,7 +100,7 @@ const CreateUser = (props: IModalProp) => {
         <FormItem label='用户提货码' name='code' rules={[{ required: true, message: '请输入提货码' }]}>
           <Input placeholder='请输入提货码' />
         </FormItem>
-        <FormItem label='提货点' name='deptId' rules={[{ required: true, message: '请选择提货点' }]}>
+        <FormItem label='提货点' name='pid' rules={[{ required: true, message: '请选择提货点' }]}>
           <TreeSelect
             placeholder='请选择提货点'
             allowClear
@@ -114,7 +115,8 @@ const CreateUser = (props: IModalProp) => {
         </FormItem>
         
         <FormItem label='用户权限' name='userRoles' rules={[{ required: true, message: '请选择用户权限' }]}>
-          <Select placeholder='请选择角色'>
+         {/**
+          * <Select placeholder='请选择角色'>
             {roleList.map(item=> {
                 return (
                 <Select.Option value={item.id} key={item.id}>
@@ -123,6 +125,12 @@ const CreateUser = (props: IModalProp) => {
                 )
               })}
 
+          </Select>
+          */}
+          <Select placeholder='请选择角色'>
+          <Select.Option value={1} key={1}>超級管理員</Select.Option>
+          <Select.Option value={2} key={2}>管理員</Select.Option>
+          <Select.Option value={3} key={3}>用戶</Select.Option>
           </Select>
         </FormItem>
         <FormItem label='用户状态' name='userStatus' rules={[{ required: true, message: '请选择用户状态' }]}>
