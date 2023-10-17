@@ -11,6 +11,7 @@ import Menu from '@/views/system/menu'
 import AuthLoader from './AuthLoader'
 import Role from '@/views/system/role'
 import OrderList from '@/views/order/OrderList'
+import CategoryList from '@/views/system/category'
 
 export const router = [
   {
@@ -53,13 +54,17 @@ export const router = [
         path: '/menuList',
         element: <Menu />,
       },
-      {
+     /** {
         path: '/roleList',
         element: <Role />,
-      },
+      },*/ 
       {
         path: '/orderList',
         element: <OrderList />,
+      },
+      {
+        path: '/catList',
+        element: <CategoryList />,
       },
     ],
   },

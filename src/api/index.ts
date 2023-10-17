@@ -133,7 +133,7 @@ export default {
   },
 
   //删除角色
-  delRole(params: { _id: string }) {
+  delRole(params: { id: string }) {
     return request.post('http://127.0.0.1:8080/roles/delete', params)
   },
 
@@ -142,9 +142,10 @@ export default {
     return request.post('http://127.0.0.1:8080/roles/update/permission', params)
   },
 
+  //////////////////////////////////////////////////////////////////////////////////////////////////////
  //获取订单列表
   getOrderList(params:Order.Params){
-    return request.get<Dashboard.ResultData<Order.OrderItem>>('http://127.0.0.1:8080/order/list', params)
+    return request.get<Dashboard.ResultData<Order.OrderItem>>('http://127.0.0.1:8080/orders/list', params)
   },
 
   //获取城市列表

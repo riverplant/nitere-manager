@@ -22,17 +22,18 @@ const App: React.FC = () => {
     const data = await api.getUserInfo()
     updateUserInfo(data)
   }
-
+ 
   const route = searchRoute(pathname, router.routes)
- /**  if( !route || route.meta?.auth === true || route.meta?.auth === undefined) {
+   if( !route || route.meta?.auth === true || route.meta?.auth === undefined) {
     //权限判断
     const data = useRouteLoaderData('layout') as IAuthLoader
-
     const staticPath = ['/welcom','/403', '/404']
     if(!data.menuPathList.includes(pathname) && !staticPath.includes(pathname))  {
       return <Navigate to={'/403'}/>
     }
-  }*/
+  }
+
+   
   
   return (
     <Watermark content='逆海淘'>

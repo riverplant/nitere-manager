@@ -49,7 +49,9 @@ export const formatState = (role: number) => {
 //获取页面路径
 export const getMenuPath = (list: Menu.MenuItem[]): string[] => {
   return list.reduce((result: string[], item: Menu.MenuItem) => {
-    return result.concat(Array.isArray(item.children) && !item.buttons ? getMenuPath(item.children) : item.path + '')
+    return result.concat(
+      Array.isArray(item.children) 
+      && ( !item.buttons || item.buttons.length === 0 )? getMenuPath(item.children) : item.path + '')
   }, [])
 }
 

@@ -16,6 +16,7 @@ const SideMenu = () => {
   const data: any = useRouteLoaderData('layout')
   const [selectedKeys, setSelectedKeys] = useState<string[]>([])
   const { key } = useLocation()
+  
   type MenuItem = Required<MenuProps>['items'][number]
 
   //生成每一个菜单项
@@ -48,7 +49,7 @@ const SideMenu = () => {
   const getTreeMenu = (menuList: IMenu.MenuItem[], treeList: MenuItem[] = []) => {
     menuList.forEach((item, index) => {
       if (item.menuType === 1 && item.menuStatus === 1) {
-        if (item.buttons) return treeList.push(getItem(item.menuName, item.path || index, createIcon(item.icon)))
+        if (item.buttons && item.buttons.length > 0) return treeList.push(getItem(item.menuName, item.path || index, createIcon(item.icon)))
         treeList.push(
           getItem(item.menuName, item.path || index, createIcon(item.icon), getTreeMenu(item.children || []))
         )
@@ -60,7 +61,6 @@ const SideMenu = () => {
   // 初始化，获取接口的菜单列表
   useEffect(() => {
     const treeMenuList = getTreeMenu(data.menuList)
-    console.log('treeMenuList', treeMenuList)
     setMenuList(treeMenuList)
     setSelectedKeys([key])
   }, [])

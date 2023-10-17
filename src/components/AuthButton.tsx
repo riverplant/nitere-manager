@@ -9,7 +9,7 @@ export default function AuthButton(props:any) {
     const role = useStore(state=>state.userInfo.userRoles)
     if(!props.auth)return <Button {...props}>{props.children}</Button>
 
-    if(data.buttonList.includes(props.auth) || role ===0) {
+    if(data.buttonList.includes(props.auth) || role ===1) {
         return <Button {...props}>{props.children}</Button> 
     }
     return <></>

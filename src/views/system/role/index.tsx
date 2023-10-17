@@ -56,12 +56,12 @@ export default function RoleList() {
   }
   */
   //删除确认
-  const handleDel = (_id: string) => {
+  const handleDel = (id: string) => {
     Modal.confirm({
       title: '确认',
       content: <span>确认删除该角色吗?</span>,
       async onOk() {
-        await api.delRole({ _id })
+        await api.delRole({ id })
         message.success('删除成功')
         search.submit()
       },

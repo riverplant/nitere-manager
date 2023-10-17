@@ -190,7 +190,7 @@ export default function OrderList() {
         <Form.Item name='userName' label='顾客ID'>
           <Input placeholder='请输入顾客ID'></Input>
         </Form.Item>
-        <Form.Item name='state' label='订单状态'>
+        <Form.Item name='payStatus' label='订单状态'>
           <Select style={{ width: 120 }}>
             <Select.Option value={1}>未支付</Select.Option>
             <Select.Option value={2}>已支付</Select.Option>

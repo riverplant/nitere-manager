@@ -38,7 +38,8 @@ const [action, setAction] = useState<IAction>('create')
     setVisible(true);
     console.log('data:', data)
   if (type === 'update' && data) {   
-        form.setFieldValue('orderId', data._id)
+        form.setFieldValue('id', data.id)
+        form.setFieldValue('orderId', data.orderId)
         form.setFieldValue('cityName', data.cityName)
         form.setFieldValue('vehicleName', data.vehicleName)
         form.setFieldValue('userName', data.userName)
@@ -53,6 +54,9 @@ const [action, setAction] = useState<IAction>('create')
         form.setFieldValue('endTime', dayjs(data.endTime))
 
 
+      }else {
+       let orderId =  Math.floor(Math.random() * 100000000)
+       form.setFieldValue('orderId', orderId)
       }
 
 
@@ -108,9 +112,17 @@ const [action, setAction] = useState<IAction>('create')
 
  return <Modal title="创建订单" width={800} open={visible} okText="确定" cancelText="取消" onOk={handleOk} onCancel={handleCancel}>
 <Form form={form} layout="horizontal" labelAlign="right" labelCol={{span:8}} wrapperCol={{span:16}} initialValues={initFormValues}>
-<FormItem name='orderId' hidden>
+<FormItem name='id' hidden>
           <Input />
         </FormItem>
+        <Row>
+    <Col span={12}>
+    <FormItem name='orderId' label="包裹編號">
+          <Input disabled={true} />
+        </FormItem>
+    </Col>
+</Row>
+
 <Row>
     <Col span={12}>
         <FormItem name="cityName" label="箱号" rules={[{required:true, message:'请选择箱号'}]}>

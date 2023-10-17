@@ -267,7 +267,7 @@ export namespace Order {
   }
 
   export interface OrderItem extends CreateParams {
-    _id:string,
+    id:string,
     orderId:string,
     route:Array<{lng:string; lat:string}>,
     createTime:string,

@@ -56,9 +56,9 @@ export default function TreePermission(propos: IModalProp<Role.RoleItem>) {
     const parentCheckdKeys:string[] = []
     item.checkedNodes.map((node:Menu.MenuItem)=>{
       if(node.menuType === 2) {
-        checkdKeys.push(node._id)
+        checkdKeys.push(node.id)
       } else {
-        parentCheckdKeys.push(node._id)
+        parentCheckdKeys.push(node.id)
       }
     })
     setPermission({
