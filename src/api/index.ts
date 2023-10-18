@@ -1,4 +1,4 @@
-import { Dashboard, Login, Menu, Order, PickPoint, Result, Role, User } from '@/types/api'
+import { Category, Dashboard, Login, Menu, Order, PickPoint, Result, Role, User } from '@/types/api'
 import request from '@/utils/request'
 
 export default {
@@ -46,6 +46,23 @@ export default {
   },
 
 
+  //查询類型列表
+  getCategoryList(params?: Category.Params) {
+    return request.get<Category.CategoryItem[]>('http://127.0.0.1:8080/cat/list', params)
+  },
+
+  createCategory(params: Category.CreateParams) {
+    return request.post('http://127.0.0.1:8080/cat', params)
+  },
+
+  editCategory(params: Category.EditParams) {
+    return request.put('http://127.0.0.1:8080/cat', params)
+  },
+
+  //删除類型
+  deleteCategory(params: Category.DelParams) {
+    return request.post('http://127.0.0.1:8080/cat/delete', params)
+  },
 
 
   //获取用户信息

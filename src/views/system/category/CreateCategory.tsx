@@ -1,43 +1,35 @@
 import { IAction, IModalProp } from '@/types/modal'
 import { useEffect, useImperativeHandle, useState } from 'react'
-import { Form, Input, Modal, Select, TreeSelect, TimePicker, Radio } from 'antd'
-import { PickPoint, User } from '@/types/api'
+import { Form, Input, Modal, TreeSelect, Radio } from 'antd'
+import { Category, PickPoint } from '@/types/api'
 import { useForm } from 'antd/es/form/Form'
-import dayjs from "dayjs";
 import api from '@/api'
 import FormItem from 'antd/es/form/FormItem'
-import PlaceComponent from '@/utils/addressCompleteAuto'
 import storage from '@/utils/storage'
-import { formatDate } from '@/utils'
 
-export default function CreatePickPoint(props: IModalProp<PickPoint.PickPointItem>) {
+export default function CreatCategory(props: IModalProp<Category.CategoryItem>) {
   const [form] = useForm()
   const [action, setAction] = useState<IAction>('create')
   const [visible, setVisible] = useState(false)
-  const [pickPoints, setPickPoints] = useState<PickPoint.PickPointItem[]>([])
-  const [admins, setAdmins] = useState<User.UserInfo[]>([])
-  const [startTime, setStartTime] = useState('')
-  const [endTime, setEndTime] = useState('')
+  const [category, setCategory] = useState<Category.CategoryItem[]>([])
+
+
 
   useEffect(() => {
-    getPickPointList()
-    getAllAdminList()
+    getCategoryList()
+
   }, [])
 
-  const getPickPointList = async () => {
-    const data = await api.getPickPointsList()
-    setPickPoints(data)
+  const getCategoryList = async () => {
+    const data = await api.getCategoryList()
+    setCategory(data)
   }
 
-  const getAllAdminList = async () => {
-    const data = await api.getAllAdminList()
-    setAdmins(data)
-  }
   //打开弹窗函数
-  const open = (type: IAction, data?: PickPoint.EditParams | { parentId: string }) => {
+  const open = (type: IAction, data?: Category.EditParams | { parentId: string }) => {
     setAction(type)
     setVisible(true)
-    getPickPointList()
+    getCategoryList()
     if ( data  ) {   
         form.setFieldsValue(data)
     }
@@ -47,28 +39,19 @@ export default function CreatePickPoint(props: IModalProp<PickPoint.PickPointIte
     open,
   }))
   const handleSubmit = async () => {
-    const address = JSON.parse(storage.get('pickPointAddress')) 
+
     const valid = await form.validateFields()
     if (valid) {
       if (action === 'create') {
-        const params: PickPoint.CreateParams = { ...form.getFieldsValue() }
-        if (address){
-          params.place_id = address.place_id
-          params.formatted_address = address.formatted_address
-        } 
-        params.startTime = startTime
-        params.endTime = endTime
-        await api.createPickPoints(params)
+        const params: Category.CreateParams = { ...form.getFieldsValue() }
+
+        await api.createCategory(params)
       } else {
-        const params: PickPoint.EditParams = { ...form.getFieldsValue() }
+        const params: Category.EditParams = { ...form.getFieldsValue() }
        
-        if (address){
-          params.place_id = address.place_id
-          params.formatted_address = address.formatted_address
-        } 
-        params.startTime = startTime
-        params.endTime = endTime
-        await api.editPickPoints(params)
+        
+
+        await api.editCategory(params)
       }
       handleCancel()
       props.update()
@@ -79,17 +62,12 @@ export default function CreatePickPoint(props: IModalProp<PickPoint.PickPointIte
     form.resetFields
   }
 
-  const changStartTime = (value: any, dateString: string) => {
-    setStartTime(dateString)
-  }
-  const changEndTime = (value: any, dateString: string) => {
-    setEndTime(dateString)
-  }
+
 
  
   return (
     <Modal
-      title={action === 'create' ? '创建提货点' : '编辑提货点'}
+      title={action === 'create' ? '创建類型' : '编辑類型'}
       width={800}
       open={visible}
       okText='确定'
@@ -101,42 +79,22 @@ export default function CreatePickPoint(props: IModalProp<PickPoint.PickPointIte
         <FormItem name='id' hidden>
           <Input />
         </FormItem>
-        <FormItem label='所属提货点' name='parentId'>
+        <FormItem label='父級類型' name='parentId'>
           <TreeSelect
-            placeholder='请选择所属提货点'
+            placeholder='请选择父級類型'
             allowClear
             treeDefaultExpandAll
-            fieldNames={{ label: 'ppName', value: 'id' }}
-            treeData={pickPoints}
+            fieldNames={{ label: 'name', value: 'id' }}
+            treeData={category}
           />
         </FormItem>
-        <FormItem label='提货点名称' name='ppName' rules={[{ required: true, message: '请输入提货点名称' }]}>
-          <Input placeholder='请输入提货点名称' />
+        <FormItem label='名称' name='name' rules={[{ required: true, message: '请输入名称' }]}>
+          <Input placeholder='请输入名称' />
         </FormItem>
-        <FormItem label='提货点代碼' name='ppCode' rules={[{ required: true, message: '请输入提货点代碼' }]}>
-          <Input placeholder='请输入提货点代碼' />
+        <FormItem label='類型代碼' name='enName' >
+          <Input placeholder='请输入類型代碼' />
         </FormItem>
-        <FormItem label='负责人' name='userName' >
-          <Select>
-            {admins.map(item => {
-              return (
-                <Select.Option value={item.userName} key={item.id}>
-                  {item.userName}
-                </Select.Option>
-              )
-            })}
-          </Select>
-        </FormItem>
-        <FormItem label='提货点地址' >
-          <PlaceComponent />
-        </FormItem>
-        <FormItem label='提货点开始时间' name='startTime' >
-          <TimePicker onChange={changStartTime}   />,
-        </FormItem>
-        <FormItem label='提货点结束时间' name='endTime'>
-          <TimePicker onChange={changEndTime}  />,
-        </FormItem>
-        <FormItem label='状态' name='pickPointStatus'>
+        <FormItem label='状态' name='catStatus'>
           <Radio.Group>
             <Radio value={1}>启用</Radio>
             <Radio value={2}>停用</Radio>

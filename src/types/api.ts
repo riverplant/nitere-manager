@@ -224,6 +224,41 @@ export namespace Menu {
   }
 }
 
+export namespace Category {
+  export interface Params {
+    name?: string
+    catStatus?: number // 1. 正常 2: 停用
+  }
+
+  export interface CreateParams {
+    name: string // 類型名称
+    catStatus: number // 1. 正常 2: 停用
+    enName?: string // 组件名称
+    parentId?: string // 父级菜单ID
+    orderBy: number // 组件排序
+  }
+
+  export interface EditParams extends CreateParams {
+    id?: string
+  }
+
+  export interface DelParams {
+    id?: string
+  }
+
+  export interface CategoryItem extends CreateParams {
+    id: string
+    createTime: string
+    updateTime: string
+    name: string
+    enName?: string
+    CatStatus: number
+    parentId?: string
+    children: CategoryItem[]
+
+  }
+}
+
 
 
 
