@@ -260,6 +260,37 @@ export namespace Category {
 }
 
 
+export namespace ChangeWarehouseRequest {
+  export interface Params {
+    openId?: string
+    isAccepted?: number // 0.審核中 1. 正常 2: 停用
+  }
+
+  export interface CreateParams {
+    pidOlderName: string 
+    pidNewName: string 
+    msg?: string
+    isAccepted: number 
+    
+  }
+
+  export interface EditParams extends CreateParams {
+    id?: string
+   
+  }
+
+  export interface DelParams {
+    id?: string
+  }
+
+  export interface ChangeWarehouseRequestItem extends CreateParams {
+    id: string
+    createTime: string
+    updateTime: string
+  }
+}
+
+
 
 
 export namespace Order {

@@ -1,4 +1,4 @@
-import { Category, Dashboard, Login, Menu, Order, PickPoint, Result, Role, User } from '@/types/api'
+import { Category, ChangeWarehouseRequest, Dashboard, Login, Menu, Order, PickPoint, Result, Role, User } from '@/types/api'
 import request from '@/utils/request'
 
 export default {
@@ -62,6 +62,18 @@ export default {
   //删除類型
   deleteCategory(params: Category.DelParams) {
     return request.post('http://127.0.0.1:8080/cat/delete', params)
+  },
+
+ //////////////////////////////////////////////////////////////////////////////////////////
+ 
+   //查询類型列表
+   getWarehouseRequest() {
+    return request.get<ChangeWarehouseRequest.ChangeWarehouseRequestItem[]>('http://127.0.0.1:8080/warehouseRequest/getWarehouseRequest')
+  },
+
+ 
+  editWarehouseRequest(params: ChangeWarehouseRequest.EditParams) {
+    return request.put('http://127.0.0.1:8080/warehouseRequest/updateWarehouseRequest', params)
   },
 
 
