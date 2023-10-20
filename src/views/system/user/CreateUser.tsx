@@ -68,7 +68,8 @@ const CreateUser = (props: IModalProp) => {
 
   return (
     <Modal
-      title={action === 'create' ? '创建用户' : '编辑用户'}
+     // title={action === 'create' ? '创建用户' : '编辑用户'}
+      title='编辑用户'
       okText='确定'
       cancelText='取消'
       width={800}
@@ -89,18 +90,26 @@ const CreateUser = (props: IModalProp) => {
           <Input type='number' placeholder='请输入手机号' />
         </FormItem>
 
-        <FormItem label='用户名' name='userName' rules={[{ required: true, message: '请输入用户名' }]}>
+       {/**  <FormItem label='用户名' name='userName' rules={[{ required: true, message: '请输入用户名' }]}>
           <Input placeholder='请输入用户名' />
 
         </FormItem>
         <FormItem label='用户邮箱' name='email' rules={[{ required: true, message: '请输入用户邮箱' }]}>
           <Input placeholder='请输入用户邮箱' />
         </FormItem>
-
-        <FormItem label='用户提货码' name='code' rules={[{ required: true, message: '请输入提货码' }]}>
+      */}
+      {/**
+       * <FormItem label='用户提货码' name='code' rules={[{ required: true, message: '请输入提货码' }]}>
           <Input placeholder='请输入提货码' />
         </FormItem>
-        <FormItem label='提货点' name='pid' rules={[{ required: true, message: '请选择提货点' }]}>
+       * 
+       */}
+        <FormItem label='用户提货码' name='code'>
+          <Input placeholder='请输入提货码' />
+        </FormItem>
+
+         {/**
+       *        <FormItem label='提货点' name='pid' rules={[{ required: true, message: '请选择提货点' }]}>
           <TreeSelect
             placeholder='请选择提货点'
             allowClear
@@ -110,9 +119,31 @@ const CreateUser = (props: IModalProp) => {
             treeData={pickPoints}
           />
         </FormItem>
-        <FormItem label='送货地址' name='address'>
+       * 
+       */}
+
+        {/**
+             <FormItem label='提货点' name='pid' >
+          <TreeSelect
+            placeholder='请选择提货点'
+            allowClear
+            treeDefaultExpandAll
+            showCheckedStrategy={TreeSelect.SHOW_ALL}
+            fieldNames={{ label: 'deptName', value: 'id' }}
+            treeData={pickPoints}
+          />
+        </FormItem>
+          */}
+
+       
+
+        {/**
+             <FormItem label='送货地址' name='address'>
         <PlaceComponent />
         </FormItem>
+          */}
+
+     
         
         <FormItem label='用户权限' name='userRoles' rules={[{ required: true, message: '请选择用户权限' }]}>
          {/**

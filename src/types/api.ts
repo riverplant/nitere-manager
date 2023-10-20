@@ -262,20 +262,21 @@ export namespace Category {
 
 export namespace ChangeWarehouseRequest {
   export interface Params {
-    openId?: string
+    code?: string
     isAccepted?: number // 0.審核中 1. 正常 2: 停用
   }
 
   export interface CreateParams {
     pidOlderName: string 
     pidNewName: string 
-    msg?: string
     isAccepted: number 
-    
+    code: string
+    openId: string 
   }
 
   export interface EditParams extends CreateParams {
-    id?: string
+    id: string
+    msg?: string
    
   }
 

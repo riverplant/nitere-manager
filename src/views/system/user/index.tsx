@@ -60,9 +60,9 @@ export default function UserList() {
     })
   }
 
-  const handleCreate = () => {
+  /**const handleCreate = () => {
     userRef.current?.open('create')
-  }
+  } **/
 
   //更新用户
   const handleUpdate = (recode: User.UserInfo) => {
@@ -218,9 +218,9 @@ export default function UserList() {
         <div className='header-wrapper'>
           <div className='title'>用户列表</div>
           <div className='action'>
-            <Button type='primary' onClick={handleCreate}>
+            { /**<Button type='primary' onClick={handleCreate}>
               新增
-            </Button>
+            </Button> **/}
             <Button type='primary' danger onClick={handlePatchConfirm}>
               批量删除
             </Button>

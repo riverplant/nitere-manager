@@ -12,6 +12,7 @@ import AuthLoader from './AuthLoader'
 import Role from '@/views/system/role'
 import OrderList from '@/views/order/OrderList'
 import CategoryList from '@/views/system/category'
+import WarehouseRequestList from '@/views/system/warehousetRequest'
 
 export const router = [
   {
@@ -65,6 +66,10 @@ export const router = [
       {
         path: '/catList',
         element: <CategoryList />,
+      },
+      {
+        path: '/wareHouseRequestList',
+        element: <WarehouseRequestList />,
       },
     ],
   },

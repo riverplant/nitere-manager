@@ -67,8 +67,8 @@ export default {
  //////////////////////////////////////////////////////////////////////////////////////////
  
    //查询類型列表
-   getWarehouseRequest() {
-    return request.get<ChangeWarehouseRequest.ChangeWarehouseRequestItem[]>('http://127.0.0.1:8080/warehouseRequest/getWarehouseRequest')
+   getWarehouseRequest( params:ChangeWarehouseRequest.Params) {
+    return request.get<ChangeWarehouseRequest.ChangeWarehouseRequestItem[]>('http://127.0.0.1:8080/warehouseRequest/getWarehouseRequest', params)
   },
 
  
@@ -77,6 +77,7 @@ export default {
   },
 
 
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //获取用户信息
   getUserInfo() {
     return request.get<User.UserInfo>('http://127.0.0.1:8080/users/admin')
@@ -117,17 +118,17 @@ export default {
 
   //创建用户
   createUser(params: User.CreateParams) {
-    return request.post<Dashboard.ResultData<User.UserInfo>>('http://127.0.0.1:8080/users/create', params)
+    return request.post<Dashboard.ResultData<User.UserInfo>>('http://127.0.0.1:8080/users', params)
   },
 
   //创建用户
   updateUser(params: User.EditParams) {
-    return request.post<Dashboard.ResultData<User.UserInfo>>('http://127.0.0.1:8080/users/edit', params)
+    return request.put<Dashboard.ResultData<User.UserInfo>>('http://127.0.0.1:8080/users', params)
   },
 
   //删除用户
   delUser(params: { userIds: string[] }) {
-    return request.post('http://127.0.0.1:8080/users/delete', params)
+    return request.delete('http://127.0.0.1:8080/users/'+ params.userIds)
   },
 
 
