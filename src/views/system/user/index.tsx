@@ -173,16 +173,27 @@ export default function UserList() {
       title: '操作',
       key: 'action',
       render(record: User.UserInfo) {
-        return (
-          <Space>
-            <Button type='text' onClick={() => handleUpdate(record)}>
-              编辑
-            </Button>
-            <Button type='text' danger onClick={() => handleDel(record.id)}>
-              删除
-            </Button>
-          </Space>
-        )
+        if(record.userRoles != 1) { 
+          return (
+            <Space>
+              <Button type='text' onClick={() => handleUpdate(record)}>
+                编辑
+              </Button>
+              <Button type='text' danger onClick={() => handleDel(record.id)} >
+               删除
+             </Button> 
+            </Space>
+          )
+        }else {
+          return ( <Space>
+          <Button type='text' onClick={() => handleUpdate(record)}>
+            编辑
+          </Button>
+        </Space>
+          )
+        }
+
+
       },
     },
   ]
