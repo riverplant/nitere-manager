@@ -21,6 +21,7 @@ export default function WarehouseRequestList() {
   }, [])
 
   const getChangeWarehouseRequest = async () => {
+    console.log('form:',form.getFieldsValue())
     const data = await api.getWarehouseRequest(form.getFieldsValue())
     setData(data)
   }

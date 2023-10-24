@@ -68,7 +68,7 @@ export namespace User {
     createTime: string
     userImg: string
     formatted_address: string
-    openId: string
+    openid: string
     isDeleted: boolean
     updateTime: string
 

@@ -115,8 +115,8 @@ export default function UserList() {
     },
     {
       title: 'openId',
-      dataIndex: 'openId',
-      key: 'openId',
+      dataIndex: 'openid',
+      key: 'openid',
     },
     {
       title: '提取码',
