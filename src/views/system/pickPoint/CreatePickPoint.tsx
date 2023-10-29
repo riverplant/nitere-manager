@@ -55,6 +55,9 @@ export default function CreatePickPoint(props: IModalProp<PickPoint.PickPointIte
         if (address){
           params.place_id = address.place_id
           params.formatted_address = address.formatted_address
+          params.city = address.city
+          params.url = address.url
+
         } 
         params.startTime = startTime
         params.endTime = endTime
@@ -65,6 +68,8 @@ export default function CreatePickPoint(props: IModalProp<PickPoint.PickPointIte
         if (address){
           params.place_id = address.place_id
           params.formatted_address = address.formatted_address
+          params.city = address.city
+          params.url = address.url
         } 
         params.startTime = startTime
         params.endTime = endTime

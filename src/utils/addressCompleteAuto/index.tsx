@@ -8,13 +8,15 @@ export default function PlaceComponent() {
   const [searchBox, setSearchBox] = useState(null)
 
   const onPlacesChanged = () => {
+    console.log('city:',searchBox.getPlaces()[0])
     if (searchBox !== null) {
       const address = {
         'formatted_address':searchBox.getPlaces()[0].formatted_address,
-        'place_id':searchBox.getPlaces()[0].place_id
+        'place_id':searchBox.getPlaces()[0].place_id,
+        'city':searchBox.getPlaces()[0].vicinity,
+        'url':searchBox.getPlaces()[0].url
       }
       storage.set('pickPointAddress', JSON.stringify(address))
-
     }
   }
   const onSBLoad = (ref : any)  => {

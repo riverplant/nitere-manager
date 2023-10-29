@@ -159,7 +159,6 @@ const CreateUser = (props: IModalProp) => {
           </Select>
           */}
           <Select placeholder='请选择角色'>
-          <Select.Option value={1} key={1}>超級管理員</Select.Option>
           <Select.Option value={2} key={2}>管理員</Select.Option>
           <Select.Option value={3} key={3}>用戶</Select.Option>
           </Select>

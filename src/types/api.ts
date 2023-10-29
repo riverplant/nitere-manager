@@ -179,6 +179,8 @@ export namespace PickPoint {
     endTime:string
     ppCode:string
     userId:string
+    city:string
+    url:string
   }
 
   export interface EditParams extends CreateParams {
