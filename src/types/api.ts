@@ -91,6 +91,9 @@ export namespace User {
     userStatus: number
     createTime: string
     userImg: string
+    url: string
+    place_id:string
+    
   }
 
   export interface EditParams extends CreateParams {

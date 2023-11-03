@@ -50,7 +50,6 @@ export default function UserList() {
       pageSize: params.pageSize || pagination.pageSize,
     })
 
-    console.log('userList:',data.list)
     setData(data.list)
     setTotal(data.page.total)
 
@@ -240,7 +239,7 @@ export default function UserList() {
 
         <Table
           bordered
-          rowKey='userId'
+          rowKey='id'
           rowSelection={{
             type: 'checkbox',
             selectedRowKeys: userIds,

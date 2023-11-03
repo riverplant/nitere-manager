@@ -7,6 +7,7 @@ import { Form, Input, Modal, Select, TreeSelect, message } from 'antd'
 import FormItem from 'antd/es/form/FormItem'
 import { useEffect, useImperativeHandle, useState } from 'react'
 
+
 const CreateUser = (props: IModalProp) => {
   const [form] = Form.useForm()
   const [visible, setVisible] = useState(false)
@@ -45,10 +46,11 @@ const CreateUser = (props: IModalProp) => {
   }
 
   const handleSubmit = async () => {
-    const address = storage.get('pickPointAddress')
+    const address = JSON.parse(storage.get('pickPointAddress'))
+    console.log('address:',address)
     const valid = await form.validateFields()
-    if (valid) {
-      const params = { ...form.getFieldsValue(), 'address': address }
+    if (valid) { 
+      const params = { ...form.getFieldsValue(), 'formatted_address': address.formatted_address , 'place_id':address.place_id, 'url':address.url}
       console.log('create param:', params)
       if (action === 'create') {
         await api.createUser(params)
@@ -65,6 +67,14 @@ const CreateUser = (props: IModalProp) => {
     setVisible(false)
     form.resetFields()
   }
+
+  const prefixSelector = (
+    <Form.Item name="prefix" noStyle>
+      <Select style={{ width: 70 }}>
+        <Option value="1">+1</Option>
+      </Select>
+    </Form.Item>
+  );
 
   return (
     <Modal
@@ -87,29 +97,25 @@ const CreateUser = (props: IModalProp) => {
           name='mobile'
           rules={[{ pattern: /^\(?([0-9]{3})\)?[-.●]?([0-9]{3})[-.●]?([0-9]{4})$/, message: '请输入有效的手机号' }]}
         >
-          <Input type='number' placeholder='请输入手机号' />
+          <Input addonBefore={prefixSelector} style={{ width: '100%' }}  type='number' placeholder='请输入手机号'/>
         </FormItem>
 
-       {/**  <FormItem label='用户名' name='userName' rules={[{ required: true, message: '请输入用户名' }]}>
+         <FormItem label='用户名' name='userName' >
           <Input placeholder='请输入用户名' />
 
         </FormItem>
-        <FormItem label='用户邮箱' name='email' rules={[{ required: true, message: '请输入用户邮箱' }]}>
+        <FormItem label='用户邮箱' name='email' >
           <Input placeholder='请输入用户邮箱' />
         </FormItem>
-      */}
-      {/**
-       * <FormItem label='用户提货码' name='code' rules={[{ required: true, message: '请输入提货码' }]}>
-          <Input placeholder='请输入提货码' />
-        </FormItem>
-       * 
-       */}
-        <FormItem label='用户提货码' name='code'>
+      
+      <FormItem label='用户提货码' name='code'  >
           <Input placeholder='请输入提货码' />
         </FormItem>
 
+
+
          {/**
-       *        <FormItem label='提货点' name='pid' rules={[{ required: true, message: '请选择提货点' }]}>
+       *  <FormItem label='提货点' name='pid' rules={[{ required: true, message: '请选择提货点' }]}>
           <TreeSelect
             placeholder='请选择提货点'
             allowClear
@@ -137,11 +143,11 @@ const CreateUser = (props: IModalProp) => {
 
        
 
-        {/**
-             <FormItem label='送货地址' name='address'>
+  
+        <FormItem label='送货地址' name='formatted_address'>
         <PlaceComponent />
         </FormItem>
-          */}
+
 
      
         
