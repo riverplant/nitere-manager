@@ -71,7 +71,7 @@ const CreateUser = (props: IModalProp) => {
   const prefixSelector = (
     <Form.Item name="prefix" noStyle>
       <Select style={{ width: 70 }}>
-        <Option value="1">+1</Option>
+        <Select.Option value="1">+1</Select.Option>
       </Select>
     </Form.Item>
   );
@@ -108,7 +108,7 @@ const CreateUser = (props: IModalProp) => {
           <Input placeholder='请输入用户邮箱' />
         </FormItem>
       
-      <FormItem label='用户提货码' name='code'  >
+      <FormItem label='用户提货码' name='code' disabled={false} >
           <Input placeholder='请输入提货码' />
         </FormItem>
 
