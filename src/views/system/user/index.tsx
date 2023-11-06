@@ -183,13 +183,6 @@ export default function UserList() {
              </Button> 
             </Space>
           )
-        }else {
-          return ( <Space>
-          <Button type='text' onClick={() => handleUpdate(record)}>
-            编辑
-          </Button>
-        </Space>
-          )
         }
 
 
