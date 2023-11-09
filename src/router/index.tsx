@@ -13,6 +13,7 @@ import Role from '@/views/system/role'
 import OrderList from '@/views/order/OrderList'
 import CategoryList from '@/views/system/category'
 import WarehouseRequestList from '@/views/system/warehousetRequest'
+import ClaimRequestList from '@/views/claimRequest'
 
 export const router = [
   {
@@ -70,6 +71,10 @@ export const router = [
       {
         path: '/wareHouseRequestList',
         element: <WarehouseRequestList />,
+      },
+      {
+        path: '/claimRequestList',
+        element: <ClaimRequestList />,
       },
     ],
   },
