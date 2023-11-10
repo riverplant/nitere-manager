@@ -1,4 +1,4 @@
-import { Category, ChangeWarehouseRequest, Dashboard, Login, Menu, Order, PickPoint, Result, Role, User } from '@/types/api'
+import { Category, ChangeWarehouseRequest, ClaimRequest, Dashboard, Login, Menu, Order, PickPoint, Result, ResultData, Role, User } from '@/types/api'
 import request from '@/utils/request'
 
 export default {
@@ -113,7 +113,7 @@ export default {
 
   //用户管理
   getUserList(params: User.Params) {
-    return request.get<Dashboard.ResultData<User.UserInfo>>('http://127.0.0.1:8080/users/list', params)
+    return request.get<ResultData<User.UserInfo>>('http://127.0.0.1:8080/users/list', params)
   },
 
   //创建用户
@@ -188,6 +188,11 @@ export default {
     getProductTypeList() {
       return request.get<Order.DictItem[]>('http://127.0.0.1:8080/order/vehicList')
     },
+
+      //用户管理
+     getClaimList(params: ClaimRequest.Params) {
+    return request.get<ResultData<ClaimRequest.ClaimRequestItem>>('http://127.0.0.1:8080/claim/list', params)
+  },
 
     //创建订单
     createOrder(params:Order.CreateParams) {

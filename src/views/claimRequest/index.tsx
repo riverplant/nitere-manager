@@ -1,20 +1,17 @@
-import { PageParams, User } from '@/types/api'
-import { Button, Form, Input, Modal, Select, Space, Table } from 'antd'
+import { ClaimRequest, PageParams } from '@/types/api'
+import { Button, Form, Input, Select, Space, Table } from 'antd'
 import { ColumnsType } from 'antd/es/table'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import api from '@/api'
 import { formatDate } from '@/utils'
-import { IAction } from '@/types/modal'
-import { message } from '@/utils/AntdGlobal'
+
 export default function ClaimRequestList() {
   //初始化表单
   const [form] = Form.useForm()
-  const [data, setData] = useState<User.UserInfo[]>([])
+  const [data, setData] = useState<ClaimRequest.ClaimRequestItem[]>([])
   const [total, setTotal] = useState(0)
-  const [userIds, setUserIds] = useState<string[]>([])
-  const userRef = useRef<{
-    open: (type: IAction, data?: User.UserInfo) => void
-  }>()
+  const [pageCount, setPageCount] = useState(0)
+
 
   const [pagination, setPagination] = useState({
     current: 1,
@@ -43,7 +40,7 @@ export default function ClaimRequestList() {
     //获得所有的表单值
     const values = form.getFieldsValue()
 
-    const data = await api.getUserList({
+    const data = await api.getClaimList({
       ...values,
       pageNum: params.pageNum,
       pageSize: params.pageSize || pagination.pageSize,
@@ -51,6 +48,7 @@ export default function ClaimRequestList() {
 
     setData(data.list)
     setTotal(data.page.total)
+    setPageCount(data.page.pageCount)
 
     setPagination({
       current: data.page.pageNum,
@@ -58,107 +56,31 @@ export default function ClaimRequestList() {
     })
   }
 
-
-
-  //更新用户
-  const handleUpdate = (recode: User.UserInfo) => {
-    userRef.current?.open('update', recode)
-  }
-
-  //删除用户
-  const handleDel = (userId: string) => {
-    Modal.confirm({
-      title: '删除确认',
-      content: <span>确认删除该用户吗？</span>,
-      onOk: () => {
-        handleUserDelSubmit([userId])
-      },
-    })
-  }
-  //公共删除用户接口
-  const handleUserDelSubmit = async (ids: string[]) => {
-    try {
-      await api.delUser({ userIds: ids })
-      message.success('删除成功')
-      setUserIds([])
-      getUserList({
-        pageNum: 1,
-      })
-    } catch (error) {
-      message.error('删除失败')
-    }
-  }
-
-  //批量删除用户
-  const handlePatchConfirm = () => {
-    if (userIds.length === 0) {
-      message.error('请选择要删除的用户')
-      return
-    }
-    Modal.confirm({
-      title: '删除确认',
-      content: <span>确认删除所有选中的用户吗？</span>,
-      onOk: () => {
-        handleUserDelSubmit(userIds)
-      },
-    })
-  }
-  const columns: ColumnsType<User.UserInfo> = [
+  const columns: ColumnsType<ClaimRequest.ClaimRequestItem> = [
     {
-      title: '用户ID',
-      dataIndex: 'id',
-      key: 'id',
+      title: '快遞單號',
+      dataIndex: 'trackingNumber',
+      key: 'trackingNumber',
     },
     {
-      title: 'openId',
-      dataIndex: 'openid',
-      key: 'openid',
-    },
-    {
-      title: '提取码',
+      title: '用戶提取码',
       dataIndex: 'code',
       key: 'code',
     },
     {
-      title: '手机号',
-      dataIndex: 'mobile',
-      key: 'mobile',
-    },
-    {
-      title: '提货点',
-      dataIndex: 'ppName',
-      key: 'ppName',
-    },
-    {
-      title: '送货地址',
-      dataIndex: 'formatted_address',
-      key: 'formatted_address',
-    },
-    {
-      title: '账户权限',
-      dataIndex: 'userRoles',
-      key: 'userRoles',
-      render(userRoles: number) {
+      title: '認領状态',
+      dataIndex: 'status',
+      key: 'status',
+      render(status: number) {
         return {
-          1: '超级管理员',
-          2: '管理员',
-          3: '用户',
-        }[userRoles]
+          1: '處理中',
+          2: '認領成功',
+          3: '包裹丟失',
+        }[status]
       },
     },
     {
-      title: '用户状态',
-      dataIndex: 'userStatus',
-      key: 'userStatus',
-      render(userStatus: number) {
-        return {
-          1: '正常',
-          2: '停用',
-        }[userStatus]
-      },
-    },
-    {
-      title: '账户创建时间',
+      title: '创建时间',
       dataIndex: 'createTime',
       key: 'createTime',
       render(createTime: string) {
@@ -166,25 +88,14 @@ export default function ClaimRequestList() {
       },
     },
     {
-      title: '操作',
-      key: 'action',
-      render(record: User.UserInfo) {
-        if(record.userRoles != 1) { 
-          return (
-            <Space>
-              <Button type='text' onClick={() => handleUpdate(record)}>
-                编辑
-              </Button>
-              <Button type='text' danger onClick={() => handleDel(record.id)} >
-               删除
-             </Button> 
-            </Space>
-          )
-        }
-
-
+      title: '最後更新时间',
+      dataIndex: 'updateTime',
+      key: 'updateTime',
+      render(updateTime: string) {
+        return formatDate(updateTime)
       },
     },
+
   ]
 
   return (
@@ -216,34 +127,20 @@ export default function ClaimRequestList() {
 
       <div className='base-table'>
         <div className='header-wrapper'>
-          <div className='title'>用户列表</div>
-          <div className='action'>
-            { /**<Button type='primary' onClick={handleCreate}>
-              新增
-            </Button> **/}
-            <Button type='primary' danger onClick={handlePatchConfirm}>
-              批量删除
-            </Button>
-          </div>
+          <div className='title'>認領請求列表</div>
+
         </div>
 
         <Table
           bordered
           rowKey='id'
-          rowSelection={{
-            type: 'checkbox',
-            selectedRowKeys: userIds,
-            onChange: (selectedRowKeys: React.Key[]) => {
-              setUserIds(selectedRowKeys as string[])
-            },
-          }}
           dataSource={data}
           columns={columns}
           pagination={{
             position: ['bottomRight'],
             current: pagination.current,
             pageSize: pagination.pageSize,
-            total: total,
+            total: pageCount,
             showQuickJumper: true,
             showSizeChanger: true,
             showTotal: function (total) {

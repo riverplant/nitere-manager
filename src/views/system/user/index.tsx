@@ -12,6 +12,7 @@ export default function UserList() {
   const [form] = Form.useForm()
   const [data, setData] = useState<User.UserInfo[]>([])
   const [total, setTotal] = useState(0)
+  const [pageCount, setPageCount] = useState(0)
   const [userIds, setUserIds] = useState<string[]>([])
   const userRef = useRef<{
     open: (type: IAction, data?: User.UserInfo) => void
@@ -52,6 +53,7 @@ export default function UserList() {
 
     setData(data.list)
     setTotal(data.page.total)
+    setPageCount(data.page.pageCount)
 
     setPagination({
       current: data.page.pageNum,
@@ -246,7 +248,7 @@ export default function UserList() {
             position: ['bottomRight'],
             current: pagination.current,
             pageSize: pagination.pageSize,
-            total: total,
+            total: pageCount,
             showQuickJumper: true,
             showSizeChanger: true,
             showTotal: function (total) {

@@ -270,6 +270,7 @@ export interface ResultData<T = any> {
     pageNum: number
     pageSize: number
     total: number | 0
+    pageCount: number | 0
   }
 }
 
