@@ -101,16 +101,15 @@ export default function ClaimRequestList() {
   return (
     <div className='user-list'>
       <Form className='search-form' form={form} layout='inline' initialValues={{ state: 0 }}>
-        <Form.Item name='id' label='用户ID'>
-          <Input placeholder='请输入用户ID' />
+        <Form.Item name='code' label='用戶提貨码'>
+          <Input placeholder='请输入提貨码'></Input>
         </Form.Item>
-        <Form.Item name='code' label='提取码'>
-          <Input placeholder='请输入提取码'></Input>
-        </Form.Item>
-        <Form.Item name='userStatus' label='状态'>
+        <Form.Item name='status' label='状态'>
           <Select style={{ width: 120 }}>
-            <Select.Option value={1}>正常</Select.Option>
-            <Select.Option value={2}>停用</Select.Option>
+          <Select.Option value={0}>全部</Select.Option>
+            <Select.Option value={1}>待處理</Select.Option>
+            <Select.Option value={2}>認領成功</Select.Option>
+            <Select.Option value={3}>包裹丟失</Select.Option>
           </Select>
         </Form.Item>
         <Form.Item>
