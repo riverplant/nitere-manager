@@ -1,121 +1,263 @@
-import api from '@/api'
-import { Button, Form, Input, Modal, Select, Space, Table, message } from 'antd'
-import { useForm } from 'antd/es/form/Form'
-import { useEffect, useRef, useState } from 'react'
-import { IAction } from '@/types/modal'
+import { PageParams, User } from '@/types/api'
+import { Button, Form, Input, Modal, Select, Space, Table } from 'antd'
 import { ColumnsType } from 'antd/es/table'
-import FormItem from 'antd/es/form/FormItem'
+import { useEffect, useRef, useState } from 'react'
+import api from '@/api'
 import { formatDate } from '@/utils'
-import { ChangeWarehouseRequest, Menu } from '@/types/api'
-import CreateWarehouseRequest from './CreateClaimRequest'
-
+import { IAction } from '@/types/modal'
+import { message } from '@/utils/AntdGlobal'
 export default function ClaimRequestList() {
-  const [form] = useForm()
-  const [data, setData] = useState<ChangeWarehouseRequest.ChangeWarehouseRequestItem[]>([])
-  const changeWarehouseRequestListRef = useRef<{
-    open: (type: IAction, data?: ChangeWarehouseRequest.ChangeWarehouseRequestItem) => void
+  //初始化表单
+  const [form] = Form.useForm()
+  const [data, setData] = useState<User.UserInfo[]>([])
+  const [total, setTotal] = useState(0)
+  const [userIds, setUserIds] = useState<string[]>([])
+  const userRef = useRef<{
+    open: (type: IAction, data?: User.UserInfo) => void
   }>()
 
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10,
+  })
   useEffect(() => {
-    getChangeWarehouseRequest()
-  }, [])
+    getUserList({
+      pageNum: pagination.current,
+      pageSize: pagination.pageSize,
+    })
+  }, [pagination.current, pagination.pageSize])
 
-  const getChangeWarehouseRequest = async () => {
-    console.log('form:',form.getFieldsValue())
-    const data = await api.getWarehouseRequest(form.getFieldsValue())
-    setData(data)
+  //搜索
+  const handleSearch = () => {
+    getUserList({
+      pageNum: 1,
+    })
   }
-  const handleReset = () => {
+  //重置表单
+  const handleRest = () => {
     form.resetFields()
   }
-  
+  //获取用户列表
 
+  const getUserList = async (params: PageParams) => {
+    //获得所有的表单值
+    const values = form.getFieldsValue()
 
-  const handleEdit = (record: ChangeWarehouseRequest.ChangeWarehouseRequestItem) => {
-    changeWarehouseRequestListRef.current?.open('update', record)
+    const data = await api.getUserList({
+      ...values,
+      pageNum: params.pageNum,
+      pageSize: params.pageSize || pagination.pageSize,
+    })
+
+    setData(data.list)
+    setTotal(data.page.total)
+
+    setPagination({
+      current: data.page.pageNum,
+      pageSize: data.page.pageSize,
+    })
   }
 
-  const columns: ColumnsType<ChangeWarehouseRequest.ChangeWarehouseRequestItem> = [
+
+
+  //更新用户
+  const handleUpdate = (recode: User.UserInfo) => {
+    userRef.current?.open('update', recode)
+  }
+
+  //删除用户
+  const handleDel = (userId: string) => {
+    Modal.confirm({
+      title: '删除确认',
+      content: <span>确认删除该用户吗？</span>,
+      onOk: () => {
+        handleUserDelSubmit([userId])
+      },
+    })
+  }
+  //公共删除用户接口
+  const handleUserDelSubmit = async (ids: string[]) => {
+    try {
+      await api.delUser({ userIds: ids })
+      message.success('删除成功')
+      setUserIds([])
+      getUserList({
+        pageNum: 1,
+      })
+    } catch (error) {
+      message.error('删除失败')
+    }
+  }
+
+  //批量删除用户
+  const handlePatchConfirm = () => {
+    if (userIds.length === 0) {
+      message.error('请选择要删除的用户')
+      return
+    }
+    Modal.confirm({
+      title: '删除确认',
+      content: <span>确认删除所有选中的用户吗？</span>,
+      onOk: () => {
+        handleUserDelSubmit(userIds)
+      },
+    })
+  }
+  const columns: ColumnsType<User.UserInfo> = [
     {
-      title: '用戶提貨碼',
+      title: '用户ID',
+      dataIndex: 'id',
+      key: 'id',
+    },
+    {
+      title: 'openId',
+      dataIndex: 'openid',
+      key: 'openid',
+    },
+    {
+      title: '提取码',
       dataIndex: 'code',
       key: 'code',
     },
     {
-      title: '當前倉庫',
-      dataIndex: 'pidOlderName',
-      key: 'pidOlderName',
+      title: '手机号',
+      dataIndex: 'mobile',
+      key: 'mobile',
     },
     {
-      title: '申請倉庫',
-      dataIndex: 'pidNewName',
-      key: 'pidNewName'
+      title: '提货点',
+      dataIndex: 'ppName',
+      key: 'ppName',
     },
     {
-      title: '審核狀態',
-      dataIndex: 'isAccepted',
-      key: 'isAccepted',
-      render(isAccepted: number) {
+      title: '送货地址',
+      dataIndex: 'formatted_address',
+      key: 'formatted_address',
+    },
+    {
+      title: '账户权限',
+      dataIndex: 'userRoles',
+      key: 'userRoles',
+      render(userRoles: number) {
         return {
-          1: '審核中',
-          2: '通過',
-          3: '拒絕',
-        }[isAccepted]
+          1: '超级管理员',
+          2: '管理员',
+          3: '用户',
+        }[userRoles]
       },
     },
     {
-      title: '申請时间',
+      title: '用户状态',
+      dataIndex: 'userStatus',
+      key: 'userStatus',
+      render(userStatus: number) {
+        return {
+          1: '正常',
+          2: '停用',
+        }[userStatus]
+      },
+    },
+    {
+      title: '账户创建时间',
       dataIndex: 'createTime',
       key: 'createTime',
-      render(createTime) {
+      render(createTime: string) {
         return formatDate(createTime)
       },
     },
     {
       title: '操作',
       key: 'action',
-      width: 200,
-      render(_, record) {
-        return (
-          <Space>
-            <Button type='text' onClick={() => handleEdit(record)}>
-              编辑
-            </Button>
-          </Space>
-        )
+      render(record: User.UserInfo) {
+        if(record.userRoles != 1) { 
+          return (
+            <Space>
+              <Button type='text' onClick={() => handleUpdate(record)}>
+                编辑
+              </Button>
+              <Button type='text' danger onClick={() => handleDel(record.id)} >
+               删除
+             </Button> 
+            </Space>
+          )
+        }
+
+
       },
     },
   ]
+
   return (
-    <div>
-      <Form className='search-form' layout='inline' form={form} >
-        <FormItem label='用戶提貨碼' name='code'>
-          <Input placeholder='菜单名称' />
-        </FormItem>
-        <FormItem label='審核状态' name='isAccepted'>
-          <Select style={{ width: 100 }}>
-            <Select.Option value={0}>全部</Select.Option>
-            <Select.Option value={1}>審核中</Select.Option>
-            <Select.Option value={2}>通過</Select.Option>
-            <Select.Option value={3}>拒絕</Select.Option>
+    <div className='user-list'>
+      <Form className='search-form' form={form} layout='inline' initialValues={{ state: 0 }}>
+        <Form.Item name='id' label='用户ID'>
+          <Input placeholder='请输入用户ID' />
+        </Form.Item>
+        <Form.Item name='code' label='提取码'>
+          <Input placeholder='请输入提取码'></Input>
+        </Form.Item>
+        <Form.Item name='userStatus' label='状态'>
+          <Select style={{ width: 120 }}>
+            <Select.Option value={1}>正常</Select.Option>
+            <Select.Option value={2}>停用</Select.Option>
           </Select>
-        </FormItem>
-        <FormItem>
-          <Button type='primary' className='mr10' onClick={getChangeWarehouseRequest}>
-            搜索
-          </Button>
-          <Button type='default' onClick={handleReset}>
-            重置
-          </Button>
-        </FormItem>
+        </Form.Item>
+        <Form.Item>
+          <Space>
+            <Button type='primary' onClick={handleSearch}>
+              搜索
+            </Button>
+            <Button type='default' onClick={handleRest}>
+              重置
+            </Button>
+          </Space>
+        </Form.Item>
       </Form>
+
       <div className='base-table'>
         <div className='header-wrapper'>
-          <div className='title'>申請列表</div>
+          <div className='title'>用户列表</div>
+          <div className='action'>
+            { /**<Button type='primary' onClick={handleCreate}>
+              新增
+            </Button> **/}
+            <Button type='primary' danger onClick={handlePatchConfirm}>
+              批量删除
+            </Button>
+          </div>
         </div>
-        <Table bordered rowKey='id' columns={columns} dataSource={data} pagination={false} />
+
+        <Table
+          bordered
+          rowKey='id'
+          rowSelection={{
+            type: 'checkbox',
+            selectedRowKeys: userIds,
+            onChange: (selectedRowKeys: React.Key[]) => {
+              setUserIds(selectedRowKeys as string[])
+            },
+          }}
+          dataSource={data}
+          columns={columns}
+          pagination={{
+            position: ['bottomRight'],
+            current: pagination.current,
+            pageSize: pagination.pageSize,
+            total: total,
+            showQuickJumper: true,
+            showSizeChanger: true,
+            showTotal: function (total) {
+              return `总共: ${total} 条`
+            },
+            onChange: (page, pageSize) => {
+              setPagination({
+                current: page,
+                pageSize,
+              })
+            },
+          }}
+        />
       </div>
-      <CreateWarehouseRequest mRef={changeWarehouseRequestListRef} update={getChangeWarehouseRequest} />
     </div>
   )
 }

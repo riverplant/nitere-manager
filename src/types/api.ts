@@ -264,6 +264,38 @@ export namespace Category {
   }
 }
 
+export interface ResultData<T = any> {
+  list: T[]
+  page: {
+    pageNum: number
+    pageSize: number
+    total: number | 0
+  }
+}
+
+export namespace ClaimRequest {
+
+  export interface Params extends PageParams{
+    code?: string
+    status?: number // 0.全部 1.處理中 2. 正常 3: 包裹丟失
+    isDelete?: number
+  } 
+
+  export interface ClaimRequestItem {
+    id:             string
+    createTime:     string
+    updateTime:     string
+    trackingNumber: string
+    openid:         string
+    ImageUrlList:   string[] 
+    code:           string
+	  //上下架状态 上下架状态,1:處理中 2:處理完成 3:丟失
+    status:         number
+    //逻辑删除状态,1:正常 2:已删除
+    isDelete:       number
+  }
+
+}
 
 export namespace ChangeWarehouseRequest {
   export interface Params {
