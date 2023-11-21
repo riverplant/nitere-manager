@@ -168,6 +168,7 @@ export namespace PickPoint {
     parentId: string
     userId: string
     ppCode:string
+    nRandom:number
     children: PickPointItem[]
   }
 
@@ -184,6 +185,7 @@ export namespace PickPoint {
     userId:string
     city:string
     url:string
+    nRandom:number
   }
 
   export interface EditParams extends CreateParams {

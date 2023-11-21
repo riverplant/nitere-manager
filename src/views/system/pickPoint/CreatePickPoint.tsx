@@ -1,6 +1,6 @@
 import { IAction, IModalProp } from '@/types/modal'
 import { useEffect, useImperativeHandle, useState } from 'react'
-import { Form, Input, Modal, Select, TreeSelect, TimePicker, Radio } from 'antd'
+import { Form, Input, Modal, Select, TreeSelect, TimePicker, Radio, InputNumber } from 'antd'
 import { PickPoint, User } from '@/types/api'
 import { useForm } from 'antd/es/form/Form'
 import dayjs from "dayjs";
@@ -141,6 +141,11 @@ export default function CreatePickPoint(props: IModalProp<PickPoint.PickPointIte
         <FormItem label='提货点结束时间' name='endTime'>
           <TimePicker onChange={changEndTime}  />,
         </FormItem>
+
+        <FormItem label='随机码位数' name='nRandom' rules={[{ required: true, message: '请输入随机码位数' }]}>
+          <InputNumber placeholder='请输入随机码位数' />
+        </FormItem>
+
         <FormItem label='状态' name='pickPointStatus'>
           <Radio.Group>
             <Radio value={1}>启用</Radio>
