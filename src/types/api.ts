@@ -1,5 +1,7 @@
 //接口类型定义
 
+import wxorder from "@/views/PayOrders"
+
 export interface Result<T = any> {
   status: number
   data: T
@@ -230,6 +232,40 @@ export namespace Menu {
     children?: MenuItem[]
   }
 }
+
+export namespace PayOrders {
+  export interface Params {
+    code?: string
+    payMethod?: number // 1. 微信小程序支付 2. e-transfer
+    payStatus?:number // 10：未支付 20：已支付 30: 支付失败 40： 已退款
+  }
+
+  export interface CreateParams {
+	  openId: string
+	  userId: string
+    code:   string
+	  // 实际支付价格
+    price: string
+	// 提货仓库
+	  pid:   string
+
+	  payMethod: number
+	/**
+	 * 10：未支付 20：已支付 30: 支付失败 40： 已退款
+	 */
+	  payStatus: number
+  }
+
+  export interface EditParams extends CreateParams {
+    id?: string
+  }
+
+
+  export interface PayOrdersItem extends CreateParams {
+    
+  }
+}
+
 
 export namespace Category {
   export interface Params {

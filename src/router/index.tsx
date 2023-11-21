@@ -9,11 +9,11 @@ import PickPoint from '@/views/system/pickPoint'
 import Layout from '@/layout'
 import Menu from '@/views/system/menu'
 import AuthLoader from './AuthLoader'
-import Role from '@/views/system/role'
 import OrderList from '@/views/order/OrderList'
 import CategoryList from '@/views/system/category'
 import WarehouseRequestList from '@/views/system/warehousetRequest'
 import ClaimRequestList from '@/views/claimRequest'
+import PayOrder from '@/views/PayOrders'
 
 export const router = [
   {
@@ -75,6 +75,10 @@ export const router = [
       {
         path: '/claimRequestList',
         element: <ClaimRequestList />,
+      },
+      {
+        path: '/payOrdersList',
+        element: <PayOrder />,
       },
     ],
   },
