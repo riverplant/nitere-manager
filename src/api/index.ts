@@ -176,7 +176,7 @@ export default {
  //获取订单列表
   getOrderList(params:Order.Params){
     console.log('params:',params)
-    return request.get<Dashboard.ResultData<Order.OrderItem>>('http://127.0.0.1:8080/orders/list', params)
+    return request.get<ResultData<Order.OrderItem>>('http://127.0.0.1:8080/orders/list', params)
   },
 
   //获取城市列表

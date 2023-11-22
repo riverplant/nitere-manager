@@ -1,45 +1,79 @@
-import api from '@/api';
-import { Order } from '@/types/api';
-import { formatDate, formatMoney } from '@/utils';
-import { useAntdTable } from 'ahooks';
+import { Order, PageParams, PayOrders } from '@/types/api'
 import { Button, Form, Input, Select, Space, Table } from 'antd'
 import { ColumnsType } from 'antd/es/table'
-import { useRef } from 'react';
-import CreateOrder from '../components/CreateOrder';
-import OrderDetail from '../components/OrderDetail';
-import { IAction } from '@/types/modal';
+import { useEffect, useRef, useState } from 'react'
+import api from '@/api'
+import { formatDate, formatMoney } from '@/utils'
+import { IAction } from '@/types/modal'
+import CreateOrder from '../components/CreateOrder'
 
 export default function OrderList() {
-      //初始化表单
+  //初始化表单
   const [form] = Form.useForm()
-  const getTableData = ({ current, pageSize }: { current: number; pageSize: number }, formData: Order.SearchParams) => {
-    return api
-      .getOrderList({
-        ...formData,
-        pageNum: current,
-        pageSize: pageSize,
-      })
-      .then(data => {
-        return {
-          total: data.page.total,
-          list: data.list,
-        }
-      })
-  }
-  // 为了保证有open方法所以这里需要定义一个泛型，里面有open
-  const orderRef = useRef<{ open:(type: IAction, data?: Order.OrderItem)=>void }>()
-
-  const detailRef = useRef<{ open:(orderId:string)=>void }>()
+  const [data, setData] = useState<Order.OrderItem[]>([])
+  const [total, setTotal] = useState(0)
+  const [pageCount, setPageCount] = useState(0)
 
 
-  const { tableProps, search } = useAntdTable(getTableData, {
-    form,
-    defaultParams:[
-        {current:1,pageSize:10},
-        {orderStatus:0,  payStatus:0, orderNumber: '', code:''}
-       
-    ]
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10,
   })
+
+    // 为了保证有open方法所以这里需要定义一个泛型，里面有open
+    const orderRef = useRef<{ open:(type: IAction, data?: Order.OrderItem)=>void }>()
+
+    const detailRef = useRef<{ open:(orderId:string)=>void }>()
+
+  const handleEdit = (record: Order.OrderItem) => {
+    /**if(new Date(record.departureDate).getTime() < new Date().getTime()) {
+            detailRef.current?.open(record.orderNumber)
+        }else {
+            orderRef.current?.open('update', record)
+        }**/
+        orderRef.current?.open('update', record)
+  }
+
+
+  useEffect(() => {
+    getTableData({
+      pageNum: pagination.current,
+      pageSize: pagination.pageSize,
+    })
+  }, [pagination.current, pagination.pageSize])
+
+  //搜索
+  const handleSearch = () => {
+    getTableData({
+      pageNum: 1,
+    })
+  }
+  //重置表单
+  const handleRest = () => {
+    form.resetFields()
+  }
+  //获取用户列表
+
+  const getTableData = async (params: PageParams) => {
+    //获得所有的表单值
+    const values = form.getFieldsValue()
+    console.log('value:',values)
+    const data = await api.getOrderList({
+      ...values,
+      pageNum: params.pageNum,
+      pageSize: params.pageSize || pagination.pageSize,
+    })
+
+    console.log('data:',data)
+    setData(data.list)
+    setTotal(data.page.total)
+    setPageCount(data.page.pageCount)
+
+    setPagination({
+      current: data.page.pageNum,
+      pageSize: data.page.pageSize,
+    })
+  }
 
   const columns: ColumnsType<Order.OrderItem> = [
     {
@@ -48,15 +82,15 @@ export default function OrderList() {
       key: 'orderNumber',
     },
     {
-        title: '提货码',
-        dataIndex: 'code',
-        key: 'code',
-      },
-      {
-        title: '快递单号',
-        dataIndex: 'trackingNumber',
-        key: 'trackingNumber',
-      },
+      title: '用戶提取码',
+      dataIndex: 'code',
+      key: 'code',
+    },
+    {
+      title: '快递单号',
+      dataIndex: 'trackingNumber',
+      key: 'trackingNumber',
+    },
     {
       title: '箱号',
       dataIndex: 'boxNumber',
@@ -156,47 +190,32 @@ export default function OrderList() {
     {
       title: '操作',
       key: 'action',
+      width: 200,
       render(_, record) {
         return (
           <Space>
-            <Button type='text' onClick={()=>handleDetail(record)}>
-              编辑包裹信息
+            <Button type='text' onClick={() => handleEdit(record)}>
+              编辑
             </Button>
           </Space>
         )
       },
     },
+
   ]
 
-  //创建订单
- /**
-  * const handleCreate = ()=>{
-    orderRef.current?.open('create')
-  }
-  *  */ 
-
-  //订单详情
-  const handleDetail = (record:Order.OrderItem)=>{
-  /**if(new Date(record.departureDate).getTime() < new Date().getTime()) {
-        detailRef.current?.open(record.orderNumber)
-    }else {
-        orderRef.current?.open('update', record)
-    }**/
-    orderRef.current?.open('update', record)
-    
-  }
-
-    return (
-    <div className="OrderList">
-        <Form className='search-form' form={form} layout='inline' initialValues={{ orderStatus: 0, payStatus:0 }}>
-        <Form.Item name='orderNumber' label='包裹号码'>
-          <Input placeholder='请输入包裹号码' />
+  return (
+    <div className='order-List'>
+      <Form className='search-form' form={form} layout='inline' initialValues={{ orderStatus: 0, payStatus:0 }}>
+      <Form.Item name='orderNumber' label='包裹号码'>
+          <Input placeholder='包裹号码'></Input>
         </Form.Item>
-        <Form.Item name='code' label='提货码'>
-          <Input placeholder='请输入顾客提货码'></Input>
+        <Form.Item name='code' label='用戶提貨码'>
+          <Input placeholder='请输入提貨码'></Input>
         </Form.Item>
-        <Form.Item name='payStatus' label='支付状态'>
-          <Select style={{ width: 120 }}>
+        <Form.Item name='payStatus' label='状态'>
+          <Select style={{ width: 120 }} >
+          <Select.Option value={0} >全部</Select.Option>
             <Select.Option value={10}>未支付</Select.Option>
             <Select.Option value={20}>已支付</Select.Option>
             <Select.Option value={30}>支付失败</Select.Option>
@@ -204,7 +223,7 @@ export default function OrderList() {
           </Select>
         </Form.Item>
         <Form.Item name='orderStatus' label='包裹状态'>
-          <Select style={{ width: 120 }}>
+        <Select style={{ width: 120 }}>
             <Select.Option value={0}>全部</Select.Option>
             <Select.Option value={1}>驗貨通過</Select.Option>
             <Select.Option value={2}>驗貨未通過</Select.Option>
@@ -212,10 +231,10 @@ export default function OrderList() {
         </Form.Item>
         <Form.Item>
           <Space>
-            <Button type='primary' >
+            <Button type='primary' onClick={handleSearch}>
               搜索
             </Button>
-            <Button type='default' >
+            <Button type='default' onClick={handleRest}>
               重置
             </Button>
           </Space>
@@ -224,30 +243,40 @@ export default function OrderList() {
 
       <div className='base-table'>
         <div className='header-wrapper'>
-          <div className='title'>包裹列表</div>
-         {/**
-          * <div className='action'>
-            <Button type='primary' onClick={handleCreate}>
-              新增 
-            </Button>
-            <Button type='primary' onClick={handleExport}>
-              导出 
-            </Button>
-          </div>
-          */}  
+          <div className='title'>支付订单列表</div>
+
         </div>
 
         <Table
           bordered
-          rowKey='id'     
+          rowKey='id'
+          dataSource={data}
           columns={columns}
-         {...tableProps}
+          pagination={{
+            position: ['bottomRight'],
+            current: pagination.current,
+            pageSize: pagination.pageSize,
+            total: total,
+            showQuickJumper: true,
+            showSizeChanger: true,
+            showTotal: function (total) {
+              return `总共: ${total} 条`
+            },
+            onChange: (page, pageSize) => {
+              setPagination({
+                current: page,
+                pageSize,
+              })
+            },
+          }}
         />
       </div>
-      {/**创建订单组件 */}
-      <CreateOrder mRef={orderRef} update={search.submit}/>
-       {/**订单详情 */}
-      <OrderDetail mRef={detailRef}/>
+      <CreateOrder mRef={orderRef}  update={() => {
+          getTableData({
+            pageNum: 1,
+          })
+        }}/>
     </div>
-    )
+  )
+ 
 }
