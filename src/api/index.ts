@@ -175,12 +175,13 @@ export default {
   //////////////////////////////////////////////////////////////////////////////////////////////////////
  //获取订单列表
   getOrderList(params:Order.Params){
+    console.log('params:',params)
     return request.get<Dashboard.ResultData<Order.OrderItem>>('http://127.0.0.1:8080/orders/list', params)
   },
 
   //获取城市列表
   getBoxList() {
-    return request.get<Order.DictItem[]>('http://127.0.0.1:8080/order/cityList')
+    return request.get<Order.DictItem[]>('http://127.0.0.1:8080/box/list')
   },
 
 
@@ -210,8 +211,8 @@ export default {
     },
 
     //更新订单
-    updateOrder(params:Order.CreateParams) {
-      return request.post('http://127.0.0.1:8080/order/create', params)
+    updateOrder(params:Order.EditParams) {
+      return request.put('http://127.0.0.1:8080/orders/updateForWeb', params)
     },
 
     //获取订单详情
@@ -220,9 +221,9 @@ export default {
     },
 
     //导出数据
-    exportData(params:Order.SearchParams) {
+   /**  exportData(params:Order.SearchParams) {
         return request.downloadFile('http://127.0.0.1:8080/order/orderExport', params, '订单列表.xlsx')
     }
-    
+   */ 
 
 }

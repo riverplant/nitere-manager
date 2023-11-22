@@ -374,70 +374,59 @@ export namespace ChangeWarehouseRequest {
   }
 }
 
-
-
-
 export namespace Order {
   export interface Params extends PageParams {
-    orderId?: string
-    userName?:string
-    state?:number
+    orderNumber?: string
+    code?:string
+    orderStatus?:number
+    payStatus?:number
   }
 
-  export enum PayStatus {
-    //nopay = 10,
-    doing = 1,
-    //payed = 20,
-    done = 2,
-    //payfaild = 30,
-    timeout = 3,
-    //refunded = 40
-    cance = 4
+  export interface SearchParams {
+    orderNumber?:string,
+    code?:string,
+    orderStatus?:number
+    payStatus?:number
   }
-
   export interface CreateParams {
-    cityName:string,
-    userName:string,
-    mobile:number,
-    startAddress:string,
-    endAddress:string,
-    orderAmount:number, // 订单金额
-    userPayAmount:number, // 支付金额
-    driverAmount:number, // 支付金额
-    payType: number, // 1. 微信 2. 支付宝
-    driverName:string,
-    vehicleName:string,
-    state: PayStatus,
-    useTime:string,
-    endTime:string,
-    //realWeight:string,
-    //volum:string,
-    //volumWeight:string
+	  code: string
+    trackingNumber:string
+    pLong:number
+    pWidth:number
+    pWeight:number
+    pHeight:number
+    pWeightByVolume:number
+    pVolume:number
+    price:number
+    payMethod:number
+    amount:number
+    postPrice:number
+    discount:number
+    catName:string
+    createTime:string
+    updateTime:string
+    orderNumber:string
+    departureDate:string
+    orderStatus:number
+    payStatus:number
+    pId:string
+    pName:string
+    boxId:string
+    formatted_address:string
+    deliverDate:string
+  }
 
+  export interface EditParams extends CreateParams {
+    id: string
+   
   }
 
   export interface OrderItem extends CreateParams {
     id:string,
-    orderId:string,
-    route:Array<{lng:string; lat:string}>,
-    createTime:string,
-    remark:string
-  }
-
-  export interface SearchParams {
-    orderId?:string,
-    userName?:string,
-    state?:number
-  }
-
-  export interface Params extends PageParams{
-    orderId?:string,
-    userName?:string,
-    state?:number
   }
 
   export interface DictItem {
-    id:number,
+    id:string,
     name:string
   }
 

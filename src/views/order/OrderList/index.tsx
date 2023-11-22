@@ -36,115 +36,122 @@ export default function OrderList() {
     form,
     defaultParams:[
         {current:1,pageSize:10},
-        {state:1}
+        {orderStatus:0,  payStatus:0, orderNumber: '', code:''}
+       
     ]
   })
 
-  type DataType = Order.OrderItem
-
-  const columns: ColumnsType<DataType> = [
+  const columns: ColumnsType<Order.OrderItem> = [
     {
-      title: '包裹ID',
-      dataIndex: 'orderId',
-      key: 'orderId',
+      title: '包裹号码',
+      dataIndex: 'orderNumber',
+      key: 'orderNumber',
     },
     {
-        title: '顾客ID',
-        dataIndex: 'userName',
-        key: 'userName',
+        title: '提货码',
+        dataIndex: 'code',
+        key: 'code',
       },
       {
-        title: '手机号码',
-        dataIndex: 'mobile',
-        key: 'mobile',
+        title: '快递单号',
+        dataIndex: 'trackingNumber',
+        key: 'trackingNumber',
       },
     {
       title: '箱号',
-      dataIndex: 'cityName',
-      key: 'cityName',
+      dataIndex: 'boxNumber',
+      key: 'boxNumber',
     },
     {
         title: '商品类型',
-        dataIndex: 'vehicleName',
-        key: 'vehicleName',
+        dataIndex: 'catName',
+        key: 'catName',
       },
     {
         title: '送货地址',
-        dataIndex: 'endAddress',
-        key: 'endAddress',
+        dataIndex: 'formatted_address',
+        key: 'formatted_address',
         width:195,
         render(_,record) {
             return <div>
-                <p>仓库地址: 多伦多测试地址</p>
-                <p>送货地址: {record.endAddress}</p>
+                <p>送货地址: {record.formatted_address}</p>
             </div>
         }
       },
     {
       title: '出海时间',
-      dataIndex: 'useTime',
-      key: 'useTime',
-      render(useTime: string) {
-        return formatDate(useTime)
-      },
+      dataIndex: 'departureDate',
+      key: 'departureDate',
+     
     },
-    {
-        title: '预计送货时间',
-        dataIndex: 'endTime',
-        key: 'endTime',
-        render(endTime: string) {
-          return formatDate(endTime)
-        },
-      },
+
     {
       title: '订单金额',
-      dataIndex: 'orderAmount',
-      key: 'orderAmount',
-      render(orderAmount) {
-        return formatMoney(orderAmount)
+      dataIndex: 'amount',
+      key: 'amount',
+      render(amount) {
+        return formatMoney(amount)
     }
     },
     {
         title: '优惠金额',
-        dataIndex: 'userPayAmount',
-        key: 'userPayAmount',
-        render(userPayAmount) {
-            return formatMoney(userPayAmount)
+        dataIndex: 'discount',
+        key: 'discount',
+        render(discount) {
+            return formatMoney(discount)
         }
       },
       {
         title: '实际支付',
-        dataIndex: 'driverAmount',
-        key: 'driverAmount',
-        render(driverAmount) {
-            return formatMoney(driverAmount)
+        dataIndex: 'price',
+        key: 'price',
+        render(price) {
+            return formatMoney(price)
+        }
+      },
+      {
+        title: '订单状态',
+        dataIndex: 'orderStatus',
+        key: 'orderStatus',
+        render(orderStatus) {
+         if(orderStatus === 1) return '验货通过'
+         if(orderStatus === 2) return '验货未通过'    
+        }
+      },
+      {
+        title: '支付方式',
+        dataIndex: 'payMethod',
+        key: 'payMethod',
+        render(payMethod) {
+         if(payMethod === 1) return '微信支付'
+         if(payMethod === 2) return 'E-Transfer'   
         }
       },
     {
-        title: '订单状态',
-        dataIndex: 'state',
-        key: 'state',
-        render(state) {
-         if(state === 1) return '未支付'
-         if(state === 2) return '已支付'
-         if(state === 3) return '支付超时'
-         if(state === 4) return '已退款'    
+        title: '订单支付状态',
+        dataIndex: 'payStatus',
+        key: 'payStatus',
+        render(payStatus) {
+         if(payStatus === 10) return '未支付'
+         if(payStatus === 20) return '已支付'
+         if(payStatus === 30) return '支付超时'
+         if(payStatus === 40) return '已退款'    
         }
       },
       {
         title: '实际重',
-        dataIndex: 'realWeight',
-        key: 'realWeight',
+        dataIndex: 'pWeight',
+        key: 'pWeight',
       },
       {
         title: '体积',
-        dataIndex: 'volum',
-        key: 'volum',
+        dataIndex: 'pVolume',
+        key: 'pVolume',
       },
       {
         title: '体积重',
-        dataIndex: 'volumWeight',
-        key: 'volumWeight',
+        dataIndex: 'pWeightByVolume',
+        key: 'pWeightByVolume',
       },
     {
       title: '操作',
@@ -153,7 +160,7 @@ export default function OrderList() {
         return (
           <Space>
             <Button type='text' onClick={()=>handleDetail(record)}>
-              详情
+              编辑包裹信息
             </Button>
           </Space>
         )
@@ -162,40 +169,45 @@ export default function OrderList() {
   ]
 
   //创建订单
-  const handleCreate = ()=>{
+ /**
+  * const handleCreate = ()=>{
     orderRef.current?.open('create')
   }
+  *  */ 
 
   //订单详情
   const handleDetail = (record:Order.OrderItem)=>{
-  if(new Date(record.useTime).getTime() < new Date().getTime()) {
-        detailRef.current?.open(record.orderId)
+  /**if(new Date(record.departureDate).getTime() < new Date().getTime()) {
+        detailRef.current?.open(record.orderNumber)
     }else {
         orderRef.current?.open('update', record)
-    }
+    }**/
+    orderRef.current?.open('update', record)
     
-  }
-
-  // 文件导出
-  const handleExport = ()=>{
-     api.exportData(form.getFieldsValue())
   }
 
     return (
     <div className="OrderList">
-        <Form className='search-form' form={form} layout='inline' initialValues={{ state: 1 }}>
-        <Form.Item name='orderId' label='包裹ID'>
-          <Input placeholder='请输入ID' />
+        <Form className='search-form' form={form} layout='inline' initialValues={{ orderStatus: 0, payStatus:0 }}>
+        <Form.Item name='orderNumber' label='包裹号码'>
+          <Input placeholder='请输入包裹号码' />
         </Form.Item>
-        <Form.Item name='userName' label='顾客ID'>
-          <Input placeholder='请输入顾客ID'></Input>
+        <Form.Item name='code' label='提货码'>
+          <Input placeholder='请输入顾客提货码'></Input>
         </Form.Item>
-        <Form.Item name='payStatus' label='订单状态'>
+        <Form.Item name='payStatus' label='支付状态'>
           <Select style={{ width: 120 }}>
-            <Select.Option value={1}>未支付</Select.Option>
-            <Select.Option value={2}>已支付</Select.Option>
-            <Select.Option value={3}>支付失败</Select.Option>
-            <Select.Option value={4}>已退款</Select.Option>
+            <Select.Option value={10}>未支付</Select.Option>
+            <Select.Option value={20}>已支付</Select.Option>
+            <Select.Option value={30}>支付失败</Select.Option>
+            <Select.Option value={40}>已退款</Select.Option>
+          </Select>
+        </Form.Item>
+        <Form.Item name='orderStatus' label='包裹状态'>
+          <Select style={{ width: 120 }}>
+            <Select.Option value={0}>全部</Select.Option>
+            <Select.Option value={1}>驗貨通過</Select.Option>
+            <Select.Option value={2}>驗貨未通過</Select.Option>
           </Select>
         </Form.Item>
         <Form.Item>
@@ -212,22 +224,22 @@ export default function OrderList() {
 
       <div className='base-table'>
         <div className='header-wrapper'>
-          <div className='title'>未支付订单列表</div>
-          <div className='action'>
+          <div className='title'>包裹列表</div>
+         {/**
+          * <div className='action'>
             <Button type='primary' onClick={handleCreate}>
               新增 
             </Button>
             <Button type='primary' onClick={handleExport}>
               导出 
             </Button>
-
-
           </div>
+          */}  
         </div>
 
         <Table
           bordered
-          rowKey='orderId'     
+          rowKey='id'     
           columns={columns}
          {...tableProps}
         />

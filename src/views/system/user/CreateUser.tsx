@@ -108,8 +108,8 @@ const CreateUser = (props: IModalProp) => {
           <Input placeholder='请输入用户邮箱' />
         </FormItem>
       
-      <FormItem label='用户提货码' name='code' disabled={false} >
-          <Input placeholder='请输入提货码' />
+      <FormItem label='用户提货码' name='code'  >
+          <Input placeholder='请输入提货码' disabled={false} />
         </FormItem>
 
 
