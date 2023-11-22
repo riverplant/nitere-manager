@@ -1,9 +1,11 @@
-import { ClaimRequest, PageParams, PayOrders } from '@/types/api'
+import { PageParams, PayOrders } from '@/types/api'
 import { Button, Form, Input, Select, Space, Table } from 'antd'
 import { ColumnsType } from 'antd/es/table'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import api from '@/api'
-import { formatDate } from '@/utils'
+import { formatDate, formatMoney } from '@/utils'
+import { IAction } from '@/types/modal'
+import CreatePayOrders from './CreatePayOrders'
 
 export default function PayOrder() {
   //初始化表单
@@ -17,6 +19,16 @@ export default function PayOrder() {
     current: 1,
     pageSize: 10,
   })
+
+
+  const payOrderRef = useRef<{
+    open: (type: IAction, data?: PayOrders.EditParams ) => void
+  }>()
+
+  const handleEdit = (record: PayOrders.PayOrdersItem) => {
+    payOrderRef.current?.open('update', record)
+  }
+  
   useEffect(() => {
     getPayOrdersList({
       pageNum: pagination.current,
@@ -39,12 +51,13 @@ export default function PayOrder() {
   const getPayOrdersList = async (params: PageParams) => {
     //获得所有的表单值
     const values = form.getFieldsValue()
-
+    console.log('value:',values)
     const data = await api.getPayOrdersList({
       ...values,
       pageNum: params.pageNum,
       pageSize: params.pageSize || pagination.pageSize,
     })
+
 
     setData(data.list)
     setTotal(data.page.total)
@@ -58,9 +71,9 @@ export default function PayOrder() {
 
   const columns: ColumnsType<PayOrders.PayOrdersItem> = [
     {
-      title: '快遞單號',
-      dataIndex: 'trackingNumber',
-      key: 'trackingNumber',
+      title: 'ID',
+      dataIndex: 'id',
+      key: 'id',
     },
     {
       title: '用戶提取码',
@@ -68,16 +81,22 @@ export default function PayOrder() {
       key: 'code',
     },
     {
-      title: '認領状态',
-      dataIndex: 'status',
-      key: 'status',
-      render(status: number) {
-        return {
-          1: '處理中',
-          2: '認領成功',
-          3: '包裹丟失',
-        }[status]
-      },
+      title: '提货仓库',
+      dataIndex: 'pName',
+      key: 'pName',
+    },
+    {
+      title: '金额',
+      dataIndex: 'price',
+      key: 'price',
+      render(price) {
+        return formatMoney(price)
+    }
+    },
+    {
+      title: '订单来源',
+      dataIndex: 'comeFrom',
+      key: 'comeFrom',
     },
     {
       title: '创建时间',
@@ -95,6 +114,44 @@ export default function PayOrder() {
         return formatDate(updateTime)
       },
     },
+    {
+      title: '支付方式',
+      dataIndex: 'payMethod',
+      key: 'payMethod',
+      render(payMethod: number) {
+        return {
+          1: '微信支付',
+          2: 'e-transfer'
+        }[payMethod]
+      },
+    },
+    {
+      title: '状态',
+      dataIndex: 'payStatus',
+      key: 'payStatus',
+      render(payStatus: number) {
+        return {
+          10: '未支付',
+          20: '已支付',
+          30: '支付失败',
+          40: '已退款',
+        }[payStatus]
+      },
+    },
+    {
+      title: '操作',
+      key: 'action',
+      width: 200,
+      render(_, record) {
+        return (
+          <Space>
+            <Button type='text' onClick={() => handleEdit(record)}>
+              编辑
+            </Button>
+          </Space>
+        )
+      },
+    },
 
   ]
 
@@ -104,12 +161,20 @@ export default function PayOrder() {
         <Form.Item name='code' label='用戶提貨码'>
           <Input placeholder='请输入提貨码'></Input>
         </Form.Item>
-        <Form.Item name='status' label='状态'>
+        <Form.Item name='payStatus' label='状态'>
+          <Select style={{ width: 120 }} >
+          <Select.Option value={0} >全部</Select.Option>
+            <Select.Option value={10}>未支付</Select.Option>
+            <Select.Option value={20}>已支付</Select.Option>
+            <Select.Option value={30}>支付失败</Select.Option>
+            <Select.Option value={40}>已退款</Select.Option>
+          </Select>
+        </Form.Item>
+        <Form.Item name='payMethod' label='支付方式'>
           <Select style={{ width: 120 }}>
           <Select.Option value={0}>全部</Select.Option>
-            <Select.Option value={1}>待處理</Select.Option>
-            <Select.Option value={2}>認領成功</Select.Option>
-            <Select.Option value={3}>包裹丟失</Select.Option>
+            <Select.Option value={1}>微信支付</Select.Option>
+            <Select.Option value={2}>e-transfer</Select.Option>
           </Select>
         </Form.Item>
         <Form.Item>
@@ -126,7 +191,7 @@ export default function PayOrder() {
 
       <div className='base-table'>
         <div className='header-wrapper'>
-          <div className='title'>認領請求列表</div>
+          <div className='title'>支付订单列表</div>
 
         </div>
 
@@ -154,6 +219,12 @@ export default function PayOrder() {
           }}
         />
       </div>
+      <CreatePayOrders mRef={payOrderRef}  update={() => {
+          getPayOrdersList({
+            pageNum: 1,
+          })
+        }}/>
     </div>
   )
+ 
 }

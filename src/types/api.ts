@@ -1,7 +1,4 @@
 //接口类型定义
-
-import wxorder from "@/views/PayOrders"
-
 export interface Result<T = any> {
   status: number
   data: T
@@ -247,7 +244,6 @@ export namespace PayOrders {
 	  // 实际支付价格
     price: string
 	// 提货仓库
-	  pid:   string
 
 	  payMethod: number
 	/**

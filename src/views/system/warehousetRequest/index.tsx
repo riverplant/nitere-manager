@@ -1,12 +1,12 @@
 import api from '@/api'
-import { Button, Form, Input, Modal, Select, Space, Table, message } from 'antd'
+import { Button, Form, Input, Select, Space, Table } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import { useEffect, useRef, useState } from 'react'
 import { IAction } from '@/types/modal'
 import { ColumnsType } from 'antd/es/table'
 import FormItem from 'antd/es/form/FormItem'
 import { formatDate } from '@/utils'
-import { ChangeWarehouseRequest, Menu } from '@/types/api'
+import { ChangeWarehouseRequest } from '@/types/api'
 import CreateWarehouseRequest from './CreateWarehouseRequest'
 
 export default function WarehouseRequestList() {

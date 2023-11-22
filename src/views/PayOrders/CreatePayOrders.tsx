@@ -1,72 +1,46 @@
 import { IAction, IModalProp } from '@/types/modal'
-import { useEffect, useImperativeHandle, useState } from 'react'
-import { Form, Input, Modal, TreeSelect, Radio } from 'antd'
-import { Category, PickPoint } from '@/types/api'
+import { useImperativeHandle, useState } from 'react'
+import { Form, Input, Modal, Radio } from 'antd'
+import { PayOrders } from '@/types/api'
 import { useForm } from 'antd/es/form/Form'
 import api from '@/api'
 import FormItem from 'antd/es/form/FormItem'
-
-export default function CreatPayOrders(props: IModalProp<Category.CategoryItem>) {
+export default function CreatePayOrders(props: IModalProp<PayOrders.PayOrdersItem>) {
   const [form] = useForm()
   const [action, setAction] = useState<IAction>('create')
   const [visible, setVisible] = useState(false)
-  const [category, setCategory] = useState<Category.CategoryItem[]>([])
+  
 
-
-
-  useEffect(() => {
-    getCategoryList()
-
-  }, [])
-
-  const getCategoryList = async () => {
-    const data = await api.getCategoryList()
-    setCategory(data)
-  }
-
-  //打开弹窗函数
-  const open = (type: IAction, data?: Category.EditParams | { parentId: string }) => {
-    setAction(type)
-    setVisible(true)
-    getCategoryList()
-    if ( data  ) {   
-        form.setFieldsValue(data)
-    }
-
-  }
   useImperativeHandle(props.mRef, () => ({
     open,
   }))
-  const handleSubmit = async () => {
 
+  //打开弹窗函数
+  const open = (type: IAction, data?: PayOrders.PayOrdersItem ) => {
+    setAction(type)
+    setVisible(true)
+    if (data) {
+      form.setFieldsValue(data)
+    }
+  }
+
+  const handleSubmit = async () => {
     const valid = await form.validateFields()
     if (valid) {
-      if (action === 'create') {
-        const params: Category.CreateParams = { ...form.getFieldsValue() }
-
-        await api.createCategory(params)
-      } else {
-        const params: Category.EditParams = { ...form.getFieldsValue() }
-       
-        
-
-        await api.editCategory(params)
-      }
+        const params: PayOrders.EditParams = { ...form.getFieldsValue() }
+        await api.updatePayOrder(params)
       handleCancel()
       props.update()
     }
   }
   const handleCancel = () => {
-    setVisible(false)
     form.resetFields
+    setVisible(false)
   }
 
-
-
- 
   return (
     <Modal
-      title={action === 'create' ? '创建類型' : '编辑類型'}
+      title='更新支付订单状态'
       width={800}
       open={visible}
       okText='确定'
@@ -74,34 +48,45 @@ export default function CreatPayOrders(props: IModalProp<Category.CategoryItem>)
       onOk={handleSubmit}
       onCancel={handleCancel}
     >
-      <Form form={form} labelAlign='right' labelCol={{ span: 4 }}>
+      <Form form={form} labelAlign='right' labelCol={{ span: 4 }} initialValues={{ menuType: 1, menuState: 1 }}>
         <FormItem name='id' hidden>
           <Input />
         </FormItem>
-        <FormItem label='父級類型' name='parentId'>
-          <TreeSelect
-            placeholder='请选择父級類型'
-            allowClear
-            treeDefaultExpandAll
-            fieldNames={{ label: 'name', value: 'id' }}
-            treeData={category}
-          />
+        <FormItem name='openId' hidden>
+          <Input />
         </FormItem>
-        <FormItem label='名称' name='name' rules={[{ required: true, message: '请输入名称' }]}>
-          <Input placeholder='请输入名称' />
+
+        <FormItem label='用戶提貨碼' name='code' >
+          <Input  disabled />
         </FormItem>
-        <FormItem label='類型代碼' name='enName' >
-          <Input placeholder='请输入類型代碼' />
+
+        <FormItem label='支付金额' name='price' >
+          <Input  disabled />
         </FormItem>
-        <FormItem label='状态' name='catStatus'>
+
+        <FormItem label='所属仓库' name='pName' >
+          <Input  disabled />
+        </FormItem>
+
+        <FormItem label='支付方式' name='payMethod'>
           <Radio.Group>
-            <Radio value={1}>启用</Radio>
-            <Radio value={2}>停用</Radio>
+            <Radio value={1}>微信支付</Radio>
+            <Radio value={2}>E-Transfer</Radio>
           </Radio.Group>
         </FormItem>
+        
+        <FormItem label='状态' name='payStatus'>
+          <Radio.Group>
+            <Radio value={10}>未支付</Radio>
+            <Radio value={20}>已支付</Radio>
+            <Radio value={30}>支付失败</Radio>
+            <Radio value={40}>已退款</Radio>
+          </Radio.Group>
+        </FormItem>
+
+
+       
       </Form>
     </Modal>
   )
 }
-
-
