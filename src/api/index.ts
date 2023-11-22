@@ -1,4 +1,4 @@
-import { Category, ChangeWarehouseRequest, ClaimRequest, Dashboard, Login, Menu, Order, PickPoint, Result, ResultData, Role, User } from '@/types/api'
+import { Category, ChangeWarehouseRequest, ClaimRequest, Dashboard, Login, Menu, Order, PayOrders, PickPoint, Result, ResultData, Role, User } from '@/types/api'
 import request from '@/utils/request'
 
 export default {
@@ -193,6 +193,16 @@ export default {
      getClaimList(params: ClaimRequest.Params) {
     return request.get<ResultData<ClaimRequest.ClaimRequestItem>>('http://127.0.0.1:8080/claim/list', params)
   },
+
+        //获取微信订单
+     getPayOrdersList(params: PayOrders.Params) {
+    return request.get<ResultData<PayOrders.PayOrdersItem>>('http://127.0.0.1:8080/payorder/list', params)
+  },
+
+    //更新订单
+    updatePayOrder(params:PayOrders.EditParams) {
+      return request.put('http://127.0.0.1:8080/payorder/update', params)
+    },
 
     //创建订单
     createOrder(params:Order.CreateParams) {

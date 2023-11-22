@@ -261,8 +261,19 @@ export namespace PayOrders {
   }
 
 
-  export interface PayOrdersItem extends CreateParams {
-    
+  export interface PayOrdersItem  {
+    openId: string
+	  userId: string
+    code:   string
+	  // 实际支付价格
+    price: string
+	  // 提货仓库
+	  pName:   string
+	  payMethod: number
+	/**
+	 * 10：未支付 20：已支付 30: 支付失败 40： 已退款
+	 */
+	  payStatus: number
   }
 }
 

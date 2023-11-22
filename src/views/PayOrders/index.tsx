@@ -40,7 +40,7 @@ export default function PayOrder() {
     //获得所有的表单值
     const values = form.getFieldsValue()
 
-    const data = await api.getClaimList({
+    const data = await api.getPayOrdersList({
       ...values,
       pageNum: params.pageNum,
       pageSize: params.pageSize || pagination.pageSize,
@@ -56,7 +56,7 @@ export default function PayOrder() {
     })
   }
 
-  const columns: ColumnsType<ClaimRequest.ClaimRequestItem> = [
+  const columns: ColumnsType<PayOrders.PayOrdersItem> = [
     {
       title: '快遞單號',
       dataIndex: 'trackingNumber',
