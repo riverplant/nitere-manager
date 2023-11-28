@@ -1,4 +1,4 @@
-import { Category, ChangeWarehouseRequest, ClaimRequest, Dashboard, Login, Menu, Order, PayOrders, PickPoint, Result, ResultData, Role, User } from '@/types/api'
+import { Cabinet, Category, ChangeWarehouseRequest, ClaimRequest, Dashboard, Login, Menu, Order, PayOrders, PickPoint, Result, ResultData, Role, User } from '@/types/api'
 import request from '@/utils/request'
 
 export default {
@@ -216,10 +216,16 @@ export default {
     },
 
     //获取订单详情
-    getOrderDetail(orderId:string) {
-       return request.get<Order.OrderItem>(`http://127.0.0.1:8080/order/detail/${orderId}`)
+    getOrderDetail(id:string) {
+       return request.get<Order.OrderItem>(`http://127.0.0.1:8080/orders/detail/${id}`)
     },
 
+      //////////////////////////////////////////////////////////////////////////////////////////////////////
+   //获取柜子列表
+   getCabinetList(params:Cabinet.Params){
+    console.log('params:',params)
+    return request.get<ResultData<Cabinet.Item>>('http://127.0.0.1:8080/cabinet/list', params)
+  },
     //导出数据
    /**  exportData(params:Order.SearchParams) {
         return request.downloadFile('http://127.0.0.1:8080/order/orderExport', params, '订单列表.xlsx')

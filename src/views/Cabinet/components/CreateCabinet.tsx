@@ -1,12 +1,12 @@
 import api from "@/api";
-import { Order } from "@/types/api";
+import { Cabinet, Order } from "@/types/api";
 import { IAction, IModalProp } from "@/types/modal";
 import { message } from "@/utils/AntdGlobal";
 import {Col, DatePicker, Form, Input, Modal, Row, Select} from "antd";
 import FormItem from "antd/es/form/FormItem";
 import dayjs from "dayjs";
 import { useEffect, useImperativeHandle, useState } from "react";
-export default function CreateOrder(props:IModalProp<Order.OrderItem>) {
+export default function CreateCabinet(props:IModalProp<Order.OrderItem>) {
 const [action, setAction] = useState<IAction>('create')
  const [visible, setVisible] = useState(false)
  const [modalValideOpen, setModalValideOpen] = useState(false)
@@ -30,7 +30,7 @@ const [action, setAction] = useState<IAction>('create')
     }
   })
 //打开弹框
- const open = (type: IAction, data: Order.OrderItem)=>{ 
+ const open = (type: IAction, data: Cabinet.Item)=>{ 
     setAction(type)
     setVisible(true);
   if (type === 'update' && data) {   

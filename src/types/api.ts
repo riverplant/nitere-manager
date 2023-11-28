@@ -431,3 +431,76 @@ export namespace Order {
   }
 
 }
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export namespace Cabinet {
+
+  export interface Params extends PageParams {
+    dateStart?: string
+    dateEnd?:string
+  }
+
+
+  export interface Item {
+  id: string
+  departureDate:string
+	boxs: BoxItem[]
+	createTime: string
+	updateTime: string
+	// 0.全部 1.未出海 2. 已出海
+	Status: number
+	// 1.未刪除 2. 已刪除
+	isDelete: number
+	cabinetNumber: number
+	pid: string
+  pName: string
+	// 合計重量
+   weightTotal: number
+	// 合計體積
+	volumTotal: number
+	// 合计价格
+	priceTotal: number
+	// 包裹數量
+	orderCount: number
+  }
+
+  export interface BoxItem {
+    id: string
+    pName: string
+    code: string
+    boxNumber: number
+    // 取貨點
+    pid: string
+    // 裝箱狀態: 1. 未封箱 2. 已封箱
+    boxStatus: number
+    // 箱子類型: 1. 獨立包裹 2. 合裝箱
+    boxType: number
+    // 合計重量
+    weightTotal:number
+    // 合計體積
+    volumTotal: number 
+    // 合计价格
+    priceTotal: number
+    // 包裹數量
+    orderCount: number
+    // 封箱日期
+    SealingDate: string
+    // 所屬櫃子ID
+    cabinetId: string
+  
+    /**
+     * 逻辑删除状态,1:正常 2:已删除
+     */
+    isDelete: number
+  
+    createTime: string
+  
+    updateTime: string
+
+  
+    orderInfos: Order.OrderItem[]
+  }
+
+}

@@ -1,17 +1,17 @@
-import { Order, PageParams, PayOrders } from '@/types/api'
+import { Cabinet, Order, PageParams } from '@/types/api'
 import { Button, Form, Input, Select, Space, Table } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import { useEffect, useRef, useState } from 'react'
 import api from '@/api'
 import { formatDate, formatMoney } from '@/utils'
 import { IAction } from '@/types/modal'
-import CreateOrder from '../components/CreateOrder'
-import OrderDetail from '../components/OrderDetail'
+import CreateOrder from '../components/CreateCabinet'
+import CreateCabinet from '../components/CreateCabinet'
 
-export default function OrderList() {
+export default function CabinetList() {
   //初始化表单
   const [form] = Form.useForm()
-  const [data, setData] = useState<Order.OrderItem[]>([])
+  const [data, setData] = useState<Cabinet.Item[]>([])
   const [total, setTotal] = useState(0)
   const [pageCount, setPageCount] = useState(0)
 
@@ -22,16 +22,15 @@ export default function OrderList() {
   })
 
     // 为了保证有open方法所以这里需要定义一个泛型，里面有open
-    const orderRef = useRef<{ open:(type: IAction, data?: Order.OrderItem)=>void }>()
+    const cabinetRef = useRef<{ open:(type: IAction, data?: Cabinet.Item)=>void }>()
 
     const detailRef = useRef<{ open:(orderId:string)=>void }>()
 
-  const handleEdit = (record: Order.OrderItem) => {
+  const handleEdit = (record: Cabinet.Item) => {
     if( record.departureDate != null && new Date(record.departureDate).getTime() < new Date().getTime()) {
-         detailRef.current?.open(record.id)
+            detailRef.current?.open(record.id)
         }else {
-          console.log('update')
-            orderRef.current?.open('update', record)
+          cabinetRef.current?.open('update', record)
         }
   }
 
@@ -58,12 +57,14 @@ export default function OrderList() {
   const getTableData = async (params: PageParams) => {
     //获得所有的表单值
     const values = form.getFieldsValue()
+    console.log('value:',values)
     const data = await api.getOrderList({
       ...values,
       pageNum: params.pageNum,
       pageSize: params.pageSize || pagination.pageSize,
     })
 
+    console.log('data:',data)
     setData(data.list)
     setTotal(data.page.total)
     setPageCount(data.page.pageCount)
@@ -270,12 +271,11 @@ export default function OrderList() {
           }}
         />
       </div>
-      <CreateOrder mRef={orderRef}  update={() => {
+      <CreateCabinet mRef={cabinetRef}  update={() => {
           getTableData({
             pageNum: 1,
           })
         }}/>
-         <OrderDetail mRef={detailRef}/>
     </div>
   )
  

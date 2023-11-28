@@ -1,7 +1,7 @@
 import api from "@/api";
 import { Order } from "@/types/api";
 import { IDetailProp } from "@/types/modal";
-import { formatDate, formatMoney, formateMobile } from "@/utils";
+import { formatDate, formatMoney } from "@/utils";
 import { Descriptions, Modal } from "antd";
 import DescriptionsItem from "antd/es/descriptions/Item";
 import { useImperativeHandle, useState } from "react";
@@ -16,9 +16,9 @@ export default function OrderDetail(props:IDetailProp){
         }
     })
 
-    const open = async(orderId:string) =>{
+    const open = async(id:string) =>{
         setVisible(true)
-        const detail = await api.getOrderDetail(orderId)
+        const detail = await api.getOrderDetail(id)
         setDetail(detail)
 
     }
@@ -28,18 +28,18 @@ export default function OrderDetail(props:IDetailProp){
     }
     return <Modal title="订单详情" width={800} open={visible} footer={false} onCancel={handleCancel}>
     <Descriptions column={2} style={{padding:'10px, 30px'}}>
-     <DescriptionsItem label='包裹ID'> {detail?.orderId} </DescriptionsItem>
-     <DescriptionsItem label='箱子编号'> {detail?.cityName} </DescriptionsItem>
-     <DescriptionsItem label='顾客ID'> {detail?.userName} </DescriptionsItem>
-     <DescriptionsItem label='手机号码'> {formateMobile(detail?.mobile)} </DescriptionsItem>
-     <DescriptionsItem label='商品类型'> {detail?.vehicleName} </DescriptionsItem>
-     <DescriptionsItem label='订单状态'> {detail?.state == 1? '未支付' :(detail?.state == 2? '已支付' : (detail?.state == 3? '支付超时':'已退款'))} </DescriptionsItem>
-     <DescriptionsItem label='支付方式'> {detail?.payType === 1? '微信支付' : 'Interac'} </DescriptionsItem>
-     <DescriptionsItem label='订单金额'> {formatMoney(detail?.orderAmount)} </DescriptionsItem>
-     <DescriptionsItem label='优惠金额'> {formatMoney(detail?.userPayAmount)} </DescriptionsItem>
-     <DescriptionsItem label='实际支付金额'> {formatMoney(detail?.driverAmount)} </DescriptionsItem>
-     <DescriptionsItem label='出海时间'> {formatDate(detail?.useTime) } </DescriptionsItem>
-     <DescriptionsItem label='预计送货时间'> {formatDate(detail?.endTime)} </DescriptionsItem>
+     <DescriptionsItem label='包裹ID'> {detail?.id} </DescriptionsItem>
+     <DescriptionsItem label='箱子编号'> {detail?.orderNumber} </DescriptionsItem>
+     <DescriptionsItem label='用户提货码'> {detail?.code} </DescriptionsItem>
+     <DescriptionsItem label='取货仓库'> {detail?.pName} </DescriptionsItem>
+     <DescriptionsItem label='商品类型'> {detail?.catName} </DescriptionsItem>
+     <DescriptionsItem label='订单状态'> {detail?.payStatus == 10? '未支付' :(detail?.payStatus == 20? '已支付' : (detail?.payStatus == 30? '支付超时':'已退款'))} </DescriptionsItem>
+     <DescriptionsItem label='支付方式'> {detail?.payMethod === 1? '微信支付' : 'Interac'} </DescriptionsItem>
+     <DescriptionsItem label='订单金额'> {formatMoney(detail?.amount)} </DescriptionsItem>
+     <DescriptionsItem label='优惠金额'> {formatMoney(detail?.discount)} </DescriptionsItem>
+     <DescriptionsItem label='实际支付金额'> {formatMoney(detail?.price)} </DescriptionsItem>
+     <DescriptionsItem label='出海时间'> {formatDate(detail?.departureDate) } </DescriptionsItem>
+     {/**<DescriptionsItem label='预计送货时间'> {formatDate(detail?.endTime)} </DescriptionsItem> **/}
     </Descriptions>
     </Modal>
 }
