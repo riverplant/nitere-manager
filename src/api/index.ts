@@ -223,13 +223,14 @@ export default {
       //////////////////////////////////////////////////////////////////////////////////////////////////////
    //获取柜子列表
    getCabinetList(params:Cabinet.Params){
-    console.log('params:',params)
     return request.get<ResultData<Cabinet.Item>>('http://127.0.0.1:8080/cabinet/list', params)
   },
+
+
     //导出数据
-   /**  exportData(params:Order.SearchParams) {
-        return request.downloadFile('http://127.0.0.1:8080/order/orderExport', params, '订单列表.xlsx')
+     exportExcelById(id:string) {
+        return request.downloadFile(id)
     }
-   */ 
+   
 
 }

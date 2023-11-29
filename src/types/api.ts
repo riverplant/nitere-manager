@@ -442,6 +442,11 @@ export namespace Cabinet {
     dateEnd?:string
   }
 
+  export interface ExportParams  {
+    id: string
+
+  }
+
 
   export interface Item {
   id: string
@@ -464,6 +469,8 @@ export namespace Cabinet {
 	priceTotal: number
 	// 包裹數量
 	orderCount: number
+
+  amountTotal: number
   }
 
   export interface BoxItem {

@@ -86,24 +86,51 @@ export default {
     return instance.delete(url)
   },
 
-  downloadFile(url: string, data: any, fileName = 'fileName.xlsx') {
-    instance({
-      url,
-      data,
-      method: 'post',
-      responseType: 'blob',
-    }).then(response => {
-      const blob = new Blob([response.data], {
-        type: response.data.type
+  downloadFile(id: string) {
+      axios.get(
+        `http://127.0.0.1:8080/cabinet/exportExcelById?id=`+id,
+        {
+          responseType: 'blob'
+        }
+      )
+      .then((res) => {
+        try {
+          console.log('响应信息 =>', res)
+ 
+          if (res.data.size > 0) {
+            // 响应头信息
+            const headers = res.headers
+            // application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8
+            const contentType = headers['content-type']
+            console.log('contentType =>', contentType)
+            
+            const url = window.URL.createObjectURL(
+              new Blob(
+                [res.data],
+                {
+                  type: contentType
+                }
+              )
+            )
+            const link = document.createElement('a')
+            link.style.display = 'none'
+            link.href = url
+            link.setAttribute('download', `订单列表.xlsx` || 'template.xlsx')
+            document.body.appendChild(link)
+            link.click()
+            document.body.removeChild(link)
+          } else {
+          
+          }
+        } catch (e) {
+          console.error(e)
+          
+        }
       })
-      const name = (response.headers['file-name'] as string) || fileName
-      const link = document.createElement('a')
-      link.download = decodeURIComponent(name)
-      link.href = URL.createObjectURL(blob)
-      document.body.append(link)
-      link.click()
-      document.body.removeChild(link)
-      window.URL.revokeObjectURL(link.href)
-    })
-  }
+      .catch((e) => { 
+        console.error(e)
+        
+      })
+    },
+ 
 }

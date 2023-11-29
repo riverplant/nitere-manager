@@ -1,5 +1,5 @@
 import { Cabinet, Order, PageParams } from '@/types/api'
-import { Button, Form, Input, Select, Space, Table } from 'antd'
+import { Button, DatePicker, Form, Input, Select, Space, Table } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import { useEffect, useRef, useState } from 'react'
 import api from '@/api'
@@ -14,6 +14,8 @@ export default function CabinetList() {
   const [data, setData] = useState<Cabinet.Item[]>([])
   const [total, setTotal] = useState(0)
   const [pageCount, setPageCount] = useState(0)
+  const [startDate, setStartDate] = useState('')
+  const [endDate, setEndDate] = useState('')
 
 
   const [pagination, setPagination] = useState({
@@ -56,15 +58,13 @@ export default function CabinetList() {
 
   const getTableData = async (params: PageParams) => {
     //获得所有的表单值
-    const values = form.getFieldsValue()
-    console.log('value:',values)
-    const data = await api.getOrderList({
+    const values = {dateStart: startDate, dateEnd: endDate}
+    const data = await api.getCabinetList({
       ...values,
       pageNum: params.pageNum,
       pageSize: params.pageSize || pagination.pageSize,
     })
 
-    console.log('data:',data)
     setData(data.list)
     setTotal(data.page.total)
     setPageCount(data.page.pageCount)
@@ -75,118 +75,77 @@ export default function CabinetList() {
     })
   }
 
-  const columns: ColumnsType<Order.OrderItem> = [
+  const exportExcelById = async (id: string) =>{
+    console.log('exportExcelById................')
+    api.exportExcelById(id)
+
+
+  }
+
+  const changStartDate = (value: any, dateString: string) => {
+    setStartDate(dateString)
+  }
+  const changeEnddate = (value: any, dateString: string) => {
+    setEndDate(dateString)
+  }
+
+  const columns: ColumnsType<Cabinet.Item> = [
     {
-      title: '包裹号码',
-      dataIndex: 'orderNumber',
-      key: 'orderNumber',
+      title: 'ID',
+      dataIndex: 'id',
+      key: 'id',
+      width:195,
     },
     {
-      title: '用戶提取码',
-      dataIndex: 'code',
-      key: 'code',
-    },
-    {
-      title: '快递单号',
-      dataIndex: 'trackingNumber',
-      key: 'trackingNumber',
-    },
-    {
-      title: '箱号',
-      dataIndex: 'boxNumber',
-      key: 'boxNumber',
-    },
-    {
-        title: '商品类型',
-        dataIndex: 'catName',
-        key: 'catName',
-      },
-    {
-        title: '送货地址',
-        dataIndex: 'formatted_address',
-        key: 'formatted_address',
-        width:195,
-        render(_,record) {
-            return <div>
-                <p>送货地址: {record.formatted_address}</p>
-            </div>
-        }
-      },
-    {
-      title: '出海时间',
+      title: '出海日期 | 包裹数',
       dataIndex: 'departureDate',
       key: 'departureDate',
+      width:195,
+      render(_,record) {
+          return <div>
+              <p>出海日期: {record.departureDate}</p>
+              <p>包裹数: {record.orderCount}</p>
+          </div>
+      }
+    },
+    {
+      title: '总重量 | 体积',
+      dataIndex: 'weightTotal',
+      key: 'weightTotal',
+      width:195,
+      render(_,record) {
+          return <div>
+              <p>日期重量合计: {record.weightTotal}</p>
+              <p>体积合计: {record.volumTotal}</p>
+          </div>
+      }
+    },
+    {
+      title: '按包裹统计',
+      dataIndex: 'priceTotal',
+      key: 'priceTotal',
+      width:195,
+      render(_,record) {
+          return <div>
+              <p>包裹计费合计: {record.amountTotal}</p>
+              <p>确认收费合计: {record.priceTotal}</p>
+          </div>
+      }
+    },
+    {
+        title: '创建时间',
+        dataIndex: 'createTime',
+        key: 'createTime',
+        width:195,
+      },
+   
+    {
+      title: '最后更新',
+      dataIndex: 'updateTime',
+      key: 'updateTime',
+      width:195,
      
     },
-
-    {
-      title: '订单金额',
-      dataIndex: 'amount',
-      key: 'amount',
-      render(amount) {
-        return formatMoney(amount)
-    }
-    },
-    {
-        title: '优惠金额',
-        dataIndex: 'discount',
-        key: 'discount',
-        render(discount) {
-            return formatMoney(discount)
-        }
-      },
-      {
-        title: '实际支付',
-        dataIndex: 'price',
-        key: 'price',
-        render(price) {
-            return formatMoney(price)
-        }
-      },
-      {
-        title: '订单状态',
-        dataIndex: 'orderStatus',
-        key: 'orderStatus',
-        render(orderStatus) {
-         if(orderStatus === 1) return '验货通过'
-         if(orderStatus === 2) return '验货未通过'    
-        }
-      },
-      {
-        title: '支付方式',
-        dataIndex: 'payMethod',
-        key: 'payMethod',
-        render(payMethod) {
-         if(payMethod === 1) return '微信支付'
-         if(payMethod === 2) return 'E-Transfer'   
-        }
-      },
-    {
-        title: '订单支付状态',
-        dataIndex: 'payStatus',
-        key: 'payStatus',
-        render(payStatus) {
-         if(payStatus === 10) return '未支付'
-         if(payStatus === 20) return '已支付'
-         if(payStatus === 30) return '支付超时'
-         if(payStatus === 40) return '已退款'    
-        }
-      },
-      {
-        title: '实际重',
-        dataIndex: 'pWeight',
-        key: 'pWeight',
-      },
-      {
-        title: '体积',
-        dataIndex: 'pVolume',
-        key: 'pVolume',
-      },
-      {
-        title: '体积重',
-        dataIndex: 'pWeightByVolume',
-        key: 'pWeightByVolume',
-      },
     {
       title: '操作',
       key: 'action',
@@ -194,8 +153,14 @@ export default function CabinetList() {
       render(_, record) {
         return (
           <Space>
-            <Button type='text' onClick={() => handleEdit(record)}>
-              编辑
+            <Button type='primary' onClick={() => exportExcelById(record.id)}>
+              导出清单
+            </Button>
+            <Button type='primary' onClick={() => handleEdit(record)}>
+              提货点汇总
+            </Button>
+            <Button type='primary' onClick={() => handleEdit(record)}>
+              路径规划
             </Button>
           </Space>
         )
@@ -205,30 +170,17 @@ export default function CabinetList() {
   ]
 
   return (
-    <div className='order-List'>
+    <div className='cabinet-List'>
       <Form className='search-form' form={form} layout='inline' initialValues={{ orderStatus: 0, payStatus:0 }}>
-      <Form.Item name='orderNumber' label='包裹号码'>
-          <Input placeholder='包裹号码'></Input>
+
+        <Form.Item name='dateStart' label='开始日期'>
+        <DatePicker onChange={changStartDate}/>
         </Form.Item>
-        <Form.Item name='code' label='用戶提貨码'>
-          <Input placeholder='请输入提貨码'></Input>
+
+        <Form.Item name='dateEnd' label='结束日期'>
+        <DatePicker onChange={changeEnddate}/>
         </Form.Item>
-        <Form.Item name='payStatus' label='状态'>
-          <Select style={{ width: 120 }} >
-          <Select.Option value={0} >全部</Select.Option>
-            <Select.Option value={10}>未支付</Select.Option>
-            <Select.Option value={20}>已支付</Select.Option>
-            <Select.Option value={30}>支付失败</Select.Option>
-            <Select.Option value={40}>已退款</Select.Option>
-          </Select>
-        </Form.Item>
-        <Form.Item name='orderStatus' label='包裹状态'>
-        <Select style={{ width: 120 }}>
-            <Select.Option value={0}>全部</Select.Option>
-            <Select.Option value={1}>驗貨通過</Select.Option>
-            <Select.Option value={2}>驗貨未通過</Select.Option>
-          </Select>
-        </Form.Item>
+
         <Form.Item>
           <Space>
             <Button type='primary' onClick={handleSearch}>
@@ -243,7 +195,7 @@ export default function CabinetList() {
 
       <div className='base-table'>
         <div className='header-wrapper'>
-          <div className='title'>支付订单列表</div>
+          <div className='title'>柜子列表</div>
 
         </div>
 
@@ -271,11 +223,13 @@ export default function CabinetList() {
           }}
         />
       </div>
-      <CreateCabinet mRef={cabinetRef}  update={() => {
+     
+     <CreateCabinet mRef={cabinetRef}  update={() => {
           getTableData({
             pageNum: 1,
           })
         }}/>
+       
     </div>
   )
  
