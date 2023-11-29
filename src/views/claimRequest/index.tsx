@@ -132,7 +132,7 @@ export default function ClaimRequestList() {
 
         <Table
           bordered
-          rowKey='id'
+          rowKey='trackingNumber'
           dataSource={data}
           columns={columns}
           pagination={{

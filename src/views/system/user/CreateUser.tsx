@@ -97,11 +97,11 @@ const CreateUser = (props: IModalProp) => {
           name='mobile'
           rules={[{ pattern: /^\(?([0-9]{3})\)?[-.●]?([0-9]{3})[-.●]?([0-9]{4})$/, message: '请输入有效的手机号' }]}
         >
-          <Input addonBefore={prefixSelector} style={{ width: '100%' }}  type='number' placeholder='请输入手机号'/>
+          <Input addonBefore={prefixSelector} style={{ width: '100%' }}  type='number' placeholder='请输入手机号' disabled={true}/>
         </FormItem>
 
          <FormItem label='用户名' name='userName' >
-          <Input placeholder='请输入用户名' />
+          <Input placeholder='请输入用户名' disabled={true}/>
 
         </FormItem>
         <FormItem label='用户邮箱' name='email' >
@@ -109,7 +109,7 @@ const CreateUser = (props: IModalProp) => {
         </FormItem>
       
       <FormItem label='用户提货码' name='code'  >
-          <Input placeholder='请输入提货码' disabled={false} />
+          <Input placeholder='请输入提货码' disabled={true} />
         </FormItem>
 
 
@@ -142,13 +142,13 @@ const CreateUser = (props: IModalProp) => {
           */}
 
        
-
+ {/**
   
         <FormItem label='送货地址' name='formatted_address'>
         <PlaceComponent />
         </FormItem>
 
-
+ */}
      
         
         <FormItem label='用户权限' name='userRoles' rules={[{ required: true, message: '请选择用户权限' }]}>

@@ -94,6 +94,10 @@ export default function OrderList() {
       title: '箱号',
       dataIndex: 'boxNumber',
       key: 'boxNumber',
+      render(boxNumber) {
+        if(boxNumber === 0) return '未裝箱'
+        else return   boxNumber 
+       }
     },
     {
         title: '商品类型',
@@ -115,7 +119,10 @@ export default function OrderList() {
       title: '出海时间',
       dataIndex: 'departureDate',
       key: 'departureDate',
-     
+      render(departureDate) {
+        if(departureDate === null) return '未指定出海時間'
+        else return   departureDate 
+       }
     },
 
     {

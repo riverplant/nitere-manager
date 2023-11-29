@@ -473,6 +473,18 @@ export namespace Cabinet {
   amountTotal: number
   }
 
+  export interface Vo {
+    id:number
+    departureDate:string
+    pName: string
+    clientCount: number
+    boxCount: number
+    boxMixCount:number
+    orderCount: number
+    pVolumeTotal: number
+    pWeightTotal: number
+    }
+
   export interface BoxItem {
     id: string
     pName: string

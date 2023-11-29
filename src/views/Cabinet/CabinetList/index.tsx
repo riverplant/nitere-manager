@@ -3,9 +3,7 @@ import { Button, DatePicker, Form, Input, Select, Space, Table } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import { useEffect, useRef, useState } from 'react'
 import api from '@/api'
-import { formatDate, formatMoney } from '@/utils'
 import { IAction } from '@/types/modal'
-import CreateOrder from '../components/CreateCabinet'
 import CreateCabinet from '../components/CreateCabinet'
 
 export default function CabinetList() {
@@ -26,14 +24,9 @@ export default function CabinetList() {
     // 为了保证有open方法所以这里需要定义一个泛型，里面有open
     const cabinetRef = useRef<{ open:(type: IAction, data?: Cabinet.Item)=>void }>()
 
-    const detailRef = useRef<{ open:(orderId:string)=>void }>()
 
-  const handleEdit = (record: Cabinet.Item) => {
-    if( record.departureDate != null && new Date(record.departureDate).getTime() < new Date().getTime()) {
-            detailRef.current?.open(record.id)
-        }else {
+  const handleGroupByPid = (record: Cabinet.Item) => {
           cabinetRef.current?.open('update', record)
-        }
   }
 
 
@@ -156,11 +149,8 @@ export default function CabinetList() {
             <Button type='primary' onClick={() => exportExcelById(record.id)}>
               导出清单
             </Button>
-            <Button type='primary' onClick={() => handleEdit(record)}>
+            <Button type='primary' onClick={() => handleGroupByPid(record)}>
               提货点汇总
-            </Button>
-            <Button type='primary' onClick={() => handleEdit(record)}>
-              路径规划
             </Button>
           </Space>
         )

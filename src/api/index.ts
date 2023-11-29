@@ -230,7 +230,12 @@ export default {
     //导出数据
      exportExcelById(id:string) {
         return request.downloadFile(id)
-    }
+    },
+
+    //提貨點匯總
+    getOrderInfoListGroupByPid(id:string){
+    return request.get<Cabinet.Vo[]>('http://127.0.0.1:8080/cabinet/getOrderInfoListGroupByPid?id='+id)
+  },
    
 
 }
