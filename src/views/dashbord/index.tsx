@@ -240,11 +240,11 @@ export default function DashBoard() {
       },
       radar: {
         indicator: [
-          { name: '验货通过包裹总数', max: 30 },
-          { name: '待认证包裹总数', max: 30 },
-          { name: '验货失败包裹总数', max: 30 },
-          { name: '已付款包裹总数', max: 30 },
-          { name: '待付款包裹总数', max: 30 },
+          { name: '验货通过包裹总数', max: radarData?.orderCount },
+          { name: '待认证包裹总数', max: radarData?.orderCount },
+          { name: '验货失败包裹总数', max: radarData?.orderCount },
+          { name: '已付款包裹总数', max: radarData?.orderCount },
+          { name: '待付款包裹总数', max: radarData?.orderCount },
         ],
       },
       series: [
