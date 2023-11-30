@@ -113,10 +113,29 @@ export namespace Dashboard {
     packageRefuseCount: number
   }
   export interface ReportData {
-    driverCount: number
-    totalMoney: number
-    orderCount: number
-    cityNum: number
+    orderCount:      number
+	  // 通過驗證的包裹數量
+	  orderValideCount: number
+	  // 未通過驗證的包裹數量
+	  orderInValideCount:number
+	   // 待认领
+	   claimCount:number
+
+	// 验货通过包裹总重量
+	   weightTotal: number
+	// 验货通过包裹总体积
+	   volumTotal: number
+	// Wechat支付
+	  payByWXTotal: number
+	// e-Transfer支付
+   payByETransferTotal: number
+
+   	// 通過驗證的包裹數量
+	 orderNotPayCount: number
+
+	// 未通過驗證的包裹數量
+	 orderPayCount: number
+
   }
 
   export interface LineData {

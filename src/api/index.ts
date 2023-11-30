@@ -89,26 +89,22 @@ export default {
   },
 
   //获取dashbord报表汇总数据
-  getPackageReportData() {
+  getReportData() {
     //DashBoard.PackageReportData
-    return request.get<Dashboard.ReportData>('http://127.0.0.1:8080/order/dashboard/getReportData')
+    return request.get<Dashboard.ReportData>('http://127.0.0.1:8080/orders/dashboard/getReportData')
   },
 
   //获取折线图数据
   getLineData() {
-    return request.get<Dashboard.LineData>('http://127.0.0.1:8080/order/dashboard/getReportData')
+    return request.get<Dashboard.LineData>('http://127.0.0.1:8080/orders/dashboard/getReportData')
   },
 
   getPieCityData() {
-    return request.get<Dashboard.PieElement[]>('http://127.0.0.1:8080/order/dashboard/getPieCityData')
+    return request.get<Dashboard.PieElement[]>('http://127.0.0.1:8080/orders/dashboard/getPieCityData')
   },
 
   getPieAgeData() {
-    return request.get<Dashboard.PieElement[]>('http://127.0.0.1:8080/order/dashboard/getPieAgeData')
-  },
-
-  getRadarData() {
-    return request.get<Dashboard.RadarData>('http://127.0.0.1:8080/order/dashboard/getRadarData')
+    return request.get<Dashboard.PieElement[]>('http://127.0.0.1:8080/orders/dashboard/getPieAgeData')
   },
 
   //用户管理

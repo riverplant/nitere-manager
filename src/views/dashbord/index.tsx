@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { useStore } from '@/store'
 import api from '@/api'
 import { Dashboard } from '@/types/api'
-import { formatNum } from '@/utils'
+import { formatMoney, formatNum } from '@/utils'
 import { useCharts } from '@/hook/useCharts'
 
 export default function DashBoard() {
@@ -22,7 +22,7 @@ export default function DashBoard() {
   const [radarRef, radarChart] = useCharts()
 
   useEffect(() => {
-    // renderLineChart()
+
     const optionLine = {
       tooltip: {
         trigger: 'axis',
@@ -79,6 +79,17 @@ export default function DashBoard() {
             { value: 235, name: '卡尔加里' },
             { value: 400, name: '渥太华' },
           ],
+          symbol: 'rect',
+          symbolSize: 12,
+          lineStyle: {
+            type: 'dashed'
+          },
+          label: {
+            show: true,
+            formatter: function (params: any) {
+              return params.value as string;
+            }
+          }
         },
       ],
     }
@@ -112,33 +123,6 @@ export default function DashBoard() {
       ],
     }
 
-    const radar = {
-      legend: {
-        orient: 'vertical',
-        left: 'auto',
-      },
-      radar: {
-        indicator: [
-          { name: '验货通过包裹总数', max: 3000 },
-          { name: '待认证包裹总数', max: 3000 },
-          { name: '验货失败包裹总数', max: 3000 },
-          { name: '已付款包裹总数', max: 3000 },
-          { name: '待付款包裹总数', max: 3000 },
-        ],
-      },
-      series: [
-        {
-          name: '包裹模型诊断',
-          type: 'radar',
-          data: [
-            {
-              value: [2200, 600, 200, 600, 1400],
-              name: '包裹模型诊断',
-            },
-          ],
-        },
-      ],
-    }
 
     pieChart1?.setOption(optionPie)
 
@@ -146,8 +130,13 @@ export default function DashBoard() {
 
     pieChart2?.setOption(optionAge)
 
-    radarChart?.setOption(radar)
+    renderRadarChart()
+
+
   }, [lineChart, pieChart1, pieChart2, radarChart])
+
+
+  
 
   //读服务加载折线图
   const renderLineChart = async () => {
@@ -240,23 +229,40 @@ export default function DashBoard() {
 
   const renderRadarChart = async () => {
     if (!radarChart) return
-    const data = await api.getRadarData()
-    radarChart?.setOption({
+
+    const radarData = await api.getReportData()
+    console.log('report:',radarData)
+
+    const radar = {
       legend: {
         orient: 'vertical',
         left: 'auto',
       },
       radar: {
-        indicator: data.indicator,
+        indicator: [
+          { name: '验货通过包裹总数', max: 30 },
+          { name: '待认证包裹总数', max: 30 },
+          { name: '验货失败包裹总数', max: 30 },
+          { name: '已付款包裹总数', max: 30 },
+          { name: '待付款包裹总数', max: 30 },
+        ],
       },
       series: [
         {
           name: '包裹模型诊断',
           type: 'radar',
-          data: data.data,
+          data: [
+            {
+              value: [ radarData?.orderValideCount,  radarData?.claimCount,   radarData?.orderInValideCount,  radarData?.orderPayCount,  radarData?.orderNotPayCount ],
+              name: '包裹模型诊断',
+            },
+          ],
         },
       ],
-    })
+    }
+
+    console.log("rader:", radar)
+    radarChart?.setOption( radar )
   }
 
   const handlePieChart = () => {
@@ -269,7 +275,7 @@ export default function DashBoard() {
   }, [])
 
   const getReportData = async () => {
-    const data = await api.getPackageReportData()
+    const data = await api.getReportData()
     setReport(data)
   }
   return (
@@ -298,37 +304,37 @@ export default function DashBoard() {
 
         <div className={styles.card}>
           <div className='title'>验货通过包裹总数</div>
-          <div className={styles.data}>873</div>
+          <div className={styles.data}>{formatNum(report?.orderValideCount)}</div>
         </div>
 
         <div className={styles.card}>
           <div className='title'>验货通过包裹总重量</div>
-          <div className={styles.data}>1300.781kg</div>
+          <div className={styles.data}>{report?.weightTotal}kg</div>
         </div>
 
         <div className={styles.card}>
           <div className='title'>验货通过包裹总体积</div>
-          <div className={styles.data}>8.741m2</div>
+          <div className={styles.data}>{report?.volumTotal}m2</div>
         </div>
 
         <div className={styles.card}>
           <div className='title'>待认领</div>
-          <div className={styles.data}>42</div>
+          <div className={styles.data}>{report?.claimCount}</div>
         </div>
 
         <div className={styles.card}>
           <div className='title'>验货失败</div>
-          <div className={styles.data}>59</div>
+          <div className={styles.data}>{report?.orderInValideCount}</div>
         </div>
 
         <div className={styles.card}>
           <div className='title'>Wechat支付</div>
-          <div className={styles.data}>$1,236.79</div>
+          <div className={styles.data}>{formatMoney(report?.payByWXTotal)}</div>
         </div>
 
         <div className={styles.card}>
           <div className='title'>e-Transfer支付</div>
-          <div className={styles.data}>$815.69</div>
+          <div className={styles.data}>{formatMoney(report?.payByETransferTotal)}</div>
         </div>
       </div>
       <div className={styles.chart}>
