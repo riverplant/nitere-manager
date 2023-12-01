@@ -142,10 +142,6 @@ export default function CreatePickPoint(props: IModalProp<PickPoint.PickPointIte
           <TimePicker onChange={changEndTime}  />,
         </FormItem>
 
-        <FormItem label='随机码位数' name='nRandom' rules={[{ required: true, message: '请输入随机码位数' }]}>
-          <InputNumber placeholder='请输入随机码位数' />
-        </FormItem>
-
         <FormItem label='状态' name='pickPointStatus'>
           <Radio.Group>
             <Radio value={1}>启用</Radio>
