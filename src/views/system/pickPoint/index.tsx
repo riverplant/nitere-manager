@@ -68,55 +68,57 @@ export default function PickPointList() {
       title: '提货点',
       dataIndex: 'ppName',
       key: 'ppName',
-      width: 200,
     },
     {
       title: '地址',
       dataIndex: 'formatted_address',
       key: 'formatted_address',
-      width: 350,
     },
     {
       title: '负责人',
       dataIndex: 'userName',
       key: 'userName',
-      width: 150,
     },
 
     {
       title: '开放时间',
       dataIndex: 'startTime',
       key: 'startTime',
-      render(startTime) {
-        return formatDate(startTime, 'HH:mm:ss')
-      },
     },
     {
       title: '关闭时间',
       dataIndex: 'endTime',
       key: 'endTime',
-      render(endTime) {
-        return formatDate(endTime, 'HH:mm:ss')
-      },
     },
     {
       title: '操作',
       key: 'action',
       width: 200,
       render(_, record) {
-        return (
-          <Space>
-            <Button type='text' onClick={() => handleSubCreate(record.id)}>
-              新增
-            </Button>
-            <Button type='text' onClick={() => handleEdit(record)}>
-              编辑
-            </Button>
-            <Button type='text' onClick={() => handleDelet(record.id)} danger>
-              删除
-            </Button>
-          </Space>
-        )
+if(record.pickPointStatus === 1) {
+  return (
+    <Space>
+      <Button type='text' onClick={() => handleSubCreate(record.id)}>
+        新增
+      </Button>
+      <Button type='text' onClick={() => handleEdit(record)}>
+        编辑
+      </Button>
+      <Button type='text' onClick={() => handleDelet(record.id)} danger>
+        删除
+      </Button>
+    </Space>
+  )
+}else {
+  return (
+    <Space>
+      <Button type='text' onClick={() => handleEdit(record)}>
+        编辑
+      </Button>
+    </Space>
+  )
+}
+       
       },
     },
   ]

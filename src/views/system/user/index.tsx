@@ -175,16 +175,27 @@ export default function UserList() {
       key: 'action',
       render(record: User.UserInfo) {
         if(record.userRoles != 1) { 
-          return (
-            <Space>
-              <Button type='text' onClick={() => handleUpdate(record)}>
-                编辑
-              </Button>
-              <Button type='text' danger onClick={() => handleDel(record.id)} >
-               删除
-             </Button> 
-            </Space>
-          )
+          if(record.userStatus === 1) {
+            return (
+              <Space>
+                <Button type='text' onClick={() => handleUpdate(record)}>
+                  编辑
+                </Button>
+                <Button type='text' danger onClick={() => handleDel(record.id)} >
+                 删除
+               </Button> 
+              </Space>
+            )
+          }else {
+            return (
+              <Space>
+                <Button type='text' onClick={() => handleUpdate(record)}>
+                  编辑
+                </Button>
+              </Space>
+            )
+          }
+          
         }
 
 
@@ -195,9 +206,6 @@ export default function UserList() {
   return (
     <div className='user-list'>
       <Form className='search-form' form={form} layout='inline' initialValues={{ state: 0 }}>
-        <Form.Item name='id' label='用户ID'>
-          <Input placeholder='请输入用户ID' />
-        </Form.Item>
         <Form.Item name='code' label='提取码'>
           <Input placeholder='请输入提取码'></Input>
         </Form.Item>

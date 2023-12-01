@@ -112,19 +112,30 @@ export default function MenuList() {
       key: 'action',
       width: 200,
       render(_, record) {
-        return (
-          <Space>
-            <Button type='text' onClick={() => handleSubCreate(record)}>
-              新增
-            </Button>
-            <Button type='text' onClick={() => handleEdit(record)}>
-              编辑
-            </Button>
-            <Button type='text' onClick={() => handleDelet(record)} danger>
-              删除
-            </Button>
-          </Space>
-        )
+        if(record.menuStatus === 1) {
+          return (
+            <Space>
+              <Button type='text' onClick={() => handleSubCreate(record)}>
+                新增
+              </Button>
+              <Button type='text' onClick={() => handleEdit(record)}>
+                编辑
+              </Button>
+              <Button type='text' onClick={() => handleDelet(record)} danger>
+                删除
+              </Button>
+            </Space>
+          )  
+        }else {
+          return (
+            <Space>
+              <Button type='text' onClick={() => handleEdit(record)}>
+                编辑
+              </Button>
+            </Space>
+          )  
+        }
+       
       },
     },
   ]

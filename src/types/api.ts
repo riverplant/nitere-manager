@@ -186,6 +186,7 @@ export namespace PickPoint {
     parentId: string
     userId: string
     ppCode:string
+    pickPointStatus:number
     children: PickPointItem[]
   }
 
