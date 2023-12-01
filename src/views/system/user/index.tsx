@@ -84,13 +84,13 @@ export default function UserList() {
   const handleUserDelSubmit = async (ids: string[]) => {
     try {
       await api.delUser({ userIds: ids })
-      message.success('删除成功')
+      message.success('删除成功,請注意! 超級管理員不可以被刪除')
       setUserIds([])
       getUserList({
         pageNum: 1,
       })
     } catch (error) {
-      message.error('删除失败')
+      message.error('删除失败:'+error)
     }
   }
 
