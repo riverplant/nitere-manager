@@ -46,11 +46,10 @@ const CreateUser = (props: IModalProp) => {
   }
 
   const handleSubmit = async () => {
-    const address = JSON.parse(storage.get('pickPointAddress'))
-    console.log('address:',address)
+   
     const valid = await form.validateFields()
     if (valid) { 
-      const params = { ...form.getFieldsValue(), 'formatted_address': address.formatted_address , 'place_id':address.place_id, 'url':address.url}
+      const params = { ...form.getFieldsValue()}
       console.log('create param:', params)
       if (action === 'create') {
         await api.createUser(params)
