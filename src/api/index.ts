@@ -113,14 +113,24 @@ export default {
   },
 
   //创建用户
-  createUser(params: User.CreateWebParams) {
-    return request.post('http://127.0.0.1:8080/users/web/create', params)
+  createUser(params: User.CreateParams) {
+    return request.post('http://127.0.0.1:8080/users', params)
   },
 
   //创建用户
-  updateUser(params: User.EditWebParams) {
-    return request.put('http://127.0.0.1:8080/users/web/update', params)
+  updateUser(params: User.EditParams) {
+    return request.put('http://127.0.0.1:8080/users', params)
   },
+
+    //创建用户
+    createWebUser(params: User.CreateWebParams) {
+      return request.post('http://127.0.0.1:8080/users/web/create', params)
+    },
+  
+    //创建用户
+    updateWebUser(params: User.EditWebParams) {
+      return request.put('http://127.0.0.1:8080/users/web/update', params)
+    },
 
   //删除用户
   delUser(params: { userIds: string[] }) {

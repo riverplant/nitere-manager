@@ -48,10 +48,10 @@ const CreateWebUser = (props: IModalProp) => {
       const params = { ...form.getFieldsValue()}
       console.log('create param:', params)
       if (action === 'create') {
-        await api.createUser(params)
+        await api.createWebUser(params)
         message.success('创建成功')
       } else {
-        await api.updateUser(params)
+        await api.updateWebUser(params)
         message.success('更新成功')
       }
       handleCancel()
