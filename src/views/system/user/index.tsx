@@ -7,6 +7,7 @@ import { formatDate } from '@/utils'
 import CreateUser from './CreateUser'
 import { IAction } from '@/types/modal'
 import { message } from '@/utils/AntdGlobal'
+import CreateWebUser from './CreateWebUser'
 export default function UserList() {
   //初始化表单
   const [form] = Form.useForm()
@@ -15,6 +16,10 @@ export default function UserList() {
   const [pageCount, setPageCount] = useState(0)
   const [userIds, setUserIds] = useState<string[]>([])
   const userRef = useRef<{
+    open: (type: IAction, data?: User.UserInfo) => void
+  }>()
+
+  const webUserRef = useRef<{
     open: (type: IAction, data?: User.UserInfo) => void
   }>()
 
@@ -61,13 +66,16 @@ export default function UserList() {
     })
   }
 
-  /**const handleCreate = () => {
-    userRef.current?.open('create')
-  } **/
+  const handleCreate = () => {
+    webUserRef.current?.open('create')
+  } 
 
   //更新用户
   const handleUpdate = (recode: User.UserInfo) => {
-    userRef.current?.open('update', recode)
+    if( recode.password === null ) 
+       userRef.current?.open('update', recode)
+    else
+       webUserRef.current?.open('update', recode)
   }
 
   //删除用户
@@ -140,7 +148,7 @@ export default function UserList() {
       key: 'formatted_address',
     },
     {
-      title: '账户权限',
+      title: '用戶权限',
       dataIndex: 'userRoles',
       key: 'userRoles',
       render(userRoles: number) {
@@ -148,6 +156,7 @@ export default function UserList() {
           1: '超级管理员',
           2: '管理员',
           3: '用户',
+          4: '網站管理員',
         }[userRoles]
       },
     },
@@ -234,6 +243,9 @@ export default function UserList() {
             { /**<Button type='primary' onClick={handleCreate}>
               新增
             </Button> **/}
+            <Button type='primary' onClick={handleCreate}>
+              新增網站管理員
+            </Button>
             <Button type='primary' danger onClick={handlePatchConfirm}>
               批量删除
             </Button>
@@ -273,6 +285,15 @@ export default function UserList() {
       </div>
       <CreateUser
         mRef={userRef}
+        update={() => {
+          getUserList({
+            pageNum: 1,
+          })
+        }}
+      />
+
+       <CreateWebUser
+        mRef={webUserRef}
         update={() => {
           getUserList({
             pageNum: 1,

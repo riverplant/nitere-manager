@@ -84,8 +84,8 @@ export default {
   },
 
   //获取用户权限列表
-  getPermissionList() {
-    return request.get<{ buttonList: string[]; menuList: Menu.MenuItem[] }>('http://127.0.0.1:8080/users/getPermissionList')
+  getPermissionList(id:string) {
+    return request.get<{ buttonList: string[]; menuList: Menu.MenuItem[] }>('http://127.0.0.1:8080/users/getPermissionList/'+id)
   },
 
   //获取dashbord报表汇总数据
@@ -113,13 +113,13 @@ export default {
   },
 
   //创建用户
-  createUser(params: User.CreateParams) {
-    return request.post<Dashboard.ResultData<User.UserInfo>>('http://127.0.0.1:8080/users', params)
+  createUser(params: User.CreateWebParams) {
+    return request.post('http://127.0.0.1:8080/users/web/create', params)
   },
 
   //创建用户
-  updateUser(params: User.EditParams) {
-    return request.put<Dashboard.ResultData<User.UserInfo>>('http://127.0.0.1:8080/users', params)
+  updateUser(params: User.EditWebParams) {
+    return request.put('http://127.0.0.1:8080/users/web/update', params)
   },
 
   //删除用户
@@ -141,7 +141,7 @@ export default {
 
   //获取所有角色管理
   getRoleList(params?: Role.Params) {
-    return request.get<Dashboard.ResultData<Role.RoleItem>>('http://127.0.0.1:8080/roles/list', params)
+    return request.get<Role.RoleItem[]>('http://127.0.0.1:8080/roles/list', params)
   },
 
   getAllRoleList() {
@@ -150,12 +150,12 @@ export default {
 
   //创建角色
   createRole(params: Role.CreateParams) {
-    return request.post('http://127.0.0.1:8080/roles/create', params)
+    return request.post('http://127.0.0.1:8080/roles', params)
   },
 
   //更新角色
   editRole(params: Role.EditParams) {
-    return request.post('http://127.0.0.1:8080/roles/edit', params)
+    return request.put('http://127.0.0.1:8080/roles', params)
   },
 
   //删除角色

@@ -43,7 +43,6 @@ instance.interceptors.response.use(
   response => {
     const data: Result = response.data
     hideLoading()
-    console.log('data:',data)
     if(data.status != 200) {
       message.error(data.msg)
       return Promise.reject(data)

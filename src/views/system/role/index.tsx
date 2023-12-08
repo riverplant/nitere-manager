@@ -5,41 +5,34 @@ import { useAntdTable } from 'ahooks'
 import { Button, Form, Input, Modal, Space, Table } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import CreateRole from './CreateRole'
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { IAction } from '@/types/modal'
 import { ColumnsType } from 'antd/es/table'
 import { message } from '@/utils/AntdGlobal'
 import TreePermission from './TreePermission'
 export default function RoleList() {
   const [form] = useForm()
+  const [data, setData] = useState<Role.RoleItem[]>([])
   const roleRef = useRef<{
     open: (type: IAction, data?: Role.RoleItem) => void
   }>()
 
-  /**const permissionRef = useRef<{
+  const permissionRef = useRef<{
     open: ( type: IAction, data?: Role.RoleItem) => void
   }>()
-**/
 
-  const getTableData = ({ current, pageSize }: { current: number; pageSize: number }, formData: Role.Params) => {
-    return api
-      .getRoleList({
-        ...formData,
-        pageNum: current,
-        pageSize: pageSize,
-      })
-      .then(data => {
-        return {
-          total: data.page.total,
-          list: data.list,
-        }
-      })
+  useEffect(() => {
+    getRoleList()
+  }, [])
+
+  const getRoleList = async () => {
+    const data = await api.getRoleList(form.getFieldsValue())
+    setData(data)
   }
 
-  const { tableProps, search } = useAntdTable(getTableData, {
-    form,
-    defaultPageSize: 10,
-  })
+  const handleReset = () => {
+    form.resetFields()
+  }
 
   // 创建角色
   const handleCreate = () => {
@@ -50,11 +43,11 @@ export default function RoleList() {
   const handleEdite = (data: Role.RoleItem) => {
     roleRef.current?.open('update', data)
   }
-  /** 
+  
   const handleAutorisation = (record: Role.RoleItem) => {
     permissionRef.current?.open('update', record)
   }
-  */
+  
   //删除确认
   const handleDel = (id: string) => {
     Modal.confirm({
@@ -63,7 +56,7 @@ export default function RoleList() {
       async onOk() {
         await api.delRole({ id })
         message.success('删除成功')
-        search.submit()
+        getRoleList()
       },
     })
   }
@@ -111,7 +104,9 @@ export default function RoleList() {
             </Button>
              * 
             */}
-           
+           <Button type='text' onClick={() => handleAutorisation(record)}>
+              设置权限
+            </Button>
             <Button type='text' danger onClick={() => handleDel(record.id)}>
               删除
             </Button>
@@ -129,10 +124,10 @@ export default function RoleList() {
         </Form.Item>
         <Form.Item>
           <Space>
-            <Button type='primary' onClick={search.submit}>
+            <Button type='primary' onClick={getRoleList}>
               搜索
             </Button>
-            <Button type='default' onClick={search.reset}>
+            <Button type='default' onClick={handleReset}>
               重置
             </Button>
           </Space>
@@ -147,12 +142,13 @@ export default function RoleList() {
             </Button>
           </div>
         </div>
-        <Table bordered rowKey='id' columns={columns} {...tableProps} />
+        <Table bordered rowKey='id' columns={columns}  dataSource={data} pagination={false}/>
       </div>
       {/**创建角色组件 */}
-      <CreateRole mRef={roleRef} update={search.submit} />
+      <CreateRole mRef={roleRef} update={getRoleList} />
        {/**设置权限组件 */}
        {/** <TreePermission mRef={permissionRef} update={search.submit} /> */} 
+       <TreePermission mRef={permissionRef} update={getRoleList} />
     </div>
   )
 }

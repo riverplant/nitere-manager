@@ -90,7 +90,7 @@ export default function TreePermission(propos: IModalProp<Role.RoleItem>) {
         <Tree
         checkable
         defaultExpandAll
-        fieldNames={{title:'menuName',key:'_id'}}
+        fieldNames={{title:'menuName',key:'id'}}
         onCheck={onCheck}
         checkedKeys={checkedKeys}
         treeData={menuList}

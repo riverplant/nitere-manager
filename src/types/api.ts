@@ -16,7 +16,7 @@ export interface PageParams {
 }
 
 export namespace Role {
-  export interface Params extends PageParams {
+  export interface Params {
     roleName?: string
   }
 
@@ -62,7 +62,6 @@ export namespace User {
     mobile: string
     ppName: string
     userRoles: number
-    roleList:string
     userStatus: number
     createTime: string
     userImg: string
@@ -70,6 +69,8 @@ export namespace User {
     openid: string
     isDeleted: boolean
     updateTime: string
+    password: string
+    role:string
 
   }
 
@@ -93,6 +94,18 @@ export namespace User {
     url: string
     place_id:string
     
+  }
+
+  export interface CreateWebParams {
+    email: string
+    password: string
+    role: string
+    userStatus: number
+ 
+  }
+
+  export interface EditWebParams extends CreateWebParams{
+    id: string
   }
 
   export interface EditParams extends CreateParams {

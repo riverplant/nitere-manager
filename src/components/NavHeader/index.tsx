@@ -5,6 +5,7 @@ import styles from './index.module.less'
 import { useStore } from '@/store'
 import storage from '@/utils/storage'
 const NavHeader = () => {
+  const userinfo = storage.get('userInfo')
   const { userInfo, collapsed, updateCollapsed } = useStore()
   const breadList = [
     {
@@ -17,7 +18,7 @@ const NavHeader = () => {
   const items: MenuProps['items'] = [
     {
       key: 'email',
-      label: '邮箱：' + userInfo.email,
+      label: '邮箱：' + userinfo.email,
     },
     {
       key: 'logout',
@@ -32,7 +33,7 @@ const NavHeader = () => {
 
   const onClick: MenuProps['onClick'] = ({ key }) => {
     if (key === 'logout') {
-      storage.remove('token')
+      storage.remove('userInfo')
       location.href = '/login?callback=' + encodeURIComponent(location.href)
     }
   }
@@ -46,7 +47,7 @@ const NavHeader = () => {
       <div className='right'>
         <Switch checkedChildren='暗黑' unCheckedChildren='默认' style={{ marginRight: 10 }} />
         <Dropdown menu={{ items, onClick }} trigger={['click']}>
-          <span className={styles.nickName}>{userInfo.email}</span>
+          <span className={styles.nickName}>{userinfo.email}</span>
         </Dropdown>
       </div>
     </div>

@@ -1,9 +1,7 @@
 import api from '@/api'
-import { PickPoint, Role, User } from '@/types/api'
+import { PickPoint, User } from '@/types/api'
 import { IAction, IModalProp } from '@/types/modal'
-import PlaceComponent from '@/utils/addressCompleteAuto'
-import storage from '@/utils/storage'
-import { Form, Input, Modal, Select, TreeSelect, message } from 'antd'
+import { Form, Input, Modal, Select, message } from 'antd'
 import FormItem from 'antd/es/form/FormItem'
 import { useEffect, useImperativeHandle, useState } from 'react'
 
@@ -13,7 +11,6 @@ const CreateUser = (props: IModalProp) => {
   const [visible, setVisible] = useState(false)
   const [action, setAction] = useState<IAction>('create')
   const [pickPoints, setPickPoints] = useState<PickPoint.PickPointItem[]>([])
- // const [roleList, setRoleList] = useState<Role.RoleItem[]>([])
   //暴露子组件的open
   useImperativeHandle(props.mRef, () => {
     return {
@@ -22,19 +19,12 @@ const CreateUser = (props: IModalProp) => {
   })
   useEffect(() => {
     getPickPointList()
-   // getAllRoleList()
+
   }, [])
   const getPickPointList = async () => {
     const data = await api.getPickPointsList()
     setPickPoints(data)
   }
-/** 
- * const getAllRoleList = async () => {
-    const data = await api.getRoleList()
-    setRoleList(data.list)
-  }
-*/
-  
 
   //调用弹窗显示方法
   const open = (type: IAction, data?: User.UserInfo) => {
@@ -77,8 +67,7 @@ const CreateUser = (props: IModalProp) => {
 
   return (
     <Modal
-     // title={action === 'create' ? '创建用户' : '编辑用户'}
-      title='编辑用户'
+     title='编辑用户'
       okText='确定'
       cancelText='取消'
       width={800}
@@ -96,7 +85,7 @@ const CreateUser = (props: IModalProp) => {
           name='mobile'
           rules={[{ pattern: /^\(?([0-9]{3})\)?[-.●]?([0-9]{3})[-.●]?([0-9]{4})$/, message: '请输入有效的手机号' }]}
         >
-          <Input addonBefore={prefixSelector} style={{ width: '100%' }}  type='number' placeholder='请输入手机号' disabled={true}/>
+          <Input addonBefore={prefixSelector} style={{ width: '100%' }}  type='number' disabled={true}/>
         </FormItem>
 
          <FormItem label='用户名' name='userName' >

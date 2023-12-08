@@ -1,6 +1,7 @@
 import api from '@/api'
 import { Menu } from '@/types/api'
 import { getMenuPath } from '@/utils'
+import storage from '@/utils/storage'
 export interface IAuthLoader{
   buttonList:string[],
   menuList:Menu.MenuItem[],
@@ -8,9 +9,9 @@ export interface IAuthLoader{
 }
 
 export default async function AuthLoader() {
-  const data = await api.getPermissionList()
+  const userinfo = storage.get('userInfo')
+  const data = await api.getPermissionList(userinfo.id)
   const menuPathList = getMenuPath(data.menuList)
-  console.log('menuPathList', menuPathList)
   return {
     buttonList: data.buttonList,
     menuList: data.menuList,

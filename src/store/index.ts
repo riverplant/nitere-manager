@@ -20,14 +20,16 @@ export const useStore = create<{
     ppName: '',
     userStatus:1,
     userRoles: 3,
-    roleList:'',
+    role:'',
     formatted_address:'',
     openid:'',
     isDeleted: false,
     userImg: '',
     createTime:'',
     updateTime:'',
+    password:''
   },
+
   collapsed: false,
   updateToken: token => set({ token }),
   updateUserInfo: (userInfo: User.UserInfo) => set({ userInfo }),

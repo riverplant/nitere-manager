@@ -4,10 +4,10 @@ import styles from './index.module.less'
 import api from '@/api'
 import { Login } from '@/types/api'
 import storage from '@/utils/storage'
-import { useStore } from '@/store'
+
 export default function LoginFC() {
   const [loading, setLoading] = useState(false)
-  const updateToken = useStore(state => state.updateToken)
+  //const updateToken = useStore(state => state.updateToken)
   
   const onFinish = async (values: Login.params) => {
     console.log('onFinish----------------------------------')
@@ -16,10 +16,9 @@ export default function LoginFC() {
       console.log('login----------------------------------')
       const data = await api.login(values)
      
-      console.log('data:',data.data)
       setLoading(false)
-      storage.set('token', data.data)
-      updateToken(data.data)
+      storage.set('userInfo', data)
+      //updateToken(data.data)
       message.success('登录成功')
       const params = new URLSearchParams(location.search)
       setTimeout(() => {

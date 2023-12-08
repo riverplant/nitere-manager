@@ -1,11 +1,10 @@
 import { IAction, IModalProp } from '@/types/modal'
 import { useEffect, useImperativeHandle, useState } from 'react'
 import { Form, Input, Modal, TreeSelect, Radio } from 'antd'
-import { Category, PickPoint } from '@/types/api'
+import { Category } from '@/types/api'
 import { useForm } from 'antd/es/form/Form'
 import api from '@/api'
 import FormItem from 'antd/es/form/FormItem'
-import storage from '@/utils/storage'
 
 export default function CreatCategory(props: IModalProp<Category.CategoryItem>) {
   const [form] = useForm()

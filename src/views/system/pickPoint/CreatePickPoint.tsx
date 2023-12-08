@@ -3,12 +3,10 @@ import { useEffect, useImperativeHandle, useState } from 'react'
 import { Form, Input, Modal, Select, TreeSelect, TimePicker, Radio, InputNumber } from 'antd'
 import { PickPoint, User } from '@/types/api'
 import { useForm } from 'antd/es/form/Form'
-import dayjs from "dayjs";
 import api from '@/api'
 import FormItem from 'antd/es/form/FormItem'
 import PlaceComponent from '@/utils/addressCompleteAuto'
 import storage from '@/utils/storage'
-import { formatDate } from '@/utils'
 
 export default function CreatePickPoint(props: IModalProp<PickPoint.PickPointItem>) {
   const [form] = useForm()

@@ -56,7 +56,7 @@ export default function CreateRole(propos: IModalProp<Role.RoleItem>) {
       onCancel={handleCancel}
     >
       <Form form={form} labelAlign='right' labelCol={{ span: 4 }}>
-        <FormItem name='_id' hidden>
+        <FormItem name='id' hidden>
           <Input />
         </FormItem>
         <FormItem
