@@ -118,14 +118,15 @@ export default function UserList() {
   }
   const columns: ColumnsType<User.UserInfo> = [
     {
-      title: '用户ID',
-      dataIndex: 'id',
-      key: 'id',
+      title: '用户名',
+      dataIndex: 'userName',
+      key: 'userName',
     },
     {
       title: 'openId',
       dataIndex: 'openid',
       key: 'openid',
+      width:160
     },
     {
       title: '提取码',

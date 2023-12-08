@@ -101,6 +101,7 @@ export namespace User {
     password: string
     role: string
     userStatus: number
+    userName: string
  
   }
 

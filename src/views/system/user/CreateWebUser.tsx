@@ -38,6 +38,7 @@ const CreateWebUser = (props: IModalProp) => {
       form.setFieldValue('email', data.email)
       form.setFieldValue('role', data.role)
       form.setFieldValue('userStatus', data.userStatus)
+      form.setFieldValue('userName', data.userName)
     }
   }
 
@@ -77,6 +78,10 @@ const CreateWebUser = (props: IModalProp) => {
         <FormItem name='id' hidden>
           <Input />
         </FormItem>
+
+        <FormItem label='用戶名' name='userName' rules={[{ required: true, message: '请輸入用戶名' }]}>
+          <Input placeholder='请輸入用戶名'/>
+          </FormItem>
 
          <FormItem label='郵箱地址' name='email' rules={[{ required: true, message: '请輸入郵箱地址' }]}>
           <Input placeholder='请输入郵箱地址'/>
