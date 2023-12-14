@@ -1,5 +1,5 @@
 import api from '@/api'
-import { Button, Form, Input, Modal, Select, Space, Table, message } from 'antd'
+import { Button, Form, Input, Modal, Select, Space, Table } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import { useEffect, useRef, useState } from 'react'
 import { IAction } from '@/types/modal'

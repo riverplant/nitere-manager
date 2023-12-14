@@ -1,31 +1,33 @@
 import { useState } from 'react'
-
 import { StandaloneSearchBox, LoadScript } from '@react-google-maps/api'
 import storage from '../storage'
 
 export default function PlaceComponent() {
-  const lib = ['places']
-  const [searchBox, setSearchBox] = useState(null)
+  const [searchBox, setSearchBox] = useState<google.maps.places.SearchBox >()
 
   const onPlacesChanged = () => {
-    console.log('city:',searchBox.getPlaces()[0])
-    if (searchBox !== null) {
-      const address = {
-        'formatted_address':searchBox.getPlaces()[0].formatted_address,
-        'place_id':searchBox.getPlaces()[0].place_id,
-        'city':searchBox.getPlaces()[0].vicinity,
-        'url':searchBox.getPlaces()[0].url
+    console.log('searchBox:',searchBox)
+    if (searchBox ) {
+      const result = searchBox.getPlaces()
+      if( result instanceof Array ) {
+        const address = {
+          'formatted_address':result[0].formatted_address,
+          'place_id':result[0].place_id || '',
+          'city':result[0].vicinity || '',
+          'url':result[0].url || ''
+        }
+        storage.set('pickPointAddress', JSON.stringify(address))
       }
-      storage.set('pickPointAddress', JSON.stringify(address))
+       
     }
   }
-  const onSBLoad = (ref : any)  => {
+  const onSBLoad = (ref : google.maps.places.SearchBox)  => {
     setSearchBox(ref)
   }
   
 
   return (
-    <LoadScript googleMapsApiKey='AIzaSyC153GoK1FRCh1x-lVZ3-ruujEY25-Qq9A' libraries={lib}>
+    <LoadScript googleMapsApiKey='AIzaSyC153GoK1FRCh1x-lVZ3-ruujEY25-Qq9A' libraries={["places"]}>
       {/* Child components, such as markers, info windows, etc. */}
       <>
         <StandaloneSearchBox onPlacesChanged={onPlacesChanged} onLoad={onSBLoad}>

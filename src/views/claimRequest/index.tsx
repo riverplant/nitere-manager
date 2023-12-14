@@ -9,7 +9,7 @@ export default function ClaimRequestList() {
   //初始化表单
   const [form] = Form.useForm()
   const [data, setData] = useState<ClaimRequest.ClaimRequestItem[]>([])
-  const [total, setTotal] = useState(0)
+  const [, setTotal] = useState(0)
   const [pageCount, setPageCount] = useState(0)
 
 

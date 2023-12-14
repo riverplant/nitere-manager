@@ -1,6 +1,6 @@
 import { IAction, IModalProp } from '@/types/modal'
 import { useEffect, useImperativeHandle, useState } from 'react'
-import { Form, Input, Modal, Select, TreeSelect, TimePicker, Radio, InputNumber } from 'antd'
+import { Form, Input, Modal, Select, TreeSelect, TimePicker, Radio } from 'antd'
 import { PickPoint, User } from '@/types/api'
 import { useForm } from 'antd/es/form/Form'
 import api from '@/api'
@@ -82,10 +82,10 @@ export default function CreatePickPoint(props: IModalProp<PickPoint.PickPointIte
     form.resetFields
   }
 
-  const changStartTime = (value: any, dateString: string) => {
+  const changStartTime = (_value: any, dateString: string) => {
     setStartTime(dateString)
   }
-  const changEndTime = (value: any, dateString: string) => {
+  const changEndTime = (_value: any, dateString: string) => {
     setEndTime(dateString)
   }
 
@@ -130,7 +130,7 @@ export default function CreatePickPoint(props: IModalProp<PickPoint.PickPointIte
             })}
           </Select>
         </FormItem>
-        <FormItem label='提货点地址' >
+        <FormItem label='提货点地址' name='place'>
           <PlaceComponent />
         </FormItem>
         <FormItem label='提货点开始时间' name='startTime' >

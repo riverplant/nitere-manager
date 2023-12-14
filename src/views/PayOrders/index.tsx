@@ -11,7 +11,7 @@ export default function PayOrder() {
   //初始化表单
   const [form] = Form.useForm()
   const [data, setData] = useState<PayOrders.PayOrdersItem[]>([])
-  const [total, setTotal] = useState(0)
+  const [, setTotal] = useState(0)
   const [pageCount, setPageCount] = useState(0)
 
 

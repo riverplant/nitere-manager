@@ -66,7 +66,7 @@ const SideMenu = () => {
   }, [])
 
   // 菜单点击
-  const handleClickMenu = ({ key }: { Key: string }) => {
+  const handleClickMenu = ({ key }: { key: string }) => {
     setSelectedKeys([key])
     navigate(key)
   }

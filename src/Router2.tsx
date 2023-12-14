@@ -1,4 +1,4 @@
-import { Link, Navigate, createBrowserRouter, createHashRouter } from 'react-router-dom'
+import { Link, Navigate, createBrowserRouter } from 'react-router-dom'
 import App from './App'
 function ReactDemo() {
   return (

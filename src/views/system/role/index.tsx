@@ -1,7 +1,6 @@
 import api from '@/api'
 import { Role } from '@/types/api'
 import { formatDate } from '@/utils'
-import { useAntdTable } from 'ahooks'
 import { Button, Form, Input, Modal, Space, Table } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import CreateRole from './CreateRole'

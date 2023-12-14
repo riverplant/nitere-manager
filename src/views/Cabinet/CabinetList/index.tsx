@@ -1,5 +1,5 @@
-import { Cabinet, Order, PageParams } from '@/types/api'
-import { Button, DatePicker, Form, Input, Select, Space, Table } from 'antd'
+import { Cabinet, PageParams } from '@/types/api'
+import { Button, DatePicker, Form, Space, Table } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import { useEffect, useRef, useState } from 'react'
 import api from '@/api'
@@ -11,7 +11,7 @@ export default function CabinetList() {
   const [form] = Form.useForm()
   const [data, setData] = useState<Cabinet.Item[]>([])
   const [total, setTotal] = useState(0)
-  const [pageCount, setPageCount] = useState(0)
+  const [, setPageCount] = useState(0)
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
 
@@ -69,16 +69,15 @@ export default function CabinetList() {
   }
 
   const exportExcelById = async (id: string) =>{
-    console.log('exportExcelById................')
     api.exportExcelById(id)
 
 
   }
 
-  const changStartDate = (value: any, dateString: string) => {
+  const changStartDate = (_value: any, dateString: string) => {
     setStartDate(dateString)
   }
-  const changeEnddate = (value: any, dateString: string) => {
+  const changeEnddate = (_value: any, dateString: string) => {
     setEndDate(dateString)
   }
 

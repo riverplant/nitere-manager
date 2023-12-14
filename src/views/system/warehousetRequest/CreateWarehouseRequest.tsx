@@ -7,7 +7,7 @@ import api from '@/api'
 import FormItem from 'antd/es/form/FormItem'
 export default function CreateWarehouseRequest(props: IModalProp<ChangeWarehouseRequest.ChangeWarehouseRequestItem>) {
   const [form] = useForm()
-  const [action, setAction] = useState<IAction>('create')
+  const [, setAction] = useState<IAction>('create')
   const [visible, setVisible] = useState(false)
   
 

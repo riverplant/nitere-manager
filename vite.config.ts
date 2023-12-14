@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [react()],
   base: '/',
   server: {
-    host: '127.0.0.1',
+    host: '0.0.0.0',
     port: 9999,
     proxy: {
       '/api': 'http://api-driver.marsview.cc', //代理，通过'i/api'代理到后端接口

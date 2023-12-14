@@ -10,7 +10,7 @@ const CreateUser = (props: IModalProp) => {
   const [form] = Form.useForm()
   const [visible, setVisible] = useState(false)
   const [action, setAction] = useState<IAction>('create')
-  const [pickPoints, setPickPoints] = useState<PickPoint.PickPointItem[]>([])
+  const [, setPickPoints] = useState<PickPoint.PickPointItem[]>([])
   //暴露子组件的open
   useImperativeHandle(props.mRef, () => {
     return {

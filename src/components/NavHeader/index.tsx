@@ -6,7 +6,7 @@ import { useStore } from '@/store'
 import storage from '@/utils/storage'
 const NavHeader = () => {
   const userinfo = storage.get('userInfo')
-  const { userInfo, collapsed, updateCollapsed } = useStore()
+  const { collapsed, updateCollapsed } = useStore()
   const breadList = [
     {
       title: '首页',

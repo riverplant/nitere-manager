@@ -8,15 +8,12 @@ import Table, { ColumnsType } from "antd/es/table";
 import { useEffect, useImperativeHandle, useState } from "react";
 export default function CreateCabinet(props:IModalProp<Cabinet.Item>) {
 
-const [action, setAction] = useState<IAction>('create')
+const [, setAction] = useState<IAction>('create')
  const [visible, setVisible] = useState(false)
 
 
  const[cabinetVoList, setCabinetVoList] = useState<Cabinet.Vo[]>([])
 
-
- let total:number = 0
- 
  useEffect(()=>{
    
  }, [])

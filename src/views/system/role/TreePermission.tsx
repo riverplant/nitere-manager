@@ -29,7 +29,7 @@ export default function TreePermission(propos: IModalProp<Role.RoleItem>) {
     }
   })
 
-  const open = (type: IAction, data?: Role.RoleItem) => {
+  const open = (_type: IAction, data?: Role.RoleItem) => {
     setVisible(true)
     setRoleInfo(data)
     setCheckedKeys(data?.permissionList.checkedKeys || [])

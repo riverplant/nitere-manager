@@ -2,14 +2,13 @@ import { Button, Card, Descriptions } from 'antd'
 import styles from './index.module.less'
 
 import { useEffect, useState } from 'react'
-import { useStore } from '@/store'
 import api from '@/api'
 import { Dashboard } from '@/types/api'
 import { formatMoney, formatNum } from '@/utils'
 import { useCharts } from '@/hook/useCharts'
 
 export default function DashBoard() {
-  const userInfo = useStore(state => state.userInfo)
+  //const userInfo = useStore(state => state.userInfo)
 
   const [report, setReport] = useState<Dashboard.ReportData>()
   //Hook一定要放在函数外面,初始化折线图

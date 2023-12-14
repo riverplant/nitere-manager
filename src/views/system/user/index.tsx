@@ -12,7 +12,7 @@ export default function UserList() {
   //初始化表单
   const [form] = Form.useForm()
   const [data, setData] = useState<User.UserInfo[]>([])
-  const [total, setTotal] = useState(0)
+  const [, setTotal] = useState(0)
   const [pageCount, setPageCount] = useState(0)
   const [userIds, setUserIds] = useState<string[]>([])
   const userRef = useRef<{
@@ -126,7 +126,7 @@ export default function UserList() {
       title: 'openId',
       dataIndex: 'openid',
       key: 'openid',
-      width:160
+       width:160
     },
     {
       title: '提取码',
