@@ -43,11 +43,7 @@ instance.interceptors.response.use(
   response => {
     const data: Result = response.data
     hideLoading()
-    if(data.status != 200) {
-      message.error(data.msg)
-      return Promise.reject(data)
-    }
-   /** if (response.config.responseType === 'blob') return response
+   
       if (data.status === 500001) {
         //没有登陆
         //1. 提示错误信息
@@ -58,8 +54,9 @@ instance.interceptors.response.use(
         location.href = '/login?callback=' + encodeURIComponent(location.href)
       } else if (data.status != 200) {
         //报错
-       
-      } **/
+          message.error(data.msg)
+          return Promise.reject(data)
+      } 
 
     return data.data
   },
@@ -87,7 +84,7 @@ export default {
 
   downloadFile(id: string) {
       axios.get(
-        `http://127.0.0.1:8080/cabinet/exportExcelById?id=`+id,
+        `http://47.254.14.210/cabinet/exportExcelById?id=`+id,
         {
           responseType: 'blob'
         }

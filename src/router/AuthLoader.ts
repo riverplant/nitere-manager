@@ -9,8 +9,8 @@ export interface IAuthLoader{
 }
 
 export default async function AuthLoader() {
-  const userinfo = storage.get('userInfo')
-  const data = await api.getPermissionList(userinfo.id)
+  const userinfo = storage.get('userInfo') || null
+  const data = await api.getPermissionList( userinfo === null ? 'null' : userinfo.id )
   const menuPathList = getMenuPath(data.menuList)
   return {
     buttonList: data.buttonList,
