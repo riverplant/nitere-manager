@@ -65,13 +65,14 @@ const [, setAction] = useState<IAction>('create')
   const valid = await form.validateFields()
   if(valid){
     const params = { ...form.getFieldsValue()}
-    console.log('params:',params)
     await api.updateOrder(params)
     message.success('更新订单成功')
     handleCancel()
     props.update()
   }
  }
+
+ const dateFormat = 'YYYY/MM/DD';
 
  const setDriverAmount = ()=>{
     let oa:number = form.getFieldValue('amount') || 0
@@ -170,7 +171,7 @@ const [, setAction] = useState<IAction>('create')
     </Col>
 </Row>
 
-{/**<Row>
+<Row>
     <Col span={12}>
         <FormItem name="payMethod" label="支付方式">
             <Select placeholder="请选择支付方式">
@@ -182,20 +183,20 @@ const [, setAction] = useState<IAction>('create')
     <Col span={12}>
     <FormItem name="payStatus" label="订单状态">
             <Select placeholder="请选择订单状态">
-                <Select.Option value={10}>进行中</Select.Option>
+                <Select.Option value={10}>未支付</Select.Option>
                 <Select.Option value={20}>已支付</Select.Option>
-                <Select.Option value={30}>支付失败</Select.Option>
-                <Select.Option value={40}>退款</Select.Option>
+                <Select.Option value={30}>退款</Select.Option>
+                <Select.Option value={40}>已發貨</Select.Option>
             </Select>
         </FormItem>
     </Col>
 </Row>
-            **/}
+            
 
 <Row>
 <Col span={12}>
         <FormItem name="departureDate" label="出海时间">
-           <DatePicker />
+           <DatePicker format={dateFormat} />
         </FormItem>
     </Col>
 {/**

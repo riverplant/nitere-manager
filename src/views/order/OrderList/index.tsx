@@ -174,8 +174,8 @@ export default function OrderList() {
         render(payStatus) {
          if(payStatus === 10) return '未支付'
          if(payStatus === 20) return '已支付'
-         if(payStatus === 30) return '支付超时'
-         if(payStatus === 40) return '已退款'    
+         if(payStatus === 30) return '已退款'
+         if(payStatus === 40) return '已發貨' 
         }
       },
       {

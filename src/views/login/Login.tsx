@@ -10,15 +10,12 @@ export default function LoginFC() {
   //const updateToken = useStore(state => state.updateToken)
   
   const onFinish = async (values: Login.params) => {
-    console.log('onFinish----------------------------------')
     try {
       setLoading(true)
-      console.log('login----------------------------------')
       const data = await api.login(values)
      
       setLoading(false)
       storage.set('userInfo', data)
-      //updateToken(data.data)
       message.success('登录成功')
       const params = new URLSearchParams(location.search)
       setTimeout(() => {

@@ -555,3 +555,47 @@ export namespace Cabinet {
   }
 
 }
+
+export namespace Coupon {
+
+  export interface Vo {
+    name: string
+
+    value: number
+  
+    expiryDate: string
+  
+    id: string
+  
+    createTime: string
+  
+    updateTime: string
+  
+    // 優惠碼類型: 1.百分比 2. 數值 3. 無
+    couponType:number
+
+    status: number
+  }
+
+  export interface Params {
+    status?: number
+  }
+
+  export interface CreateParams {
+    name: string
+
+    value: number
+  
+    expiryDate: string
+   // 優惠碼類型: 1.百分比 2. 數值 3. 無
+   couponType:number
+
+   status: number
+  }
+
+  export interface EditParams extends CreateParams {
+    id: string
+  }
+
+
+}

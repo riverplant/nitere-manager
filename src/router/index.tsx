@@ -16,6 +16,7 @@ import ClaimRequestList from '@/views/claimRequest'
 import PayOrder from '@/views/PayOrders'
 import CabinetList from '@/views/Cabinet/CabinetList'
 import Role from '@/views/system/role'
+import CouponList from '@/views/system/coupon'
 
 
 export const router = [
@@ -74,6 +75,10 @@ export const router = [
       {
         path: '/wareHouseRequestList',
         element: <WarehouseRequestList />,
+      },
+      {
+        path: '/couponList',
+        element: <CouponList />,
       },
       {
         path: '/claimRequestList',

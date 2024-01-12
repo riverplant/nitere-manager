@@ -31,7 +31,7 @@ export default function PlaceComponent() {
       {/* Child components, such as markers, info windows, etc. */}
       <>
         <StandaloneSearchBox onPlacesChanged={onPlacesChanged} onLoad={onSBLoad}>
-          <input
+          <input  style={{width: '626.67px', height: '31.33px'}}
             placeholder='请输入提货点地址'
             aria-required='true'
             className='ant-input css-dev-only-do-not-override-12jzuas'

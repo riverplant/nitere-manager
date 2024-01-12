@@ -33,7 +33,7 @@ export default function OrderDetail(props:IDetailProp){
      <DescriptionsItem label='用户提货码'> {detail?.code} </DescriptionsItem>
      <DescriptionsItem label='取货仓库'> {detail?.pName} </DescriptionsItem>
      <DescriptionsItem label='商品类型'> {detail?.catName} </DescriptionsItem>
-     <DescriptionsItem label='订单状态'> {detail?.payStatus == 10? '未支付' :(detail?.payStatus == 20? '已支付' : (detail?.payStatus == 30? '支付超时':'已退款'))} </DescriptionsItem>
+     <DescriptionsItem label='订单状态'> {detail?.payStatus == 10? '未支付' :(detail?.payStatus == 20? '已支付' : (detail?.payStatus == 30? '已退款':'已發貨'))} </DescriptionsItem>
      <DescriptionsItem label='支付方式'> {detail?.payMethod === 1? '微信支付' : 'Interac'} </DescriptionsItem>
      <DescriptionsItem label='订单金额'> {formatMoney(detail?.amount)} </DescriptionsItem>
      <DescriptionsItem label='优惠金额'> {formatMoney(detail?.discount)} </DescriptionsItem>
