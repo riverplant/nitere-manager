@@ -1,5 +1,5 @@
 import api from '@/api'
-import { PickPoint, User } from '@/types/api'
+import { Coupon, PickPoint, User } from '@/types/api'
 import { IAction, IModalProp } from '@/types/modal'
 import { Form, Input, Modal, Select, message } from 'antd'
 import FormItem from 'antd/es/form/FormItem'
@@ -11,6 +11,7 @@ const CreateUser = (props: IModalProp) => {
   const [visible, setVisible] = useState(false)
   const [action, setAction] = useState<IAction>('create')
   const [, setPickPoints] = useState<PickPoint.PickPointItem[]>([])
+  const [coupList, setCoupList] = useState<Coupon.Vo[]>([])
   //暴露子组件的open
   useImperativeHandle(props.mRef, () => {
     return {
@@ -19,11 +20,18 @@ const CreateUser = (props: IModalProp) => {
   })
   useEffect(() => {
     getPickPointList()
+    getCouponList()
 
   }, [])
+
   const getPickPointList = async () => {
     const data = await api.getPickPointsList()
     setPickPoints(data)
+  }
+
+  const getCouponList = async () => {
+    const data = await api.getAllActiveCoupons()
+    setCoupList(data)
   }
 
   //调用弹窗显示方法
@@ -31,6 +39,7 @@ const CreateUser = (props: IModalProp) => {
     setAction(type)
     setVisible(true)
     if (type === 'update' && data) {
+      console.log('data:',data)
       form.setFieldsValue(data)
     }
   }
@@ -100,7 +109,20 @@ const CreateUser = (props: IModalProp) => {
           <Input placeholder='请输入提货码' disabled={true} />
         </FormItem>
 
+        <FormItem label='優惠碼' name='couponId'>
+         {
+           <Select placeholder='请选择優惠碼' >
+            {coupList.map(item=> {
+                return (
+                <Select.Option value={item.id} key={item.id}>
+                  {item.name}
+                  </Select.Option>
+                )
+              })}
 
+          </Select>
+          }
+        </FormItem>
 
          {/**
        *  <FormItem label='提货点' name='pid' rules={[{ required: true, message: '请选择提货点' }]}>

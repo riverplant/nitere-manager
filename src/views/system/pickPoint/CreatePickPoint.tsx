@@ -1,7 +1,7 @@
 import { IAction, IModalProp } from '@/types/modal'
 import { useEffect, useImperativeHandle, useState } from 'react'
-import { Form, Input, Modal, Select, TreeSelect, TimePicker, Radio } from 'antd'
-import { PickPoint, User } from '@/types/api'
+import { Form, Input, Modal, Select, TreeSelect, TimePicker, Radio, InputNumber } from 'antd'
+import { Coupon, PickPoint, User } from '@/types/api'
 import { useForm } from 'antd/es/form/Form'
 import api from '@/api'
 import FormItem from 'antd/es/form/FormItem'
@@ -16,15 +16,22 @@ export default function CreatePickPoint(props: IModalProp<PickPoint.PickPointIte
   const [admins, setAdmins] = useState<User.UserInfo[]>([])
   const [startTime, setStartTime] = useState('')
   const [endTime, setEndTime] = useState('')
+  const [coupList, setCoupList] = useState<Coupon.Vo[]>([])
 
   useEffect(() => {
     getPickPointList()
     getAllAdminList()
+    getCouponList()
   }, [])
 
   const getPickPointList = async () => {
     const data = await api.getPickPointsList()
     setPickPoints(data)
+  }
+
+  const getCouponList = async () => {
+    const data = await api.getAllActiveCoupons()
+    setCoupList(data)
   }
 
   const getAllAdminList = async () => {
@@ -138,6 +145,24 @@ export default function CreatePickPoint(props: IModalProp<PickPoint.PickPointIte
         </FormItem>
         <FormItem label='提货点结束时间' name='endTime'>
           <TimePicker onChange={changEndTime}  />,
+        </FormItem>
+
+        <FormItem label='優惠碼' name='couponId'>
+         {
+           <Select placeholder='请选择優惠碼' >
+            {coupList.map(item=> {
+                return (
+                <Select.Option value={item.id} key={item.id}>
+                  {item.name}
+                  </Select.Option>
+                )
+              })}
+
+          </Select>
+          }
+        </FormItem>
+        <FormItem label='提貨碼位數' name='nRandom' rules={[{ required: true, message: '請輸入該提貨點生成的提貨碼位數' }]}>
+          <InputNumber placeholder='請輸入該提貨點生成的提貨碼位數' />
         </FormItem>
 
         <FormItem label='状态' name='pickPointStatus'>

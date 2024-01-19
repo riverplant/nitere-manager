@@ -1,6 +1,6 @@
 import { IAction, IModalProp } from '@/types/modal'
 import { useImperativeHandle, useState } from 'react'
-import { DatePicker, DatePickerProps, Form, Input, Modal, Radio } from 'antd'
+import { DatePicker, DatePickerProps, Form, Input, InputNumber, Modal, Radio } from 'antd'
 import { Coupon } from '@/types/api'
 import { useForm } from 'antd/es/form/Form'
 import api from '@/api'
@@ -87,11 +87,11 @@ export default function CreateCoupon(props: IModalProp<Coupon.Vo>) {
           {() => {
             return form.getFieldValue('couponType') === 1 ? (
               <FormItem label='優惠百分比%' name='value'>
-                <Input  />
+                <InputNumber  />
               </FormItem>
             ) : (
               <FormItem label='優惠金額' name='value'>
-              <Input />
+              <InputNumber />
             </FormItem>
             )
           }}

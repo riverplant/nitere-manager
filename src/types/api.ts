@@ -71,6 +71,8 @@ export namespace User {
     updateTime: string
     password: string
     role:string
+    couponName: String 
+    couponExpireDate: string
 
   }
 
@@ -93,6 +95,7 @@ export namespace User {
     userImg: string
     url: string
     place_id:string
+    couponId:string
     
   }
 
@@ -200,7 +203,10 @@ export namespace PickPoint {
     parentId: string
     userId: string
     ppCode:string
+    couponName: String 
+    couponExpireDate: string
     pickPointStatus:number
+    nRandom:number
     children: PickPointItem[]
   }
 
@@ -217,6 +223,8 @@ export namespace PickPoint {
     userId:string
     city:string
     url:string
+    couponId:string
+    nRandom: number
   }
 
   export interface EditParams extends CreateParams {

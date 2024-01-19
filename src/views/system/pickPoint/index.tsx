@@ -7,6 +7,7 @@ import CreatePickPoint from './CreatePickPoint'
 import { IAction } from '@/types/modal'
 import { ColumnsType } from 'antd/es/table'
 import FormItem from 'antd/es/form/FormItem'
+import { formatDate } from '@/utils'
 
 export default function PickPointList() {
   const [form] = useForm()
@@ -57,8 +58,6 @@ export default function PickPointList() {
     .catch((error) => {
       console.log(error);
     });
-  
-    console.log('刪除完成......')
     getPickPointList()
   }
 
@@ -88,6 +87,31 @@ export default function PickPointList() {
       title: '关闭时间',
       dataIndex: 'endTime',
       key: 'endTime',
+    },
+    {
+      title: '優惠碼',
+      dataIndex: 'couponName',
+      key: 'couponName',
+      render(_, record) {
+        return ( record.couponName ) ? record.couponName : '無優惠碼'
+              },
+    },
+    {
+      title: '優惠碼過期時間',
+      dataIndex: 'couponExpireDate',
+      key: 'couponExpireDate',
+      render(_, record) {
+        if(record.couponExpireDate) {
+
+         return  ( new Date(record.couponExpireDate).valueOf() > Date.now().valueOf() ) ? record.couponExpireDate : '優惠碼已失效'
+        }
+        return ''
+              },
+    },
+    {
+      title: '提貨碼位數',
+      dataIndex: 'nRandom',
+      key: 'nRandom',
     },
     {
       title: '操作',

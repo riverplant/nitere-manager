@@ -173,6 +173,26 @@ export default function UserList() {
       },
     },
     {
+      title: '優惠碼',
+      dataIndex: 'couponName',
+      key: 'couponName',
+      render(_, record) {
+        return ( record.couponName ) ? record.couponName : '無優惠碼'
+              },
+    },
+    {
+      title: '優惠碼過期時間',
+      dataIndex: 'couponExpireDate',
+      key: 'couponExpireDate',
+      render(_, record) {
+        if(record.couponExpireDate) {
+
+         return  ( new Date(record.couponExpireDate).valueOf() > Date.now().valueOf() ) ? record.couponExpireDate : '優惠碼已失效'
+        }
+        return ''
+              },
+    },
+    {
       title: '账户创建时间',
       dataIndex: 'createTime',
       key: 'createTime',
