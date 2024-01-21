@@ -7,7 +7,6 @@ import CreatePickPoint from './CreatePickPoint'
 import { IAction } from '@/types/modal'
 import { ColumnsType } from 'antd/es/table'
 import FormItem from 'antd/es/form/FormItem'
-import { formatDate } from '@/utils'
 
 export default function PickPointList() {
   const [form] = useForm()

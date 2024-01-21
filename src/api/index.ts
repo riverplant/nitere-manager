@@ -238,6 +238,12 @@ export default {
         return request.downloadFile(id)
     },
 
+      //删除用户
+      exportPayordersReportSubmit(payOrderIds: string[]) {
+    return request.downloadPayorderFile(payOrderIds)
+  },
+
+
     //提貨點匯總
     getOrderInfoListGroupByPid(id:string){
     return request.get<Cabinet.Vo[]>('http://127.0.0.1:8080/cabinet/getOrderInfoListGroupByPid?id='+id)

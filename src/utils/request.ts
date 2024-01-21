@@ -128,5 +128,52 @@ export default {
         
       })
     },
+
+    downloadPayorderFile( ids: string[] ) {
+      axios.get(
+        `http://127.0.0.1:8080/payorder/exportExcelByIds?ids=`+ids,
+        {
+          responseType: 'blob'
+        }
+      )
+      .then((res) => {
+        try {
+          console.log('响应信息 =>', res)
+ 
+          if (res.data.size > 0) {
+            // 响应头信息
+            const headers = res.headers
+            // application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8
+            const contentType = headers['content-type']
+            console.log('contentType =>', contentType)
+            
+            const url = window.URL.createObjectURL(
+              new Blob(
+                [res.data],
+                {
+                  type: contentType
+                }
+              )
+            )
+            const link = document.createElement('a')
+            link.style.display = 'none'
+            link.href = url
+            link.setAttribute('download', `订单列表.xlsx` || 'template.xlsx')
+            document.body.appendChild(link)
+            link.click()
+            document.body.removeChild(link)
+          } else {
+          
+          }
+        } catch (e) {
+          console.error(e)
+          
+        }
+      })
+      .catch((e) => { 
+        console.error(e)
+        
+      })
+    },
  
 }

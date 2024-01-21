@@ -1,5 +1,5 @@
 import { PageParams, PayOrders } from '@/types/api'
-import { Button, Form, Input, Select, Space, Table } from 'antd'
+import { Button, DatePicker, Form, Input, Select, Space, Table, message } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import { useEffect, useRef, useState } from 'react'
 import api from '@/api'
@@ -13,6 +13,9 @@ export default function PayOrder() {
   const [data, setData] = useState<PayOrders.PayOrdersItem[]>([])
   const [, setTotal] = useState(0)
   const [pageCount, setPageCount] = useState(0)
+  const [startDate, setStartDate] = useState('')
+  const [endDate, setEndDate] = useState('')
+  const [orderIds, setOrderIds] = useState<string[]>([])
 
 
   const [pagination, setPagination] = useState({
@@ -46,14 +49,36 @@ export default function PayOrder() {
   const handleRest = () => {
     form.resetFields()
   }
+
+  const exportPayordersReportSubmit = async (ids: string[]) => {
+    try {
+      await api.exportPayordersReportSubmit({ payOrderIds: ids })
+      setOrderIds([])
+    } catch (error) {
+      message.error('导出失败:'+error)
+    }
+  }
+
+  const handleReport = ()=> {
+    if (orderIds.length === 0) {
+      message.error('请选择要导出的订单')
+      return
+    }
+    exportPayordersReportSubmit(orderIds)
+    
+}
+
+
   //获取用户列表
 
   const getPayOrdersList = async (params: PageParams) => {
     //获得所有的表单值
     const values = form.getFieldsValue()
+    const values2 =  {dateStart: startDate, dateEnd: endDate}
     console.log('value:',values)
     const data = await api.getPayOrdersList({
       ...values,
+      ...values2,
       pageNum: params.pageNum,
       pageSize: params.pageSize || pagination.pageSize,
     })
@@ -67,6 +92,13 @@ export default function PayOrder() {
       current: data.page.pageNum,
       pageSize: data.page.pageSize,
     })
+  }
+
+  const changStartDate = (_value: any, dateString: string) => {
+    setStartDate(dateString)
+  }
+  const changeEnddate = (_value: any, dateString: string) => {
+    setEndDate(dateString)
   }
 
   const columns: ColumnsType<PayOrders.PayOrdersItem> = [
@@ -148,6 +180,9 @@ export default function PayOrder() {
             <Button type='text' onClick={() => handleEdit(record)}>
               编辑
             </Button>
+            <Button type='text' onClick={() => handleEdit(record)}>
+              编辑
+            </Button>
           </Space>
         )
       },
@@ -177,6 +212,13 @@ export default function PayOrder() {
             <Select.Option value={2}>e-transfer</Select.Option>
           </Select>
         </Form.Item>
+        <Form.Item name='dateStart' label='开始日期'>
+        <DatePicker onChange={changStartDate}/>
+        </Form.Item>
+
+        <Form.Item name='dateEnd' label='结束日期'>
+        <DatePicker onChange={changeEnddate}/>
+        </Form.Item>
         <Form.Item>
           <Space>
             <Button type='primary' onClick={handleSearch}>
@@ -184,6 +226,9 @@ export default function PayOrder() {
             </Button>
             <Button type='default' onClick={handleRest}>
               重置
+            </Button>
+            <Button type='default' onClick={handleReport}>
+              生成报表
             </Button>
           </Space>
         </Form.Item>
@@ -198,6 +243,13 @@ export default function PayOrder() {
         <Table
           bordered
           rowKey='id'
+          rowSelection={{
+            type: 'checkbox',
+            selectedRowKeys: orderIds,
+            onChange: (selectedRowKeys: React.Key[]) => {
+              setOrderIds(selectedRowKeys as string[])
+            },
+          }}
           dataSource={data}
           columns={columns}
           pagination={{

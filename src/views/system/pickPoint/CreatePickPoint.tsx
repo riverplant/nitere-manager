@@ -149,7 +149,7 @@ export default function CreatePickPoint(props: IModalProp<PickPoint.PickPointIte
 
         <FormItem label='優惠碼' name='couponId'>
          {
-           <Select placeholder='请选择優惠碼' >
+           <Select placeholder='请选择優惠碼'>
             {coupList.map(item=> {
                 return (
                 <Select.Option value={item.id} key={item.id}>

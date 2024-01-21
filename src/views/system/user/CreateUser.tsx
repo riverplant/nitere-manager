@@ -39,7 +39,6 @@ const CreateUser = (props: IModalProp) => {
     setAction(type)
     setVisible(true)
     if (type === 'update' && data) {
-      console.log('data:',data)
       form.setFieldsValue(data)
     }
   }
@@ -49,7 +48,6 @@ const CreateUser = (props: IModalProp) => {
     const valid = await form.validateFields()
     if (valid) { 
       const params = { ...form.getFieldsValue()}
-      console.log('create param:', params)
       if (action === 'create') {
         await api.createUser(params)
         message.success('创建成功')
