@@ -131,7 +131,7 @@ export default {
 
     downloadPayorderFile( ids: string[] ) {
       axios.get(
-        `http://127.0.0.1:8080/payorder/exportExcelByIds?ids=`+ids,
+        `http://127.0.0.1:8080/payorder/exportPayOrderExcelByIds?ids=`+ids,
         {
           responseType: 'blob'
         }

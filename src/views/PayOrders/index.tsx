@@ -51,6 +51,7 @@ export default function PayOrder() {
   }
 
   const exportPayordersReportSubmit = async (ids: string[]) => {
+    console.log('ids:',ids)
     try {
       api.exportPayordersReportSubmit(ids)
       setOrderIds([])
