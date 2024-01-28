@@ -275,6 +275,8 @@ export namespace PayOrders {
     code?: string
     payMethod?: number // 1. 微信小程序支付 2. e-transfer
     payStatus?:number // 10：未支付 20：已支付 30: 支付失败 40： 已退款
+    dateStart?:string
+    dateEnd?:string
   }
 
   export interface CreateParams {
@@ -310,6 +312,7 @@ export namespace PayOrders {
 	 * 10：未支付 20：已支付 30: 支付失败 40： 已退款
 	 */
 	  payStatus: number
+    transactionTime:string
   }
 }
 

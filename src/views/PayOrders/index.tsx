@@ -52,7 +52,7 @@ export default function PayOrder() {
 
   const exportPayordersReportSubmit = async (ids: string[]) => {
     try {
-      await api.exportPayordersReportSubmit({ payOrderIds: ids })
+      api.exportPayordersReportSubmit(ids)
       setOrderIds([])
     } catch (error) {
       message.error('导出失败:'+error)
@@ -145,6 +145,12 @@ export default function PayOrder() {
       render(updateTime: string) {
         return formatDate(updateTime)
       },
+    },
+
+    {
+      title: '订单支付时间',
+      dataIndex: 'transactionTime',
+      key: 'transactionTime',
     },
     {
       title: '支付方式',
