@@ -79,6 +79,7 @@ export namespace User {
   export interface Params extends PageParams {
     code?: string
     userStatus?: number
+    userId?: string
   }
 
   export interface CreateParams {

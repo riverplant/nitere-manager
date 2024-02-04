@@ -126,11 +126,11 @@ export default function CreatePickPoint(props: IModalProp<PickPoint.PickPointIte
         <FormItem label='提货点代碼' name='ppCode' rules={[{ required: true, message: '请输入提货点代碼' }]}>
           <Input placeholder='请输入提货点代碼' />
         </FormItem>
-        <FormItem label='负责人' name='userName' >
+        <FormItem label='负责人' name='userId' >
           <Select>
             {admins.map(item => {
               return (
-                <Select.Option value={item.userName} key={item.id}>
+                <Select.Option value={item.id} key={item.id}>
                   {item.userName}
                 </Select.Option>
               )

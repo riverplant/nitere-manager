@@ -8,6 +8,7 @@ import CreateUser from './CreateUser'
 import { IAction } from '@/types/modal'
 import { message } from '@/utils/AntdGlobal'
 import CreateWebUser from './CreateWebUser'
+import storage from '@/utils/storage'
 export default function UserList() {
   //初始化表单
   const [form] = Form.useForm()
@@ -15,6 +16,7 @@ export default function UserList() {
   const [, setTotal] = useState(0)
   const [pageCount, setPageCount] = useState(0)
   const [userIds, setUserIds] = useState<string[]>([])
+  const [userinfo, setUserinfo] = useState<User.UserInfo>()
   const userRef = useRef<{
     open: (type: IAction, data?: User.UserInfo) => void
   }>()
@@ -28,6 +30,10 @@ export default function UserList() {
     pageSize: 10,
   })
   useEffect(() => {
+    const uinfo = storage.get('userInfo')
+    console.log('uinfo:', uinfo)
+    setUserinfo(uinfo)
+    form.setFieldValue('userId', uinfo?.id )
     getUserList({
       pageNum: pagination.current,
       pageSize: pagination.pageSize,
@@ -49,7 +55,7 @@ export default function UserList() {
   const getUserList = async (params: PageParams) => {
     //获得所有的表单值
     const values = form.getFieldsValue()
-
+    console.log('values:', values)
     const data = await api.getUserList({
       ...values,
       pageNum: params.pageNum,
@@ -236,6 +242,9 @@ export default function UserList() {
   return (
     <div className='user-list'>
       <Form className='search-form' form={form} layout='inline' initialValues={{ state: 0 }}>
+      <Form.Item name='userId' hidden>
+          <Input />
+        </Form.Item>
         <Form.Item name='code' label='提取码'>
           <Input placeholder='请输入提取码'></Input>
         </Form.Item>
@@ -260,17 +269,14 @@ export default function UserList() {
       <div className='base-table'>
         <div className='header-wrapper'>
           <div className='title'>用户列表</div>
-          <div className='action'>
-            { /**<Button type='primary' onClick={handleCreate}>
-              新增
-            </Button> **/}
-            <Button type='primary' onClick={handleCreate}>
-              新增網站管理員
-            </Button>
-            <Button type='primary' danger onClick={handlePatchConfirm}>
-              批量删除
-            </Button>
-          </div>
+              <div className='action'>
+              <Button type='primary' onClick={handleCreate} disabled = {userinfo?.userRoles != 1}>
+                      新增網站管理員
+                    </Button>
+                    <Button type='primary' danger onClick={handlePatchConfirm}>
+                      批量删除
+                    </Button>
+                  </div>
         </div>
 
         <Table
