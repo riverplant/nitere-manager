@@ -1,9 +1,10 @@
-import { ClaimRequest, PageParams } from '@/types/api'
+import { ClaimRequest, PageParams, User } from '@/types/api'
 import { Button, Form, Input, Select, Space, Table } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import { useEffect, useState } from 'react'
 import api from '@/api'
 import { formatDate } from '@/utils'
+import storage from '@/utils/storage'
 
 export default function ClaimRequestList() {
   //初始化表单
@@ -11,6 +12,7 @@ export default function ClaimRequestList() {
   const [data, setData] = useState<ClaimRequest.ClaimRequestItem[]>([])
   const [, setTotal] = useState(0)
   const [pageCount, setPageCount] = useState(0)
+ 
 
 
   const [pagination, setPagination] = useState({
@@ -18,6 +20,8 @@ export default function ClaimRequestList() {
     pageSize: 10,
   })
   useEffect(() => {
+    const uinfo = storage.get('userInfo')
+    form.setFieldValue('userId', uinfo?.id )
     getUserList({
       pageNum: pagination.current,
       pageSize: pagination.pageSize,
@@ -101,6 +105,9 @@ export default function ClaimRequestList() {
   return (
     <div className='user-list'>
       <Form className='search-form' form={form} layout='inline' initialValues={{ state: 0 }}>
+      <Form.Item name='userId' hidden>
+          <Input />
+        </Form.Item>
         <Form.Item name='code' label='用戶提貨码'>
           <Input placeholder='请输入提貨码'></Input>
         </Form.Item>

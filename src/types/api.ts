@@ -369,6 +369,7 @@ export namespace ClaimRequest {
     code?: string
     status?: number // 0.全部 1.處理中 2. 正常 3: 包裹丟失
     isDelete?: number
+    userId?: string
   } 
 
   export interface ClaimRequestItem {
