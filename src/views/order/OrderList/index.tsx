@@ -1,4 +1,4 @@
-import { Order, PageParams } from '@/types/api'
+import { Order, PageParams, User } from '@/types/api'
 import { Button, Form, Input, Select, Space, Table } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import { useEffect, useRef, useState } from 'react'
@@ -7,6 +7,7 @@ import { formatMoney } from '@/utils'
 import { IAction } from '@/types/modal'
 import CreateOrder from '../components/CreateOrder'
 import OrderDetail from '../components/OrderDetail'
+import storage from '@/utils/storage'
 
 export default function OrderList() {
   //初始化表单
@@ -14,6 +15,7 @@ export default function OrderList() {
   const [data, setData] = useState<Order.OrderItem[]>([])
   const [total, setTotal] = useState(0)
   const [, setPageCount] = useState(0)
+  const [userinfo, setUserinfo] = useState<User.UserInfo>()
 
 
   const [pagination, setPagination] = useState({
@@ -37,6 +39,10 @@ export default function OrderList() {
 
 
   useEffect(() => {
+    const uinfo = storage.get('userInfo')
+    console.log('uinfo:', uinfo)
+    setUserinfo(uinfo)
+    form.setFieldValue('userId', uinfo?.id )
     getTableData({
       pageNum: pagination.current,
       pageSize: pagination.pageSize,
@@ -213,6 +219,9 @@ export default function OrderList() {
   return (
     <div className='order-List'>
       <Form className='search-form' form={form} layout='inline' initialValues={{ orderStatus: 0, payStatus:0 }}>
+      <Form.Item name='userId' hidden>
+          <Input />
+        </Form.Item>
       <Form.Item name='orderNumber' label='包裹号码'>
           <Input placeholder='包裹号码'></Input>
         </Form.Item>

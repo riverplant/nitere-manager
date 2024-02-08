@@ -425,6 +425,7 @@ export namespace Order {
     code?:string
     orderStatus?:number
     payStatus?:number
+    userId?:string
   }
 
   export interface SearchParams {
