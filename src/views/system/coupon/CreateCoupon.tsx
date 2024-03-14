@@ -1,6 +1,6 @@
 import { IAction, IModalProp } from '@/types/modal'
 import { useImperativeHandle, useState } from 'react'
-import { DatePicker, DatePickerProps, Form, Input, InputNumber, Modal, Radio } from 'antd'
+import { DatePicker, Form, Input, InputNumber, Modal, Radio } from 'antd'
 import { Coupon } from '@/types/api'
 import { useForm } from 'antd/es/form/Form'
 import api from '@/api'
@@ -10,7 +10,6 @@ export default function CreateCoupon(props: IModalProp<Coupon.Vo>) {
   const [form] = useForm()
   const [action, setAction] = useState<IAction>('create')
   const [visible, setVisible] = useState(false)
-  const [expiry, setExpiry] = useState('')
   
 
   useImperativeHandle(props.mRef, () => ({

@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios'
 import { hideLoading, showLoading } from './loading'
 import env from '@/config'
-import { Result } from '@/types/api'
+import { Cabinet, Result } from '@/types/api'
 import { message } from './AntdGlobal'
 import storage from './storage'
 
@@ -84,7 +84,7 @@ export default {
 
   downloadFile(id: string) {
       axios.get(
-        `http://47.254.14.210/cabinet/exportExcelById?id=`+id,
+        `http://aoaofast.cn/cabinet/exportExcelById?id=`+id,
         {
           responseType: 'blob'
         }
@@ -131,7 +131,7 @@ export default {
 
     downloadPayorderFile( ids: string[] ) {
       axios.get(
-        `http://127.0.0.1:8080/payorder/exportPayOrderExcelByIds?ids=`+ids,
+        `http://aoaofast.cn/payorder/exportPayOrderExcelByIds?ids=`+ids,
         {
           responseType: 'blob'
         }
@@ -159,6 +159,58 @@ export default {
             link.style.display = 'none'
             link.href = url
             link.setAttribute('download', `订单列表.xlsx` || 'template.xlsx')
+            document.body.appendChild(link)
+            link.click()
+            document.body.removeChild(link)
+          } else {
+          
+          }
+        } catch (e) {
+          console.error(e)
+          
+        }
+      })
+      .catch((e) => { 
+        console.error(e)
+        
+      })
+    },
+
+
+    exportAddress( recod:Cabinet.UserCabinetVo[]) {
+
+      axios.post(
+        `http://aoaofast.cn/cabinet/exportAddressInExcel`,recod,
+        {
+          responseType: 'blob',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+        }
+      )
+      .then((res) => {
+        try {
+          console.log('响应信息 =>', res)
+ 
+          if (res.data.size > 0) {
+            // 响应头信息
+            const headers = res.headers
+            // application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8
+            const contentType = headers['content-type']
+            console.log('contentType =>', contentType)
+            
+            const url = window.URL.createObjectURL(
+              new Blob(
+                [res.data],
+                {
+                  type: contentType
+                }
+              )
+            )
+            const link = document.createElement('a')
+            link.style.display = 'none'
+            link.href = url
+            link.setAttribute('download', `地址列表.xlsx` || 'template.xlsx')
             document.body.appendChild(link)
             link.click()
             document.body.removeChild(link)

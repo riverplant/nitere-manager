@@ -278,6 +278,7 @@ export namespace PayOrders {
     payStatus?:number // 10：未支付 20：已支付 30: 支付失败 40： 已退款
     dateStart?:string
     dateEnd?:string
+    userId?:string
   }
 
   export interface CreateParams {
@@ -529,7 +530,16 @@ export namespace Cabinet {
     orderCount: number
     pVolumeTotal: number
     pWeightTotal: number
+    userCabinetVos: UserCabinetVo[]
     }
+
+    export interface UserCabinetVo {
+      code             :string
+      mobile           :string
+      formatted_address:string
+      boxCount         :number
+      orderCount       :number
+      }
 
   export interface BoxItem {
     id: string

@@ -22,77 +22,6 @@ export default function DashBoard() {
 
   useEffect(() => {
 
-    const optionLine = {
-      tooltip: {
-        trigger: 'axis',
-      },
-      legend: {
-        data: ['订单', '流水'],
-      },
-      grid: {
-        left: '5%',
-        right: '15%',
-        bottom: '10%',
-      },
-      xAxis: {
-        data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-      },
-      yAxis: { type: 'value' },
-
-      series: [
-        {
-          name: '订单',
-          type: 'line',
-          data: [10, 20, 30, 50, 60, 70, 80, 90, 100, 110, 120],
-        },
-        {
-          name: '流水',
-          type: 'line',
-          data: [13, 20, 35, 54, 60, 700, 85, 99, 106, 118, 125],
-        },
-      ],
-    }
-
-    const optionPie = {
-      title: {
-        text: '用户分布',
-        left: 'center',
-      },
-      tooltip: {
-        trigger: 'item',
-      },
-      legend: {
-        orient: 'vertical',
-        left: 'auto',
-      },
-      series: [
-        {
-          name: '城市分布',
-          type: 'pie',
-          radius: '50%',
-          center: ['50%', '50%'],
-          data: [
-            { value: 335, name: '多伦多' },
-            { value: 310, name: '温哥华' },
-            { value: 274, name: '蒙特利尔' },
-            { value: 235, name: '卡尔加里' },
-            { value: 400, name: '渥太华' },
-          ],
-          symbol: 'rect',
-          symbolSize: 12,
-          lineStyle: {
-            type: 'dashed'
-          },
-          label: {
-            show: true,
-            formatter: function (params: any) {
-              return params.value as string;
-            }
-          }
-        },
-      ],
-    }
-
     const optionAge = {
       title: {
         text: '用户年龄分布',
@@ -123,13 +52,13 @@ export default function DashBoard() {
     }
 
 
-    pieChart1?.setOption(optionPie)
-
-    lineChart?.setOption(optionLine)
-
     pieChart2?.setOption(optionAge)
 
+    renderLineChart()
+
     renderRadarChart()
+
+    renderPieChart1()
 
 
   }, [lineChart, pieChart1, pieChart2, radarChart])
@@ -154,7 +83,7 @@ export default function DashBoard() {
         bottom: '10%',
       },
       xAxis: {
-        data: data.label,
+        data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
       },
       yAxis: { type: 'value' },
 

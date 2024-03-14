@@ -27,7 +27,9 @@ export const useStore = create<{
     userImg: '',
     createTime:'',
     updateTime:'',
-    password:''
+    password:'',
+    couponName: '', 
+    couponExpireDate: ''
   },
 
   collapsed: false,

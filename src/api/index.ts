@@ -96,10 +96,12 @@ export default {
 
   //获取折线图数据
   getLineData() {
-    return request.get<Dashboard.LineData>('http://127.0.0.1:8080/orders/dashboard/getReportData')
+    //return request.get<Dashboard.LineData>('http://127.0.0.1:8080/orders/dashboard/getLineData')
+    return request.get<Dashboard.LineData>('http://127.0.0.1:8080/orders/dashboard/getLineData')
   },
 
   getPieCityData() {
+    //return request.get<Dashboard.PieElement[]>('http://127.0.0.1:8080/orders/dashboard/getPieCityData')
     return request.get<Dashboard.PieElement[]>('http://127.0.0.1:8080/orders/dashboard/getPieCityData')
   },
 
@@ -236,6 +238,11 @@ export default {
     //导出数据
      exportExcelById(id:string) {
         return request.downloadFile(id)
+    },
+
+    exportAddress( recod:Cabinet.UserCabinetVo[]) {
+      console.log('recod:',recod)
+      return request.exportAddress(recod)
     },
 
       //删除用户

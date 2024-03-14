@@ -1,4 +1,4 @@
-import { Order, PageParams, User } from '@/types/api'
+import { Order, PageParams } from '@/types/api'
 import { Button, Form, Input, Select, Space, Table } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import { useEffect, useRef, useState } from 'react'
@@ -15,7 +15,6 @@ export default function OrderList() {
   const [data, setData] = useState<Order.OrderItem[]>([])
   const [total, setTotal] = useState(0)
   const [, setPageCount] = useState(0)
-  const [userinfo, setUserinfo] = useState<User.UserInfo>()
 
 
   const [pagination, setPagination] = useState({
@@ -41,7 +40,6 @@ export default function OrderList() {
   useEffect(() => {
     const uinfo = storage.get('userInfo')
     console.log('uinfo:', uinfo)
-    setUserinfo(uinfo)
     form.setFieldValue('userId', uinfo?.id )
     getTableData({
       pageNum: pagination.current,

@@ -1,4 +1,4 @@
-import { ClaimRequest, PageParams, User } from '@/types/api'
+import { ClaimRequest, PageParams } from '@/types/api'
 import { Button, Form, Input, Select, Space, Table } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import { useEffect, useState } from 'react'

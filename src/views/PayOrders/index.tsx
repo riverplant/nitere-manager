@@ -6,6 +6,7 @@ import api from '@/api'
 import { formatDate, formatMoney } from '@/utils'
 import { IAction } from '@/types/modal'
 import CreatePayOrders from './CreatePayOrders'
+import storage from '@/utils/storage'
 
 export default function PayOrder() {
   //初始化表单
@@ -33,6 +34,11 @@ export default function PayOrder() {
   }
   
   useEffect(() => {
+
+    const uinfo = storage.get('userInfo')
+    console.log('uinfo:', uinfo)
+    form.setFieldValue('userId', uinfo?.id )
+    
     getPayOrdersList({
       pageNum: pagination.current,
       pageSize: pagination.pageSize,
@@ -199,6 +205,9 @@ export default function PayOrder() {
   return (
     <div className='user-list'>
       <Form className='search-form' form={form} layout='inline' initialValues={{ state: 0 }}>
+      <Form.Item name='userId' hidden>
+          <Input />
+        </Form.Item>
         <Form.Item name='code' label='用戶提貨码'>
           <Input placeholder='请输入提貨码'></Input>
         </Form.Item>
