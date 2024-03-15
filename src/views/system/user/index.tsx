@@ -164,6 +164,7 @@ export default function UserList() {
           2: '管理员',
           3: '用户',
           4: '網站管理員',
+          5: '提货管理員',
         }[userRoles]
       },
     },

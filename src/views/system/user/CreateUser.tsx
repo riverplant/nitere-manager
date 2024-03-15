@@ -175,6 +175,7 @@ const CreateUser = (props: IModalProp) => {
           <Select placeholder='请选择角色'>
           <Select.Option value={2} key={2}>管理員</Select.Option>
           <Select.Option value={3} key={3}>用戶</Select.Option>
+          <Select.Option value={5} key={5}>提货管理员</Select.Option>
           </Select>
         </FormItem>
         <FormItem label='用户状态' name='userStatus' rules={[{ required: true, message: '请选择用户状态' }]}>
