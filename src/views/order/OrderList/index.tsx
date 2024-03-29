@@ -14,7 +14,6 @@ export default function OrderList() {
   const [form] = Form.useForm()
   const [data, setData] = useState<Order.OrderItem[]>([])
   const [total, setTotal] = useState(0)
-  const [, setPageCount] = useState(0)
 
 
   const [pagination, setPagination] = useState({
@@ -70,7 +69,7 @@ export default function OrderList() {
 
     setData(data.list)
     setTotal(data.page.total)
-    setPageCount(data.page.pageCount)
+
 
     setPagination({
       current: data.page.pageNum,
@@ -269,7 +268,7 @@ export default function OrderList() {
             position: ['bottomRight'],
             current: pagination.current,
             pageSize: pagination.pageSize,
-            total: total,
+            total,
             showQuickJumper: true,
             showSizeChanger: true,
             showTotal: function (total) {

@@ -9,12 +9,12 @@ import { IAction } from '@/types/modal'
 import { message } from '@/utils/AntdGlobal'
 import CreateWebUser from './CreateWebUser'
 import storage from '@/utils/storage'
+import moment from 'moment'
 export default function UserList() {
   //初始化表单
   const [form] = Form.useForm()
   const [data, setData] = useState<User.UserInfo[]>([])
-  const [, setTotal] = useState(0)
-  const [pageCount, setPageCount] = useState(0)
+  const [total, setTotal] = useState(0)
   const [userIds, setUserIds] = useState<string[]>([])
   const [userinfo, setUserinfo] = useState<User.UserInfo>()
   const userRef = useRef<{
@@ -31,7 +31,6 @@ export default function UserList() {
   })
   useEffect(() => {
     const uinfo = storage.get('userInfo')
-    console.log('uinfo:', uinfo)
     setUserinfo(uinfo)
     form.setFieldValue('userId', uinfo?.id )
     getUserList({
@@ -55,16 +54,15 @@ export default function UserList() {
   const getUserList = async (params: PageParams) => {
     //获得所有的表单值
     const values = form.getFieldsValue()
-    console.log('values:', values)
     const data = await api.getUserList({
       ...values,
       pageNum: params.pageNum,
       pageSize: params.pageSize || pagination.pageSize,
     })
 
+
     setData(data.list)
     setTotal(data.page.total)
-    setPageCount(data.page.pageCount)
 
     setPagination({
       current: data.page.pageNum,
@@ -123,6 +121,11 @@ export default function UserList() {
     })
   }
   const columns: ColumnsType<User.UserInfo> = [
+    {
+      title: '用户ID',
+      dataIndex: 'id',
+      key: 'id',
+    },
     {
       title: '用户名',
       dataIndex: 'userName',
@@ -206,6 +209,7 @@ export default function UserList() {
       render(createTime: string) {
         return formatDate(createTime)
       },
+      sorter: (a, b) => moment(a.createTime).unix() - moment(b.createTime).unix()
     },
     {
       title: '操作',
@@ -296,8 +300,7 @@ export default function UserList() {
             position: ['bottomRight'],
             current: pagination.current,
             pageSize: pagination.pageSize,
-            total: pageCount,
-            showQuickJumper: true,
+            total,
             showSizeChanger: true,
             showTotal: function (total) {
               return `总共: ${total} 条`
